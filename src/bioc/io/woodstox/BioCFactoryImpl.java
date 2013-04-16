@@ -1,4 +1,4 @@
-package bioc.io.nih;
+package bioc.io.woodstox;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -13,22 +13,22 @@ public class BioCFactoryImpl extends BioCFactory {
 
   @Override
   public BioCCollectionWriter createBioCCollectionWriter(Writer out) {
-    return new BioCNIHAdapter(out);
+    return new BioCWoodstoxAdapter(out);
   }
 
   @Override
   public BioCDocumentWriter createBioCDocumentWriter(Writer out) {
-    return new BioCNIHAdapter(out);
+    return new BioCWoodstoxAdapter(out);
   }
 
   @Override
   public BioCCollectionReader createBioCCollectionReader(Reader in) {
-    return new BioCNIHAdapter(in);
+    return new BioCWoodstoxAdapter(in);
   }
 
   @Override
   public BioCDocumentReader createBioCDocumentReader(Reader in) {
-    return new BioCNIHAdapter(in);
+    return new BioCWoodstoxAdapter(in);
   }
 
 }

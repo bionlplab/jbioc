@@ -1,4 +1,4 @@
-package bioc.io.nih;
+package bioc.io.woodstox;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -13,20 +13,20 @@ import bioc.io.BioCCollectionWriter;
 import bioc.io.BioCDocumentReader;
 import bioc.io.BioCDocumentWriter;
 
-public class BioCNIHAdapter implements BioCCollectionReader,
-    BioCDocumentWriter, BioCCollectionWriter, BioCDocumentReader {
+class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
+    BioCCollectionWriter, BioCDocumentReader {
 
   ConnectorWoodstox inConnector;
   ConnectorWoodstox outConnector;
   Reader            in;
   Writer            out;
 
-  BioCNIHAdapter(Reader in) {
+  BioCWoodstoxAdapter(Reader in) {
     inConnector = new ConnectorWoodstox();
     this.in = in;
   }
 
-  BioCNIHAdapter(Writer out) {
+  BioCWoodstoxAdapter(Writer out) {
     outConnector = new ConnectorWoodstox();
     this.out = out;
   }

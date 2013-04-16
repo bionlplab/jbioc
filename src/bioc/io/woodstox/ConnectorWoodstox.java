@@ -1,4 +1,4 @@
-package bioc.io.nih;
+package bioc.io.woodstox;
 
 import java.io.Reader;
 import java.io.StringReader;
