@@ -24,13 +24,13 @@ public class Copy5_XML {
     Copy5_XML copy_xml = new Copy5_XML();
 
     // test udel
-    copy_xml.copy(args[0], args[1] + ".udel", BioCFactory.UDEL);
+    copy_xml.copy(args[0], args[1] + ".udel", BioCFactory.STANDARD);
 
     // test nih
-    copy_xml.copy(args[0], args[1] + ".nil", BioCFactory.NIH);
+    copy_xml.copy(args[0], args[1] + ".nil", BioCFactory.WOODSTOX);
   }
 
-  public void copy(String inXML, String outXML, int flags)
+  public void copy(String inXML, String outXML, String flags)
       throws XMLStreamException, IOException {
     BioCFactory factory = BioCFactory.newFactory(flags);
     BioCCollectionReader reader = factory

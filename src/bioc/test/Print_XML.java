@@ -5,7 +5,7 @@ import java.io.FileReader;
 
 import bioc.BioCCollection;
 import bioc.BioCDocument;
-import bioc.io.nih.ConnectorWoodstox;
+import bioc.io.woodstox.ConnectorWoodstox;
 
 public class Print_XML {
 

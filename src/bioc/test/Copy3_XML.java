@@ -37,7 +37,7 @@ public class Copy3_XML {
   public void copy(String inXML, String outXML)
       throws FactoryConfigurationError, XMLStreamException, IOException {
 
-    BioCFactory factor = BioCFactory.newFactory(BioCFactory.UDEL);
+    BioCFactory factor = BioCFactory.newFactory(BioCFactory.STANDARD);
 
     BioCDocumentReader reader = factor.createBioCDocumentReader(new FileReader(
         inXML));

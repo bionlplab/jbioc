@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 
 import bioc.BioCCollection;
-import bioc.io.nih.ConnectorWoodstox;
+import bioc.io.woodstox.ConnectorWoodstox;
 
 // import bioc_util.CopyConverter;
 

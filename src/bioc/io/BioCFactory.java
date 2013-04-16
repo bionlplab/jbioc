@@ -5,17 +5,16 @@ import java.io.Writer;
 
 public abstract class BioCFactory {
 
-  public static final int NIH  = 1;
-  public static final int UDEL = 2;
+  public static final String WOODSTOX = "WOODSTDX";
+  public static final String STANDARD = "STANDARD";
 
-  public static BioCFactory newFactory(int flags) {
-    switch (flags) {
-    case UDEL:
-      return new udel.bioc.io.BioCFactoryImpl();
-    case NIH:
-      return new bioc.io.nih.BioCFactoryImpl();
-    default:
-      return new udel.bioc.io.BioCFactoryImpl();
+  public static BioCFactory newFactory(String flags) {
+    if (flags.equals(STANDARD)) {
+      return new bioc.io.standard.BioCFactoryImpl();
+    } else if (flags.equals(WOODSTOX)) {
+      return new bioc.io.woodstox.BioCFactoryImpl();
+    } else {
+      return new bioc.io.standard.BioCFactoryImpl();
     }
   }
 

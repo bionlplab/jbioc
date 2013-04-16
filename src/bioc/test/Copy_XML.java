@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import bioc.BioCCollection;
 import bioc.BioCDocument;
-import bioc.io.nih.ConnectorWoodstox;
+import bioc.io.woodstox.ConnectorWoodstox;
 
 public class Copy_XML {
 
