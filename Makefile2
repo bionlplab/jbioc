@@ -1,0 +1,23 @@
+BIN = bin
+SRC = src
+JAVA = java
+JAVAC = javac
+JFLAGS = -g -d $(BIN)
+CLASSPATH= -classpath 'bin:lib/stax-utils.jar:lib/stax2-api-3.1.1.jar:lib/woodstox-core-asl-4.1.4.jar:.'
+SOURCEPATH = -sourcepath "$(SRC)"
+
+all: jar
+
+compile:
+	find ./src -name *.java > sources_list.txt
+	$(JAVAC) $(JFLAGS) $(CLASSPATH) $(SOURCEPATH) @sources_list.txt
+	rm -rf sources_list.txt
+
+clean:
+	rm -f `find ./$(BIN) -name *.class`
+
+jar: clean compile
+	jar cvf lib/bioc.jar -C $(BIN) .
+
+tar:
+	tar czvf Java_BioC_0.2_Yifan3.tar.gz --exclude-vcs bin doc lib output src xml Makefile Makefile2 manifest.txt README.txt test.sh test2.sh
