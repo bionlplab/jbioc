@@ -11,23 +11,26 @@ import bioc.io.BioCCollectionReader;
 import bioc.io.BioCCollectionWriter;
 import bioc.io.BioCFactory;
 
+/**
+ * Test BioCCollectionReader and BioCCollectionWriter
+ */
 public class Copy5_XML {
 
   public static void main(String[] args)
       throws IOException, XMLStreamException {
 
     if (args.length != 2) {
-      System.err.println("usage: java -jar Copy_XML in.xml out.xml");
+      System.err.println("usage: java -jar Copy6_XML in.xml out.xml");
       System.exit(-1);
     }
 
     Copy5_XML copy_xml = new Copy5_XML();
 
     // test udel
-    copy_xml.copy(args[0], args[1] + ".udel", BioCFactory.STANDARD);
+    copy_xml.copy(args[0], args[1] + ".standard", BioCFactory.STANDARD);
 
     // test nih
-    copy_xml.copy(args[0], args[1] + ".nil", BioCFactory.WOODSTOX);
+    copy_xml.copy(args[0], args[1] + ".woodstox", BioCFactory.WOODSTOX);
   }
 
   public void copy(String inXML, String outXML, String flags)

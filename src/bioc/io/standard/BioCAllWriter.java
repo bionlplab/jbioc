@@ -7,8 +7,6 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javanet.staxutils.IndentingXMLStreamWriter;
-
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -29,9 +27,10 @@ abstract class BioCAllWriter implements Closeable {
   protected BioCAllWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
     XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
-    this.writer = new IndentingXMLStreamWriter(
-        xmlOutputFactory.createXMLStreamWriter(writer));
-    this.writer.writeStartDocument("utf-8", "1.0");
+    // this.writer = new IndentingXMLStreamWriter(
+    // xmlOutputFactory.createXMLStreamWriter(writer));
+    this.writer = xmlOutputFactory.createXMLStreamWriter(writer);
+    this.writer.writeStartDocument("UTF-8", "1.0");
   }
 
   protected BioCAllWriter(OutputStream outputStream)

@@ -98,7 +98,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (name.equals("infon")) {
           annotation.putInfon(
               xmlr.getAttributeValue("", "key"),
-                getString("infon"));
+              getString("infon"));
         } else if (name.equals("location")) {
           annotation.addLocation(getBioCLocation());
         } else if (name.equals("text")) {
@@ -160,7 +160,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (name.equals("infon")) {
           passage.putInfon(
               xmlr.getAttributeValue("", "key"),
-                getString("infon"));
+              getString("infon"));
         } else if (name.equals("offset")) {
           passage.setOffset(getInt("offset"));
         } else if (name.equals("text")) {
@@ -204,7 +204,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (name.equals("infon")) {
           relation.putInfon(
               xmlr.getAttributeValue("", "key"),
-                getString("infon"));
+              getString("infon"));
         } else if (name.equals("node")) {
           relation.addNode(getBioCNode());
         }
@@ -235,7 +235,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (name.equals("infon")) {
           sentence.putInfon(
               xmlr.getAttributeValue("", "key"),
-                getString("infon"));
+              getString("infon"));
         } else if (name.equals("offset")) {
           sentence.setOffset(getInt("offset"));
         } else if (name.equals("text")) {
@@ -364,10 +364,11 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
     xmlif.setProperty(
         XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
-          Boolean.FALSE);
+        Boolean.FALSE);
     xmlif.setProperty(
         XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
-          Boolean.FALSE);
+        Boolean.FALSE);
+    xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
     xmlif.configureForSpeed();
     BioCCollection collection = new BioCCollection();
@@ -439,10 +440,10 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
       xmlif.setProperty(
           XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
-            Boolean.FALSE);
+          Boolean.FALSE);
       xmlif.setProperty(
           XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
-            Boolean.FALSE);
+          Boolean.FALSE);
       xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
       xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
       xmlif.configureForSpeed();

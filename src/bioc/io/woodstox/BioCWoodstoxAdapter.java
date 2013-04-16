@@ -34,7 +34,9 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   @Override
   public void close()
       throws IOException {
-    outConnector.endWrite();
+    if (outConnector != null) {
+      outConnector.endWrite();
+    }
   }
 
   @Override
