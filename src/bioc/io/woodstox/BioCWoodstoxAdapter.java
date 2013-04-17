@@ -3,6 +3,7 @@ package bioc.io.woodstox;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -89,6 +90,11 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
       collection.addDocument(doc);
     }
     return collection;
+  }
+
+  @Override
+  public Iterator<BioCDocument> iterator() {
+    return inConnector;
   }
 
 }

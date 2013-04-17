@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.util.Iterator;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -60,35 +61,35 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
     return collection;
   }
 
-  // @Override
-  // public Iterator<BioCDocument> iterator() {
-  // return new Iterator<BioCDocument>() {
-  //
-  // @Override
-  // public boolean hasNext() {
-  // return document != null;
-  // }
-  //
-  // @Override
-  // public BioCDocument next() {
-  // BioCDocument thisDocument = document;
-  // sentence = null;
-  // passage = null;
-  // document = null;
-  // try {
-  // read();
-  // } catch (XMLStreamException e) {
-  // e.printStackTrace();
-  // }
-  // return thisDocument;
-  // }
-  //
-  // @Override
-  // public void remove() {
-  // throw new UnsupportedOperationException("remove is not supported");
-  // }
-  //
-  // };
-  // }
+  @Override
+  public Iterator<BioCDocument> iterator() {
+    return new Iterator<BioCDocument>() {
+
+      @Override
+      public boolean hasNext() {
+        return document != null;
+      }
+
+      @Override
+      public BioCDocument next() {
+        BioCDocument thisDocument = document;
+        sentence = null;
+        passage = null;
+        document = null;
+        try {
+          read();
+        } catch (XMLStreamException e) {
+          e.printStackTrace();
+        }
+        return thisDocument;
+      }
+
+      @Override
+      public void remove() {
+        throw new UnsupportedOperationException("remove is not supported");
+      }
+
+    };
+  }
 
 }

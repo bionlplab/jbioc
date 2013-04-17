@@ -46,14 +46,21 @@ public class Copy6_XML {
     writer.writeCollectionInfo(collection);
 
     // test whether it can write collection information twice.
-    writer.writeCollectionInfo(collection);
+    // writer.writeCollectionInfo(collection);
 
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
       writer.writeDocument(doc);
     }
-
     reader.close();
     writer.close();
+
+    // test iterator
+    reader = factory.createBioCDocumentReader(new FileReader(inXML));
+    for (BioCDocument document : reader) {
+      System.out.println(document);
+    }
+    reader.close();
+
   }
 }
