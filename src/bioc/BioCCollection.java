@@ -2,6 +2,7 @@ package bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * 
  * Documents may appear empty if doing document at a time IO.
  */
-public class BioCCollection {
+public class BioCCollection implements Iterable<BioCDocument> {
 
   /**
    * Describe the original source of the documents.
@@ -157,5 +158,10 @@ public class BioCCollection {
     s += documents;
     s += "\n";
     return s;
+  }
+
+  @Override
+  public Iterator<BioCDocument> iterator() {
+    return documents.iterator();
   }
 }

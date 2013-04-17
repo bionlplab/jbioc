@@ -3,6 +3,8 @@ package bioc.io;
 import java.io.Reader;
 import java.io.Writer;
 
+import javax.xml.parsers.FactoryConfigurationError;
+
 public abstract class BioCFactory {
 
   public static final String WOODSTOX = "WOODSTDX";
@@ -14,7 +16,8 @@ public abstract class BioCFactory {
     } else if (flags.equals(WOODSTOX)) {
       return new bioc.io.woodstox.BioCFactoryImpl();
     } else {
-      return new bioc.io.standard.BioCFactoryImpl();
+      throw new FactoryConfigurationError(
+          "only STANDARAD and WOODSTDX are supported.");
     }
   }
 

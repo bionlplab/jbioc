@@ -2,6 +2,7 @@ package bioc.io.standard;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -14,18 +15,19 @@ import bioc.io.BioCCollectionWriter;
 class BioCCollectionWriterImpl extends BioCAllWriter implements
     BioCCollectionWriter {
 
-  String dtd;
+  String  dtd;
+  boolean hasWritten;
 
-  public BioCCollectionWriterImpl(OutputStream outputStream)
+  BioCCollectionWriterImpl(OutputStream out)
       throws FactoryConfigurationError, XMLStreamException {
-    super(outputStream);
-    dtd = "BioC.dtd";
+    this(new OutputStreamWriter(out));
   }
 
-  public BioCCollectionWriterImpl(Writer out)
+  BioCCollectionWriterImpl(Writer out)
       throws FactoryConfigurationError, XMLStreamException {
     super(out);
     dtd = "BioC.dtd";
+    hasWritten = false;
   }
 
   @Override
@@ -49,6 +51,12 @@ class BioCCollectionWriterImpl extends BioCAllWriter implements
   @Override
   public void writeCollection(BioCCollection collection)
       throws XMLStreamException {
+    if (hasWritten) {
+      throw new IllegalStateException(
+          "writeCollection can only be invoked once.");
+    }
+    hasWritten = true;
+
     writer.writeDTD("<!DOCTYPE collection SYSTEM \"BioC.dtd\">");
     writer.writeStartElement("collection");
     // source

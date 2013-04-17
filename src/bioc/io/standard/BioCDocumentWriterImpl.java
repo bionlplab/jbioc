@@ -2,6 +2,7 @@ package bioc.io.standard;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -14,18 +15,19 @@ import bioc.io.BioCDocumentWriter;
 class BioCDocumentWriterImpl extends BioCAllWriter implements
     BioCDocumentWriter {
 
-  String dtd;
+  String  dtd;
+  boolean hasWrittenCollectionInfo;
 
-  public BioCDocumentWriterImpl(OutputStream outputStream)
+  BioCDocumentWriterImpl(OutputStream out)
       throws FactoryConfigurationError, XMLStreamException {
-    super(outputStream);
-    dtd = "BioC.dtd";
+    this(new OutputStreamWriter(out));
   }
 
-  public BioCDocumentWriterImpl(Writer out)
+  BioCDocumentWriterImpl(Writer out)
       throws FactoryConfigurationError, XMLStreamException {
     super(out);
     dtd = "BioC.dtd";
+    hasWrittenCollectionInfo = false;
   }
 
   @Override
@@ -53,6 +55,14 @@ class BioCDocumentWriterImpl extends BioCAllWriter implements
   @Override
   public void writeCollectionInfo(BioCCollection collection)
       throws XMLStreamException {
+
+    if (hasWrittenCollectionInfo) {
+      throw new IllegalStateException(
+          "writeCollectionInfo can only be invoked once.");
+    }
+
+    hasWrittenCollectionInfo = true;
+
     writer.writeDTD("<!DOCTYPE collection SYSTEM \"BioC.dtd\">");
     writer.writeStartElement("collection");
     // source
@@ -74,6 +84,10 @@ class BioCDocumentWriterImpl extends BioCAllWriter implements
   @Override
   public void writeDocument(BioCDocument document)
       throws XMLStreamException {
+    if (!hasWrittenCollectionInfo) {
+      throw new IllegalStateException(
+          "writeCollectionInfo should be invoked before.");
+    }
     write(document);
   }
 }

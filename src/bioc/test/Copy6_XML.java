@@ -45,6 +45,9 @@ public class Copy6_XML {
     BioCCollection collection = reader.readCollectionInfo();
     writer.writeCollectionInfo(collection);
 
+    // test whether it can write collection information twice.
+    writer.writeCollectionInfo(collection);
+
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
       writer.writeDocument(doc);

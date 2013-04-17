@@ -3,6 +3,7 @@ package bioc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  * An id, typically from the original corpus, identifies the particular
  * document.
  */
-public class BioCDocument {
+public class BioCDocument implements Iterable<BioCPassage> {
 
   /**
    * Id to identify the particular {@code Document}.
@@ -93,5 +94,10 @@ public class BioCDocument {
     s += "\n";
     s += passages;
     return s;
+  }
+
+  @Override
+  public Iterator<BioCPassage> iterator() {
+    return passages.iterator();
   }
 }

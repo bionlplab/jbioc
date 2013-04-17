@@ -15,23 +15,23 @@ import bioc.io.BioCCollectionReader;
 class BioCCollectionReaderImpl extends BioCReader implements
     BioCCollectionReader {
 
-  public BioCCollectionReaderImpl(InputStream inputStream)
+  BioCCollectionReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
     super(inputStream);
   }
 
-  public BioCCollectionReaderImpl(Reader in)
+  BioCCollectionReaderImpl(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
     super(in);
   }
 
-  public BioCCollectionReaderImpl(File inputFile)
+  BioCCollectionReaderImpl(File inputFile)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
     this(new FileInputStream(inputFile));
   }
 
-  public BioCCollectionReaderImpl(String inputFilename)
+  BioCCollectionReaderImpl(String inputFilename)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
     this(new FileInputStream(inputFilename));
