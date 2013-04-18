@@ -7,7 +7,7 @@ import javax.xml.stream.XMLStreamException;
 import bioc.BioCCollection;
 import bioc.BioCDocument;
 
-public interface BioCDocumentReader extends Closeable, Iterable<BioCDocument> {
+public interface BioCDocumentReader extends Closeable {
 
   public BioCDocument readDocument()
       throws XMLStreamException;
