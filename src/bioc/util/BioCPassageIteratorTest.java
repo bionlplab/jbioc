@@ -1,4 +1,4 @@
-package bioc.iterator;
+package bioc.util;
 
 import java.io.FileReader;
 import java.io.IOException;

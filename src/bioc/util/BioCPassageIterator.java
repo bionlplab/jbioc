@@ -1,4 +1,4 @@
-package bioc.iterator;
+package bioc.util;
 
 import java.util.Iterator;
 
