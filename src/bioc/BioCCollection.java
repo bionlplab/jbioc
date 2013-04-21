@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import bioc.util.BioCPassageIterator;
+import bioc.util.BioCSentenceIterator;
+
 /**
  * Collection of documents.
  * 
@@ -127,6 +130,10 @@ public class BioCCollection implements Iterable<BioCDocument> {
     documents.add(document);
   }
 
+  /**
+   * @deprecated replaced by {@link BioCPassageIterator}
+   */
+  @Deprecated
   public List<BioCPassage> getPassages() {
     ArrayList<BioCPassage> pass = new ArrayList<BioCPassage>();
     for (BioCDocument doc : documents) {
@@ -135,6 +142,10 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return pass;
   }
 
+  /**
+   * @deprecated replaced by {@link BioCSentenceIterator}
+   */
+  @Deprecated
   public List<BioCSentence> getSentences() {
     ArrayList<BioCSentence> sens = new ArrayList<BioCSentence>();
     for (BioCDocument doc : documents) {
