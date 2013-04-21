@@ -130,8 +130,12 @@ public class BioCCollection implements Iterable<BioCDocument> {
     documents.add(document);
   }
 
+  public BioCPassageIterator getPassageItr() {
+    return new BioCPassageIterator(this);
+  }
+
   /**
-   * @deprecated replaced by {@link BioCPassageIterator}
+   * @deprecated replaced by {@link getPassageItr}
    */
   @Deprecated
   public List<BioCPassage> getPassages() {
@@ -142,8 +146,12 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return pass;
   }
 
+  public BioCSentenceIterator getSentenceItr() {
+    return new BioCSentenceIterator(this);
+  }
+
   /**
-   * @deprecated replaced by {@link BioCSentenceIterator}
+   * @deprecated replaced by {@link getSentenceItr}
    */
   @Deprecated
   public List<BioCSentence> getSentences() {
