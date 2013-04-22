@@ -2,10 +2,13 @@ package bioc.test.junit;
 
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
 
 import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
@@ -13,15 +16,15 @@ import org.custommonkey.xmlunit.Difference;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import bioc.BioCCollection;
-import bioc.BioCDocument;
-import bioc.io.BioCDocumentReader;
-import bioc.io.BioCDocumentWriter;
+import bioc.io.BioCCollectionReader;
+import bioc.io.BioCCollectionWriter;
 import bioc.io.BioCFactory;
 
-public class BioCDocumentWriterTest {
+public class BioCCollectionIOTest {
 
   public BioCFactory factory = BioCFactory.newFactory(BioCFactory.STANDARD);
   public String      inXML   = "xml/PMID-8557975-simplified-sentences.xml";
@@ -72,23 +75,30 @@ public class BioCDocumentWriterTest {
         outXML + ".standard");
   }
 
+  @Ignore("Test is ignored as this function is not decided yet")
+  @Test(expected = IllegalStateException.class)
+  public void testWriteCollectionTwice()
+      throws XMLStreamException, IOException {
+    BioCCollection collection = new BioCCollection();
+
+    BioCCollectionWriter writer = factory
+        .createBioCCollectionWriter(new PrintWriter(System.out));
+    writer.writeCollection(collection);
+    writer.writeCollection(collection);
+    writer.close();
+  }
+
   private
       void
       testXMLIdentical(BioCFactory factory, String inXML, String outXML)
           throws Exception {
-    BioCDocumentReader reader = factory
-        .createBioCDocumentReader(new FileReader(inXML));
+    BioCCollectionReader reader = factory
+        .createBioCCollectionReader(new FileReader(inXML));
+    BioCCollectionWriter writer = factory
+        .createBioCCollectionWriter(new FileWriter(outXML));
 
-    BioCDocumentWriter writer = factory
-        .createBioCDocumentWriter(new FileWriter(outXML));
-
-    BioCCollection collection = reader.readCollectionInfo();
-    writer.writeCollectionInfo(collection);
-
-    BioCDocument doc = null;
-    while ((doc = reader.readDocument()) != null) {
-      writer.writeDocument(doc);
-    }
+    BioCCollection collection = reader.readCollection();
+    writer.writeCollection(collection);
 
     reader.close();
     writer.close();
