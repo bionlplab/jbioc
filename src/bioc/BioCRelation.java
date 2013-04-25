@@ -2,6 +2,7 @@ package bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
  * Relationship between multiple {@link Annotation}s and possibly other
  * {@code Relation}s.
  */
-public class BioCRelation {
+public class BioCRelation implements Iterable<BioCNode> {
 
   /**
    * Used to refer to this relation in other relationships.
@@ -81,5 +82,10 @@ public class BioCRelation {
     s += "nodes: " + nodes;
     s += "\n";
     return s;
+  }
+
+  @Override
+  public Iterator<BioCNode> iterator() {
+    return nodes.iterator();
   }
 }
