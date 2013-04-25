@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE collection SYSTEM "sentence.dtd">
+<!DOCTYPE collection SYSTEM "BioC.dtd">
 <collection>
   <source>PubMed</source>
   <date>20130316</date>

@@ -124,11 +124,11 @@
 <!ELEMENT document ( id, infon*, passage+ ) >
 <!ELEMENT id (#PCDATA)>
 
-<!ELEMENT passage ( infon*, offset, ( text* | sentence* | ( annotation*, relation* ) ) ) >
+<!ELEMENT passage ( infon*, offset, ( ( text?, annotation*, relation* ) | sentence* ) ) >
 <!ELEMENT offset (#PCDATA)>
 <!ELEMENT text (#PCDATA)>
 
-<!ELEMENT sentence ( infon*, offset, ( text | ( annotation*, relation* ) ) )>
+<!ELEMENT sentence ( infon*, offset, text?, annotation*, relation* ) >
 
 <!ELEMENT annotation ( infon*, location*, text ) >
 <!ATTLIST annotation id CDATA #IMPLIED >
