@@ -15,10 +15,16 @@ public class BioCValidation {
   String localDTD = "xml/BioC.dtd";
 
   @Test
-  public void test()
+  public void test1()
       throws ConfigurationException, FileNotFoundException, SAXException,
       MalformedURLException {
     test(new File("xml/PMID-8557975-simplified-sentences-tokens.xml"));
+  }
+
+  @Test
+  public void test2()
+      throws ConfigurationException, FileNotFoundException, SAXException,
+      MalformedURLException {
     test(new File("xml/PMID-8557975-simplified-sentences.xml"));
   }
 

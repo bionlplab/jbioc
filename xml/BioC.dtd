@@ -48,7 +48,10 @@
     information. "type" will be a particular common key in the major
     sub elements below. For PubMed references, passage "type" might
     signal "title" or "abstract". For annotations, it might indicate
-    "noun phrase", "gene", or "disease".
+    "noun phrase", "gene", or "disease". In the programming language
+    data structures, infons are typically represented as a map from
+    strings to strings.  This means keys should be unique within each
+    parent element.
 
     document:  A document in the collection. A single, complete
     stand-alone document as described by it's parent source.
@@ -121,10 +124,10 @@
 <!ELEMENT infon (#PCDATA)>
 <!ATTLIST infon key CDATA #REQUIRED >
 
-<!ELEMENT document ( id, infon*, passage+ ) >
+<!ELEMENT document ( id, infon*, passage+, relation* ) >
 <!ELEMENT id (#PCDATA)>
 
-<!ELEMENT passage ( infon*, offset, ( ( text?, annotation*, relation* ) | sentence* ) ) >
+<!ELEMENT passage ( infon*, offset, ( ( text?, annotation* ) | sentence* ), relation* ) >
 <!ELEMENT offset (#PCDATA)>
 <!ELEMENT text (#PCDATA)>
 
