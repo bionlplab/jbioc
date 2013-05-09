@@ -1,17 +1,22 @@
 package bioc.test;
 
 import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.IOException;
+
+import javax.xml.stream.XMLStreamException;
 
 import bioc.BioCCollection;
 import bioc.BioCDocument;
-import bioc.io.woodstox.ConnectorWoodstox;
+import bioc.io.BioCDocumentReader;
+import bioc.io.BioCDocumentWriter;
+import bioc.io.BioCFactory;
 
 public class Copy_XML {
 
   public static void main(String[] args)
-      throws IOException {
+      throws XMLStreamException, IOException {
 
     if (args.length != 2) {
       System.err.println("usage: java -jar Copy_XML in.xml out.xml");
@@ -23,19 +28,24 @@ public class Copy_XML {
   }
 
   public void copy(String inXML, String outXML)
-      throws IOException {
+      throws XMLStreamException, IOException {
 
-    ConnectorWoodstox inConnector = new ConnectorWoodstox();
-    BioCCollection collection = inConnector.startRead(new FileReader(inXML));
+	  BioCFactory factory = BioCFactory.newFactory(BioCFactory.WOODSTOX);
+	  BioCDocumentReader reader =
+			  factory.createBioCDocumentReader(new FileReader(inXML));
+	  BioCDocumentWriter writer =
+			  factory.createBioCDocumentWriter(
+					  new OutputStreamWriter(
+							  new FileOutputStream(outXML), "UTF-8"));
+//	  factory.createBioCDocumentWriter(new FileWriter(outXML));
 
-    ConnectorWoodstox outConnector = new ConnectorWoodstox();
-    outConnector.startWrite(new FileWriter(outXML), collection);
+    BioCCollection collection = reader.readCollectionInfo();
+    writer.writeCollectionInfo(collection);
 
-    while (inConnector.hasNext()) {
-      BioCDocument document = inConnector.next();
-      outConnector.writeNext(document);
+    for (BioCDocument document : reader) {
+    	writer.writeDocument(document);
     }
-
-    outConnector.endWrite();
+    reader.close();
+    writer.close();
   }
 }

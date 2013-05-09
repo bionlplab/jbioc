@@ -444,7 +444,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       xmlif.setProperty(
           XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
           Boolean.FALSE);
-      xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+      //      xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
       xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
       xmlif.configureForSpeed();
     } catch (Exception ex) {

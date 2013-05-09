@@ -5,20 +5,23 @@ package bioc.test;
  * writing instead of just writing the original data
  **/
 
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import javax.xml.stream.XMLStreamException;
 
 import bioc.BioCCollection;
 import bioc.BioCDocument;
-import bioc.io.woodstox.ConnectorWoodstox;
-
-// import bioc_util.CopyConverter;
+import bioc.io.BioCDocumentReader;
+import bioc.io.BioCDocumentWriter;
+import bioc.io.BioCFactory;
+import bioc.test.CopyConverter;
 
 public class Copy2_XML {
 
   public static void main(String[] args)
-      throws IOException {
+      throws XMLStreamException, IOException {
 
     if (args.length != 2) {
       System.err.println("usage: java Copy2_XML in.xml out.xml");
@@ -30,25 +33,28 @@ public class Copy2_XML {
   }
 
   public void copy(String inXML, String outXML)
-      throws IOException {
+      throws XMLStreamException, IOException {
+	  
+	  BioCFactory factory = BioCFactory.newFactory(BioCFactory.WOODSTOX);
+	  BioCDocumentReader reader =
+			  factory.createBioCDocumentReader(new FileReader(inXML));
+	  BioCDocumentWriter writer =
+			  factory.createBioCDocumentWriter(
+					  new OutputStreamWriter(
+							  new FileOutputStream(outXML), "UTF-8"));
+    
+    BioCCollection collection = reader.readCollectionInfo();
 
-    ConnectorWoodstox inConnector = new ConnectorWoodstox();
-    BioCCollection collection = inConnector.startRead(new FileReader(inXML));
+    CopyConverter converter = new CopyConverter();
+    BioCCollection outCollection = converter.getCollection(collection);
+    writer.writeCollectionInfo(outCollection);
 
-    ConnectorWoodstox outConnector = new ConnectorWoodstox();
-    BioCCollection outCollection = new BioCCollection(collection);
-
-    // CopyConverter converter = new CopyConverter();
-    // BioCCollection outCollection = converter.getCollection(collection);
-    outConnector.startWrite(new FileWriter(outXML), outCollection);
-
-    while (inConnector.hasNext()) {
-      BioCDocument document = inConnector.next();
-      BioCDocument outDocument = new BioCDocument(document);
-      // BioCDocument outDocument = converter.getDocument(document);
-      outConnector.writeNext(outDocument);
+    for ( BioCDocument document : reader ) {
+    	BioCDocument outDocument = converter.getDocument(document);
+    	writer.writeDocument(outDocument);
     }
 
-    outConnector.endWrite();
+    reader.close();
+    writer.close();
   }
 }

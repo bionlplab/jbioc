@@ -20,7 +20,7 @@ public class Copy5_XML {
       throws IOException, XMLStreamException {
 
     if (args.length != 2) {
-      System.err.println("usage: java -jar Copy6_XML in.xml out.xml");
+      System.err.println("usage: java -jar Copy5_XML in.xml out.xml");
       System.exit(-1);
     }
 

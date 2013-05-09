@@ -7,7 +7,7 @@ import javax.xml.parsers.FactoryConfigurationError;
 
 public abstract class BioCFactory {
 
-  public static final String WOODSTOX = "WOODSTDX";
+  public static final String WOODSTOX = "WOODSTOX";
   public static final String STANDARD = "STANDARD";
 
   public static BioCFactory newFactory(String flags) {
@@ -17,7 +17,7 @@ public abstract class BioCFactory {
       return new bioc.io.woodstox.BioCFactoryImpl();
     } else {
       throw new FactoryConfigurationError(
-          "only STANDARAD and WOODSTDX are supported.");
+          "only STANDARD and WOODSTOX are supported.");
     }
   }
 

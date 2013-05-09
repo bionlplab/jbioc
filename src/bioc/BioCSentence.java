@@ -82,6 +82,13 @@ public class BioCSentence {
     return infons.get(key);
   }
 
+  /**
+   * @param infons the infons to set
+   */
+  public void setInfons(Map<String,String> infons) {
+    this.infons = infons;
+  }
+
   public Map<String, String> getInfons() {
     return infons;
   }

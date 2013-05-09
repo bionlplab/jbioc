@@ -9,8 +9,7 @@ import javax.management.relation.Relation;
 
 /**
  * Stand off annotation. The connection to the original text can be made
- * through the {@code offset}, {@code length}, and possibly the {@code text}
- * fields.
+ * through the {@code location} and the {@code text} fields.
  */
 public class BioCAnnotation {
 
@@ -22,9 +21,7 @@ public class BioCAnnotation {
   protected List<BioCLocation>  locations;
 
   /**
-   * Unless something else is defined this should be the annotated text. The
-   * length is redundant in this case. Other uses for this field would be the
-   * ontology id for the specific disease when the type was "disease."
+   * The annotated text.
    */
   protected String              text;
 

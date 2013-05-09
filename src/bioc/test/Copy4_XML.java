@@ -2,21 +2,26 @@ package bioc.test;
 
 /**
  * Another copy the XML program. This time, also copy the data structure before
- * writing instead of just writing the original data
+ * writing instead of just writing the original data. Also use whole Collection
+ * IO.
  **/
 
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+import javax.xml.stream.XMLStreamException;
 
 import bioc.BioCCollection;
-import bioc.io.woodstox.ConnectorWoodstox;
-
-// import bioc_util.CopyConverter;
+import bioc.io.BioCCollectionReader;
+import bioc.io.BioCCollectionWriter;
+import bioc.io.BioCFactory;
 
 public class Copy4_XML {
 
   public static void main(String[] args)
-      throws Exception {
+      throws XMLStreamException, IOException {
 
     if (args.length != 2) {
       System.err.println("usage: java Copy4_XML in.xml out.xml");
@@ -28,31 +33,23 @@ public class Copy4_XML {
   }
 
   public void copy(String inXML, String outXML)
-      throws Exception {
-    /*
-     * FileReader test = new FileReader(inXML); BufferedReader br = new
-     * BufferedReader(test); String s = br.readLine(); System.out.println(s); s
-     * = br.readLine(); System.out.println(s); return;
-     */
+      throws XMLStreamException, IOException {
+	  
+	  BioCFactory factory = BioCFactory.newFactory(BioCFactory.WOODSTOX);
+	  BioCCollectionReader reader =
+			  factory.createBioCCollectionReader(new FileReader(inXML));
+	  BioCCollectionWriter writer =
+			  factory.createBioCCollectionWriter(
+					  new OutputStreamWriter(
+							  new FileOutputStream(outXML), "UTF-8"));
+    
+    BioCCollection collection = reader.readCollection();
 
-    ConnectorWoodstox inConnector = new ConnectorWoodstox();
+    CopyConverter converter = new CopyConverter();
+    BioCCollection outCollection = converter.getCollection(collection);
+    writer.writeCollection(outCollection);
 
-    // OK, uses a FileReader, but that uses the same code as processing a
-    // String
-    FileReader in = new FileReader(inXML);
-
-    BioCCollection collection = inConnector.parseXMLCollection(in);
-
-    ConnectorWoodstox outConnector = new ConnectorWoodstox();
-    BioCCollection outCollection = new BioCCollection(collection);
-
-    // CopyConverter converter = new CopyConverter();
-    // BioCCollection outCollection = converter.getCollection(collection);
-
-    String xml = outConnector.toXML(outCollection);
-    FileWriter out = new FileWriter(outXML);
-    out.write(xml);
-    out.close();
-
+    reader.close();
+    writer.close();
   }
 }

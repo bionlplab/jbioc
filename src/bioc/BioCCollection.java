@@ -105,6 +105,13 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return infons;
   }
 
+  /**
+   * @param infons the infons to set
+   */
+  public void setInfons(Map<String,String> infons) {
+    this.infons = infons;
+  }
+
   public String getInfon(String key) {
     return infons.get(key);
   }
