@@ -56,11 +56,11 @@ public class Copy6_XML {
     writer.close();
 
     // test iterator
-    reader = factory.createBioCDocumentReader(new FileReader(inXML));
-    for (BioCDocument document : reader) {
-      System.out.println(document);
-    }
-    reader.close();
+    // reader = factory.createBioCDocumentReader(new FileReader(inXML));
+    // for (BioCDocument document : reader) {
+    // System.out.println(document);
+    // }
+    // reader.close();
 
   }
 }

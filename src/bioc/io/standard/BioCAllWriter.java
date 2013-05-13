@@ -66,6 +66,8 @@ abstract class BioCAllWriter implements Closeable {
   protected void write(BioCSentence sentence)
       throws XMLStreamException {
     writer.writeStartElement("sentence");
+    // infon
+    write(sentence.getInfons());
     // offset
     writer.writeStartElement("offset");
     writer.writeCharacters(Integer.toString(sentence.getOffset()));
