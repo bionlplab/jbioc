@@ -67,8 +67,14 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         String name = xmlr.getName().toString();
         if (name.equals("id")) {
           document.setID(getString("id"));
+        } else if (name.equals("infon")) {
+            document.putInfon(
+                    xmlr.getAttributeValue("", "key"),
+                    getString("infon"));
         } else if (name.equals("passage")) {
           document.addPassage(getBioCPassage());
+        } else if (name.equals("relation")) {
+            document.addRelation(getBioCRelation());
         }
         break;
       case XMLEvent.END_ELEMENT:
@@ -473,6 +479,10 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
             collection.setDate(getString("date"));
           } else if (curElement.equals("key")) {
             collection.setKey(getString("key"));
+          } else if (curElement.equals("infon")) {
+              collection.putInfon(
+            		  xmlr.getAttributeValue("", "key"),
+            		  getString("infon"));
           }
           break;
         case XMLEvent.END_ELEMENT:
@@ -523,6 +533,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       writeXML("source", collection.getSource());
       writeXML("date", collection.getDate());
       writeXML("key", collection.getKey());
+      writeXML(collection.getInfons());
     } catch (Exception ex) {
       System.err.println("Exception occured while writing " + ex);
       ex.printStackTrace();
@@ -540,6 +551,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     writeXML("source", collection.getSource());
     writeXML("date", collection.getDate());
     writeXML("key", collection.getKey());
+    writeXML(collection.getInfons());
     // /////////////////////////////////
     // Now, cycle thru each Document
     // /////////////////////////////////
@@ -584,8 +596,12 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       throws XMLStreamException {
     xtw.writeStartElement("document");
     writeXML("id", document.getID());
+    writeXML(document.getInfons());
     for (BioCPassage passage : document.getPassages()) {
       writeXML(passage);
+    }
+    for (BioCRelation relation : document.getRelations()) {
+    	writeXML(relation);
     }
     xtw.writeEndElement();
   }

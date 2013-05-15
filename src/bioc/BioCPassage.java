@@ -10,12 +10,10 @@ import javax.management.relation.Relation;
 /**
  * One passage in a {@link Document}.
  * 
- * This might be the {@code text} in the passage. It could be the
- * {@link Sentence}s in the passage. Or it might be {@link Annotation}s and
- * possibly {@link Relation}s on the text of the passage.
- * 
- * There is no code to keep those possibilities mutually exclusive. However the
- * currently available DTDs only describe the listed possibilities
+ * This might be the {@code text} in the passage and possibly
+ * {@link Annotation}s over that text. It could be the
+ * {@link Sentence}s in the passage. In either case it might include
+ * {@link Relation}s over annotations on the passage.
  */
 public class BioCPassage {
 
@@ -129,6 +127,9 @@ public class BioCPassage {
     return offset;
   }
 
+  /**
+   * @return the relations
+   */
   public List<BioCRelation> getRelations() {
     return relations;
   }

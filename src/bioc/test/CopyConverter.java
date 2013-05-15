@@ -48,6 +48,9 @@ public class CopyConverter {
 		for ( BioCPassage passage : in.getPassages() ) {
 			out.addPassage( getPassage(passage) );
 		}
+		for (BioCRelation rel : in.getRelations() ) {
+			out.addRelation( rel );
+		}
 	
 		return out;
 	}
