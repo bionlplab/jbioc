@@ -1,9 +1,10 @@
 package bioc.test.junit;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +18,9 @@ import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import bioc.BioCCollection;
 import bioc.io.BioCCollectionReader;
@@ -26,9 +29,8 @@ import bioc.io.BioCFactory;
 
 public class BioCCollectionIOTest {
 
-  public BioCFactory factory = BioCFactory.newFactory(BioCFactory.STANDARD);
-  public String      inXML   = "xml/PMID-8557975-simplified-sentences.xml";
-  public String      outXML  = "output/PMID-8557975-simplified-sentences.xml";
+  @Rule
+  public TemporaryFolder testFolder = new TemporaryFolder();
 
   @BeforeClass
   public static void onlyOnce() {
@@ -60,19 +62,46 @@ public class BioCCollectionIOTest {
   @Test
   public void testWoodstox()
       throws Exception {
-    testXMLIdentical(
-        BioCFactory.newFactory(BioCFactory.WOODSTOX),
-        inXML,
-        outXML + ".woodstox");
+    File tempFile = testFolder.newFile("test.woodstox.xml");
+
+    File dir = new File("xml");
+    File[] files = dir.listFiles(new FilenameFilter() {
+
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".xml");
+      }
+
+    });
+    for (File f : files) {
+      System.out.println("testing WOODSTOX IO on " + f + " ...");
+      testXMLIdentical(
+          BioCFactory.newFactory(BioCFactory.WOODSTOX),
+          f,
+          tempFile);
+    }
   }
 
   @Test
   public void testStandard()
       throws Exception {
-    testXMLIdentical(
-        BioCFactory.newFactory(BioCFactory.STANDARD),
-        inXML,
-        outXML + ".standard");
+    File tempFile = testFolder.newFile("test.standard.xml");
+    File dir = new File("xml");
+    File[] files = dir.listFiles(new FilenameFilter() {
+
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.endsWith(".xml");
+      }
+
+    });
+    for (File f : files) {
+      System.out.println("testing STANDARD IO on " + f + " ...");
+      testXMLIdentical(
+          BioCFactory.newFactory(BioCFactory.STANDARD),
+          f,
+          tempFile);
+    }
   }
 
   @Ignore("Test is ignored as this function is not decided yet")
@@ -81,17 +110,17 @@ public class BioCCollectionIOTest {
       throws XMLStreamException, IOException {
     BioCCollection collection = new BioCCollection();
 
-    BioCCollectionWriter writer = factory
-        .createBioCCollectionWriter(new PrintWriter(System.out));
+    BioCCollectionWriter writer = BioCFactory.newFactory(BioCFactory.STANDARD)
+        .createBioCCollectionWriter(
+            new FileWriter(testFolder.newFile("test.standard.xml")));
     writer.writeCollection(collection);
     writer.writeCollection(collection);
     writer.close();
   }
 
-  private
-      void
-      testXMLIdentical(BioCFactory factory, String inXML, String outXML)
-          throws Exception {
+  private void testXMLIdentical(BioCFactory factory, File inXML, File outXML)
+      throws Exception {
+
     BioCCollectionReader reader = factory
         .createBioCCollectionReader(new FileReader(inXML));
     BioCCollectionWriter writer = factory

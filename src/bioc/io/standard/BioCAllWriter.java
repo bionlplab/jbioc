@@ -47,6 +47,12 @@ abstract class BioCAllWriter implements Closeable {
     writer.writeStartElement("offset");
     writer.writeCharacters(Integer.toString(passage.getOffset()));
     writer.writeEndElement();
+    // text
+    if (passage.getText() != null && !passage.getText().isEmpty()) {
+      writer.writeStartElement("text");
+      writer.writeCharacters(passage.getText());
+      writer.writeEndElement();
+    }
     // sen
     for (BioCSentence sen : passage.getSentences()) {
       write(sen);
@@ -73,9 +79,11 @@ abstract class BioCAllWriter implements Closeable {
     writer.writeCharacters(Integer.toString(sentence.getOffset()));
     writer.writeEndElement();
     // text
-    writer.writeStartElement("text");
-    writer.writeCharacters(sentence.getText());
-    writer.writeEndElement();
+    if (sentence.getText() != null && !sentence.getText().isEmpty()) {
+      writer.writeStartElement("text");
+      writer.writeCharacters(sentence.getText());
+      writer.writeEndElement();
+    }
     // ann
     for (BioCAnnotation ann : sentence.getAnnotations()) {
       write(ann);
@@ -146,11 +154,14 @@ abstract class BioCAllWriter implements Closeable {
     writer.writeEndElement();
     // infon
     write(document.getInfons());
-
+    // passages
     for (BioCPassage passage : document.getPassages()) {
       write(passage);
     }
-
+    // relations
+    for (BioCRelation rel : document.getRelations()) {
+      write(rel);
+    }
     writer.writeEndElement();
   }
 

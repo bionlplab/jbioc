@@ -140,6 +140,10 @@ abstract class BioCReader implements Closeable {
             // read passage
             passage = new BioCPassage();
             state = 3;
+          } else if (localName.equals("relation")) {
+            // read relation
+            BioCRelation rel = readRelation();
+            document.addRelation(rel);
           } else {
             ;
           }
