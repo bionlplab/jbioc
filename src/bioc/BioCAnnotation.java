@@ -55,6 +55,10 @@ public class BioCAnnotation {
     return infons;
   }
 
+  public void setInfons(Map<String, String> infons) {
+	    this.infons = infons;
+  }  
+  
   public List<BioCLocation> getLocations() {
     return locations;
   }
@@ -69,6 +73,10 @@ public class BioCAnnotation {
 
   public void setID(String id) {
     this.id = id;
+  }
+  
+  public void setLocations(List<BioCLocation> locations) {
+    this.locations = locations;  
   }
 
   public void setText(String text) {

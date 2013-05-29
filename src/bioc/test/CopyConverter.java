@@ -67,7 +67,7 @@ public class CopyConverter {
 			out.addSentence( getSentence(sentence) );
 		}
 		for (BioCAnnotation note : in.getAnnotations() ) {
-			out.addAnnotation( note );
+			out.addAnnotation( getAnnotation(note) );
 		}
 		for (BioCRelation rel : in.getRelations() ) {
 			out.addRelation( rel );
@@ -86,7 +86,7 @@ public class CopyConverter {
 		out.setInfons( in.getInfons() );
 	
 		for (BioCAnnotation note : in.getAnnotations() ) {
-			out.addAnnotation( note );
+			out.addAnnotation( getAnnotation(note) );
 		}
 		for (BioCRelation rel : in.getRelations() ) {
 			out.addRelation( rel );
@@ -94,4 +94,17 @@ public class CopyConverter {
 	
 		return out;
 	}
+	
+	/**
+	  * Copy a {@code BioCAnnotation}.
+	  */
+	  public BioCAnnotation getAnnotation(BioCAnnotation in) {
+	    BioCAnnotation out = new BioCAnnotation();
+	    out.setID(in.getID());
+	    out.setInfons(in.getInfons());
+	    out.setText(in.getText());
+	    out.setLocations(in.getLocations());
+	    
+	    return out;
+	  }
 }

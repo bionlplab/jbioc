@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="lib/xmlunit-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/stax-utils.jar"/>
 	<classpathentry kind="lib" path="lib/stax2-api-3.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/BioLemmatizer.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
