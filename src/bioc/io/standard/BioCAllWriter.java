@@ -100,7 +100,8 @@ abstract class BioCAllWriter implements Closeable {
       throws XMLStreamException {
     writer.writeStartElement("annotation");
     // id
-    writer.writeAttribute("id", annotation.getID());
+    if ( annotation.getID() != null) 
+      writer.writeAttribute("id", annotation.getID());
     // infon
     write(annotation.getInfons());
     // location

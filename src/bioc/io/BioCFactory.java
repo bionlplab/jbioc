@@ -17,7 +17,7 @@ public abstract class BioCFactory {
       return new bioc.io.woodstox.BioCFactoryImpl();
     } else {
       throw new FactoryConfigurationError(
-          "only STANDARD and WOODSTOX are supported.");
+          "only " + STANDARD + " and " + WOODSTOX + " are supported.");
     }
   }
 
