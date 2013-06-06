@@ -75,6 +75,16 @@ public class BioCAnnotation {
     this.id = id;
   }
   
+  public void setLocation(BioCLocation location){
+	  ArrayList<BioCLocation> locationList = new ArrayList<BioCLocation>();
+      locationList.add(location);
+	  setLocations(locationList);
+  }
+  
+  public void setLocation (int offset, int length){
+	setLocation(new BioCLocation(offset,length));  
+  }
+  
   public void setLocations(List<BioCLocation> locations) {
     this.locations = locations;  
   }
