@@ -2,10 +2,8 @@ package bioc.test;
 
 /*
  * Split passages into sentences. This is a demonstration of what a useful
- tool
- * would look like, not a genuine tool. It uses the naive period-space
- pattern
- * to split sentences, not a genuine algorithm as in the C++ tool.
+ *  tool would look like, not a genuine tool. It uses the naive period-space
+ *  pattern to split sentences, not a reliable algorithm as in the C++ tool.
  */
 
 import java.io.FileOutputStream;
@@ -22,6 +20,7 @@ import bioc.BioCSentence;
 import bioc.io.BioCDocumentReader;
 import bioc.io.BioCDocumentWriter;
 import bioc.io.BioCFactory;
+import bioc.util.CopyConverter;
 
 class SentenceConverter extends CopyConverter {
 
