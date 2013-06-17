@@ -1,8 +1,9 @@
 package bioc.tool;
 
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -41,8 +42,9 @@ public class AddLemma {
     BioCFactory factory = BioCFactory.newFactory(flags);
     BioCDocumentReader reader = factory
         .createBioCDocumentReader(new FileReader(inXML));
-    BioCDocumentWriter writer = factory
-        .createBioCDocumentWriter(new FileWriter(outXML));
+    BioCDocumentWriter writer = factory.createBioCDocumentWriter(
+			  new OutputStreamWriter(
+					  new FileOutputStream(outXML), "UTF-8"));
 
     BioCCollection collection = reader.readCollectionInfo();
     
