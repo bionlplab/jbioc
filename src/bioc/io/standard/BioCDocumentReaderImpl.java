@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -72,15 +73,15 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
 
       @Override
       public BioCDocument next() {
-        BioCDocument thisDocument = document;
-        sentence = null;
-        passage = null;
-        document = null;
-        try {
+    	BioCDocument thisDocument = document;
+    	sentence = null;
+    	passage = null;
+    	document = null;
+    	try {
           read();
-        } catch (XMLStreamException e) {
-          e.printStackTrace();
-        }
+    	} catch (XMLStreamException e) {
+          throw new NoSuchElementException( e.getMessage() );
+    	}
         return thisDocument;
       }
 

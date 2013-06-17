@@ -47,7 +47,6 @@ class BioCDocumentWriterImpl extends BioCAllWriter implements
       writer.flush();
       writer.close();
     } catch (XMLStreamException e) {
-      e.printStackTrace();
       throw new IOException(e.getMessage());
     }
   }

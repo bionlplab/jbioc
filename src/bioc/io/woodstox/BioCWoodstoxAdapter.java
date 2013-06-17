@@ -36,7 +36,11 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   public void close()
       throws IOException {
     if (outConnector != null) {
-      outConnector.endWrite();
+      try {
+        outConnector.endWrite();
+      } catch (XMLStreamException e) {
+        throw new IOException( e.getMessage(), e );
+      }
     }
   }
 

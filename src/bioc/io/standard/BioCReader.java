@@ -75,8 +75,7 @@ abstract class BioCReader implements Closeable {
     try {
       reader.close();
     } catch (XMLStreamException e) {
-      e.printStackTrace();
-      throw new IOException(e.getMessage());
+      throw new IOException(e.getMessage(),e);
     }
   }
 

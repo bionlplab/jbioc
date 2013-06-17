@@ -4,6 +4,7 @@ import java.io.Reader;
 import java.io.Writer;
 
 import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 
 public abstract class BioCFactory {
 
@@ -21,12 +22,16 @@ public abstract class BioCFactory {
     }
   }
 
-  public abstract BioCCollectionWriter createBioCCollectionWriter(Writer out);
+  public abstract BioCCollectionWriter createBioCCollectionWriter(Writer out)
+    throws XMLStreamException;
 
-  public abstract BioCDocumentWriter createBioCDocumentWriter(Writer out);
+  public abstract BioCDocumentWriter createBioCDocumentWriter(Writer out) 
+      throws XMLStreamException;
 
-  public abstract BioCCollectionReader createBioCCollectionReader(Reader in);
+  public abstract BioCCollectionReader createBioCCollectionReader(Reader in)
+      throws XMLStreamException;
 
-  public abstract BioCDocumentReader createBioCDocumentReader(Reader in);
+  public abstract BioCDocumentReader createBioCDocumentReader(Reader in)
+      throws XMLStreamException;
 
 }

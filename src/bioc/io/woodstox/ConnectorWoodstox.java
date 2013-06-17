@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLOutputFactory;
@@ -45,17 +46,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
   /**
    * Call after last document has been written. Performs any needed cleanup and
    * closes the XML file.
+   * @throws XMLStreamException 
    */
-  public void endWrite() {
-    try {
+  public void endWrite() throws XMLStreamException {
       xtw.writeEndElement();
       xtw.writeEndDocument();
       xtw.flush();
       xtw.close();
-    } catch (Exception ex) {
-      System.err.println("Exception occured while writing " + ex);
-      ex.printStackTrace();
-    }
   }
 
   void fromXML(BioCDocument document)
@@ -320,10 +317,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         }
       }
     } catch (XMLStreamException ex) {
-      System.out.println(ex.getMessage());
-      if (ex.getNestedException() != null) {
-        ex.getNestedException().printStackTrace();
-      }
+      /* This loses the exception, but hasNext is not allowed to throw
+       * an exception. Could store the exception so it could be retrieved
+       * later, but calling code would never know to retrieve the 
+       * exception.
+       */
+      inDocument = false;
+      return false;
     }
 
     // end of XML
@@ -354,12 +354,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
       fromXML(document);
     } catch (XMLStreamException ex) {
-      System.out.println(ex.getMessage());
-      if (ex.getNestedException() != null) {
-        ex.getNestedException().printStackTrace();
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
+      throw new NoSuchElementException( ex.getMessage() );
     }
     return document;
   }
@@ -439,71 +434,60 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * Start reading XML file
    * 
    * @param filename XML file to read
+   * @throws XMLStreamException 
    */
-  public BioCCollection startRead(Reader in) {
+  public BioCCollection startRead(Reader in) 
+      throws XMLStreamException {
     XMLInputFactory2 xmlif = null;
-    try {
-      xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
-      xmlif.setProperty(
-          XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
-          Boolean.FALSE);
-      xmlif.setProperty(
-          XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
-          Boolean.FALSE);
-      //      xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-      xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
-      xmlif.configureForSpeed();
-    } catch (Exception ex) {
-      ex.printStackTrace();
-    }
+    xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
+    xmlif.setProperty(
+        XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
+        Boolean.FALSE);
+    xmlif.setProperty(
+        XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
+        Boolean.FALSE);
+    //      xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+    xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
+    xmlif.configureForSpeed();
 
     BioCCollection collection = new BioCCollection();
 
-    try {
-      xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(in);
-      int eventType = xmlr.getEventType();
-      String curElement = "";
-      finishedXML = false;
-      inDocument = false;
+    xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(in);
+    int eventType = xmlr.getEventType();
+    String curElement = "";
+    finishedXML = false;
+    inDocument = false;
 
-      while (xmlr.hasNext() && !inDocument) {
-        eventType = xmlr.next();
-        switch (eventType) {
-        case XMLEvent.START_ELEMENT:
-          curElement = xmlr.getName().toString();
-          if (curElement.equals("document")) {
-            inDocument = true;
-          } else if (curElement.equals("source")) {
-            collection.setSource(getString("source"));
-          } else if (curElement.equals("date")) {
-            collection.setDate(getString("date"));
-          } else if (curElement.equals("key")) {
-            collection.setKey(getString("key"));
-          } else if (curElement.equals("infon")) {
-              collection.putInfon(
-            		  xmlr.getAttributeValue("", "key"),
-            		  getString("infon"));
-          }
-          break;
-        case XMLEvent.END_ELEMENT:
-          if (curElement.equals("collection")) {
-            inDocument = false;
-            finishedXML = true;
-          }
-          break;
-        case XMLEvent.END_DOCUMENT:
+    while (xmlr.hasNext() && !inDocument) {
+      eventType = xmlr.next();
+      switch (eventType) {
+      case XMLEvent.START_ELEMENT:
+        curElement = xmlr.getName().toString();
+        if (curElement.equals("document")) {
+          inDocument = true;
+        } else if (curElement.equals("source")) {
+          collection.setSource(getString("source"));
+        } else if (curElement.equals("date")) {
+          collection.setDate(getString("date"));
+        } else if (curElement.equals("key")) {
+          collection.setKey(getString("key"));
+        } else if (curElement.equals("infon")) {
+          collection.putInfon(
+              xmlr.getAttributeValue("", "key"),
+              getString("infon"));
+        }
+        break;
+      case XMLEvent.END_ELEMENT:
+        if (curElement.equals("collection")) {
           inDocument = false;
           finishedXML = true;
-          break;
         }
+        break;
+      case XMLEvent.END_DOCUMENT:
+        inDocument = false;
+        finishedXML = true;
+        break;
       }
-    } catch (XMLStreamException ex) {
-      System.out.println(ex.getMessage());
-      if (ex.getNestedException() != null) {
-        ex.getNestedException().printStackTrace();
-      }
-    } catch (Exception ex) {
-      ex.printStackTrace();
     }
 
     return collection;
@@ -517,27 +501,26 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * 
    *          Since this class is for document at a time IO, any documents in
    *          the collection are ignored.
+   * @throws XMLStreamException 
    */
-  public void startWrite(Writer out, BioCCollection collection) {
-    try {
-      // ?? if filename == '-', write to Print.out ??
-      XMLOutputFactory xof = XMLOutputFactory.newInstance();
-      xtw = null;
-      xtw = (XMLStreamWriter2) xof.createXMLStreamWriter(out);
-      // new FileWriter(filename));
+  public void startWrite(Writer out, BioCCollection collection)
+      throws XMLStreamException {
+    
+    // ?? if filename == '-', write to Print.out ??
+    XMLOutputFactory xof = XMLOutputFactory.newInstance();
+    xtw = null;
+    xtw = (XMLStreamWriter2) xof.createXMLStreamWriter(out);
+    // new FileWriter(filename));
 
-      // xtw.writeStartBioCDocument(null,"1.0");
-      xtw.writeStartDocument();
-      xtw.writeDTD("collection", "BioC.dtd", null, null);
-      xtw.writeStartElement("collection");
-      writeXML("source", collection.getSource());
-      writeXML("date", collection.getDate());
-      writeXML("key", collection.getKey());
-      writeXML(collection.getInfons());
-    } catch (Exception ex) {
-      System.err.println("Exception occured while writing " + ex);
-      ex.printStackTrace();
-    }
+    // xtw.writeStartBioCDocument(null,"1.0");
+    xtw.writeStartDocument();
+    xtw.writeDTD("collection", "BioC.dtd", null, null);
+    xtw.writeStartElement("collection");
+    writeXML("source", collection.getSource());
+    writeXML("date", collection.getDate());
+    writeXML("key", collection.getKey());
+    writeXML(collection.getInfons());
+
   }
 
   public String toXML(BioCCollection collection)
@@ -568,14 +551,11 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * Write the next document to the XML file.
    * 
    * @param document document to write
+   * @throws XMLStreamException 
    */
-  public void writeNext(BioCDocument document) {
-    try {
-      writeXML(document);
-    } catch (Exception ex) {
-      System.err.println("Exception occured while writing " + ex);
-      ex.printStackTrace();
-    }
+  public void writeNext(BioCDocument document)
+      throws XMLStreamException {
+    writeXML(document);
   }
 
   void writeXML(BioCAnnotation annotation)

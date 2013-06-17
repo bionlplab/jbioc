@@ -15,51 +15,33 @@ import bioc.io.BioCFactory;
 public class BioCFactoryImpl extends BioCFactory {
 
   @Override
-  public BioCCollectionWriter createBioCCollectionWriter(Writer out) {
-    try {
-      return new BioCCollectionWriterImpl(out);
-    } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
-    } catch (XMLStreamException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public BioCCollectionWriter createBioCCollectionWriter(Writer out)
+    throws XMLStreamException
+  {
+    return new BioCCollectionWriterImpl(out);
   }
 
   @Override
-  public BioCDocumentWriter createBioCDocumentWriter(Writer out) {
-    try {
-      return new BioCDocumentWriterImpl(out);
-    } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
-    } catch (XMLStreamException e) {
-      e.printStackTrace();
-    }
-    return null;
+  public BioCDocumentWriter createBioCDocumentWriter(Writer out) 
+      throws XMLStreamException
+      {
+        return new BioCDocumentWriterImpl(out);
+      }
+
+  @Override
+  public BioCCollectionReader createBioCCollectionReader(Reader in) 
+      throws XMLStreamException {
+      try {
+        return new BioCCollectionReaderImpl(in);
+      } catch (FactoryConfigurationError e) {
+        throw new XMLStreamException(e);
+      }
   }
 
   @Override
-  public BioCCollectionReader createBioCCollectionReader(Reader in) {
-    try {
-      return new BioCCollectionReaderImpl(in);
-    } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
-    } catch (XMLStreamException e) {
-      e.printStackTrace();
+  public BioCDocumentReader createBioCDocumentReader(Reader in)
+      throws FactoryConfigurationError, XMLStreamException {
+    return new BioCDocumentReaderImpl(in);
     }
-    return null;
-  }
-
-  @Override
-  public BioCDocumentReader createBioCDocumentReader(Reader in) {
-    try {
-      return new BioCDocumentReaderImpl(in);
-    } catch (FactoryConfigurationError e) {
-      e.printStackTrace();
-    } catch (XMLStreamException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
 
 }
