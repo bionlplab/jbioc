@@ -4,7 +4,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -359,8 +358,8 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     return document;
   }
 
-  public BioCCollection parseXMLCollection(Reader xmlReader)
-      throws Exception {
+  public BioCCollection parseXMLCollection(Reader xmlReader) 
+      throws XMLStreamException {
     XMLInputFactory2 xmlif = null;
     xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
     xmlif.setProperty(
@@ -393,6 +392,10 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
           collection.setDate(getString("date"));
         } else if (curElement.equals("key")) {
           collection.setKey(getString("key"));
+        } else if (curElement.equals("infon")) {
+          collection.putInfon(
+              xmlr.getAttributeValue("", "key"),
+              getString("infon"));
         }
         break;
       case XMLEvent.END_ELEMENT:
@@ -409,13 +412,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     }
     while (hasNext()) {
       BioCDocument document = next();
-      List<BioCDocument> documents = collection.getDocuments();
-      if (documents == null) {
-        documents = new ArrayList<BioCDocument>();
-      }
-      documents.add(document);
-      collection.getDocuments().clear();
-      collection.getDocuments().addAll(documents);
+      collection.addDocument(document);
     }
     return collection;
   }
