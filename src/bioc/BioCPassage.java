@@ -2,20 +2,19 @@ package bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.relation.Relation;
-
 /**
- * One passage in a {@link Document}.
+ * One passage in a {@link BioCDocument}.
  * 
  * This might be the {@code text} in the passage and possibly
- * {@link Annotation}s over that text. It could be the
- * {@link Sentence}s in the passage. In either case it might include
- * {@link Relation}s over annotations on the passage.
+ * {@link BioCAnnotation}s over that text. It could be the
+ * {@link BioCSentence}s in the passage. In either case it might include
+ * {@link BioCRelation}s over annotations on the passage.
  */
-public class BioCPassage {
+public class BioCPassage implements Iterable<BioCSentence> {
 
   /**
    * The offset of the passage in the parent document. The significance of the
@@ -86,59 +85,19 @@ public class BioCPassage {
     }
   }
 
-  public void addAnnotation(BioCAnnotation annotation) {
-    annotations.add(annotation);
-  }
-
-  public void addRelation(BioCRelation relation) {
-    relations.add(relation);
-  }
-
-  /**
-   * @param sentences the sentences to set
-   */
-  public void addSentence(BioCSentence sentence) {
-    sentences.add(sentence);
-  }
-
-  public List<BioCAnnotation> getAnnotations() {
-    return annotations;
-  }
-
-  public String getInfon(String key) {
-    return infons.get(key);
-  }
-
-  /**
-   * @param infons the infons to set
-   */
-  public void setInfons(Map<String,String> infons) {
-    this.infons = infons;
-  }
-
-  public Map<String, String> getInfons() {
-    return infons;
-  }
-
+  
   /**
    * @return the offset
    */
   public int getOffset() {
     return offset;
-  }
-
+  } 
+  
   /**
-   * @return the relations
+   * @param offset the offset to set
    */
-  public List<BioCRelation> getRelations() {
-    return relations;
-  }
-
-  /**
-   * @return the sentences
-   */
-  public List<BioCSentence> getSentences() {
-    return sentences;
+  public void setOffset(int offset) {
+    this.offset = offset;
   }
 
   /**
@@ -148,23 +107,162 @@ public class BioCPassage {
     return text;
   }
 
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  /**
-   * @param offset the offset to set
-   */
-  public void setOffset(int offset) {
-    this.offset = offset;
-  }
-
   /**
    * @param text the text to set
    */
   public void setText(String text) {
     this.text = text;
   }
+
+  /**
+   * @return the infons
+   */
+  public Map<String, String> getInfons() {
+    return infons;
+  }
+
+  /**
+   * @param infons the infons to set
+   */
+  public void setInfons(Map<String,String> infons) {
+    this.infons = infons;
+  }
+
+  public void clearInfons(){
+	  infons.clear();
+  }
+  
+  public String getInfon(String key) {
+    return infons.get(key);
+  }
+
+  public void putInfon(String key, String value) {
+    infons.put(key, value);
+  }
+
+  public void removeInfon(String key){
+	  infons.remove(key);
+  }
+
+  
+  
+  public List<BioCAnnotation> getAnnotations() {
+	    return annotations;
+  }
+  
+  public void setAnnotations(List <BioCAnnotation> annotations) {
+	    this.annotations = annotations;
+  }
+
+  public void clearAnnotations(){
+	  annotations.clear();
+  }
+
+  public BioCAnnotation getAnnotation(int index){
+	  return annotations.get(index);
+  }
+
+  public void addAnnotation(BioCAnnotation annotation) {
+	  annotations.add(annotation);
+  }
+
+  public void removeAnnotation(BioCAnnotation annotation){
+	 annotations.remove(annotation);  
+  }
+
+  public void removeAnnotation(int index){
+	  annotations.remove(index);
+  }
+  
+  /**
+   * @return iterator over annotations
+   */
+  public Iterator<BioCAnnotation> annotationIterator() {
+    return annotations.iterator();
+  }
+
+/**
+ * @return the relations
+ */
+  public List<BioCRelation> getRelations() {
+	    return relations;
+  }
+  
+  public void setRelations(List <BioCRelation> relations) {
+    this.relations = relations;
+  }
+ 
+  public void clearRelations(){
+	  relations.clear();
+  }
+
+  public BioCRelation getRelation(int index){
+	  return relations.get(index);
+  }
+
+  public void addRelation(BioCRelation relation) {
+	    relations.add(relation);
+  }
+
+  public void removeRelation(BioCRelation relation){
+	  relations.remove(relation);  
+  }
+
+  public void removeRelation(int index){
+	  relations.remove(index);
+  }
+  
+  /**
+   * @return iterator over relations
+   */
+  public Iterator<BioCRelation> relationIterator() {
+    return relations.iterator();
+  }
+ 
+  /**
+   * @return the sentences
+   */
+  public List<BioCSentence> getSentences() {
+	    return sentences;
+	  }
+  
+  public BioCSentence getSentence(int index){
+	  return sentences.get(index);
+  }
+
+  public void removeSentence(BioCSentence sentence){
+	sentences.remove(sentence);  
+  }
+
+  public void removeSentence(int index){
+	sentences.remove(index);
+  }
+
+  public void clearSentences(){
+	sentences.clear();
+  }
+
+/**
+ * @param sentence the sentence to add
+ */
+public void addSentence(BioCSentence sentence) {
+  sentences.add(sentence);
+}
+
+/**
+ * @param sentences the collection of sentences to set
+ */
+public void setSentences(List <BioCSentence> sentences) {
+	    this.sentences = sentences;
+	  }
+
+/**
+ * @return iterator over {@link BioCSentence}s
+ */
+public Iterator<BioCSentence> iterator() {
+  return sentences.iterator();
+}
+      
 
   @Override
   public String toString() {

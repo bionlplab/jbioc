@@ -6,9 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import bioc.util.BioCPassageIterator;
-import bioc.util.BioCSentenceIterator;
-
 /**
  * Collection of documents.
  * 
@@ -115,6 +112,10 @@ public class BioCCollection implements Iterable<BioCDocument> {
     this.infons = infons;
   }
 
+  public void clearInfons(){
+	  infons.clear();
+  }
+  
   public String getInfon(String key) {
     return infons.get(key);
   }
@@ -123,6 +124,10 @@ public class BioCCollection implements Iterable<BioCDocument> {
     infons.put(key, value);
   }
 
+  public void removeInfon(String key){
+	  infons.remove(key);
+  }
+  
   /**
    * @return the documents
    */
@@ -133,44 +138,35 @@ public class BioCCollection implements Iterable<BioCDocument> {
   /**
    * @param documents the documents to set
    */
+  public void setDocuments (List <BioCDocument> documents){
+	  this.documents = documents;	  
+  }
+  
+  public void clearDocuments(){
+	  documents.clear();
+  }
+
+  public int getSize(){
+	return documents.size();  
+  }
+  
+  public BioCDocument getDocument(int index) {
+	    return documents.get(index);
+	  }
+  
+  /**
+   * @param document the document to add
+   */
   public void addDocument(BioCDocument document) {
     documents.add(document);
   }
 
-  public BioCPassageIterator getPassageItr() {
-    return new BioCPassageIterator(this);
+  public void removeDocument(BioCDocument document){
+	  documents.remove(document);
   }
-
-  /**
-   * @deprecated replaced by {@link getPassageItr}
-   */
-  @Deprecated
-  public List<BioCPassage> getPassages() {
-    ArrayList<BioCPassage> pass = new ArrayList<BioCPassage>();
-    for (BioCDocument doc : documents) {
-      pass.addAll(doc.passages);
-    }
-    return pass;
-  }
-
-  public BioCSentenceIterator getSentenceItr() {
-    return new BioCSentenceIterator(this);
-  }
-
-  /**
-   * @deprecated replaced by {@link getSentenceItr}
-   */
-  @Deprecated
-  public List<BioCSentence> getSentences() {
-    ArrayList<BioCSentence> sens = new ArrayList<BioCSentence>();
-    for (BioCDocument doc : documents) {
-      for (BioCPassage pas : doc.passages) {
-        sens.addAll(pas.sentences);
-      }
-    }
-    return sens;
-  }
-
+  
+ 
+  
   @Override
   public String toString() {
     String s = "source: " + source;

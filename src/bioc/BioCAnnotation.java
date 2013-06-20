@@ -39,42 +39,54 @@ public class BioCAnnotation {
     text = annotation.text;
   }
 
-  public void addLocation(BioCLocation location) {
-    locations.add(location);
-  }
-
   public String getID() {
-    return id;
+	    return id;
   }
-
-  public String getInfon(String key) {
-    return infons.get(key);
+ 
+  public void setID(String id) {
+	    this.id = id;
   }
 
   public Map<String, String> getInfons() {
-    return infons;
-  }
+	    return infons;
+	  }
 
   public void setInfons(Map<String, String> infons) {
 	    this.infons = infons;
   }  
-  
-  public List<BioCLocation> getLocations() {
-    return locations;
-  }
 
-  public String getText() {
-    return text;
+  public void clearInfons(){
+	  infons.clear();
+  }
+  
+  public String getInfon(String key) {
+    return infons.get(key);
   }
 
   public void putInfon(String key, String value) {
     infons.put(key, value);
   }
 
-  public void setID(String id) {
-    this.id = id;
+  public void removeInfon(String key){
+	  infons.remove(key);
   }
   
+  public List<BioCLocation> getLocations() {
+	    return locations;
+  }
+ 
+  public void setLocations(List<BioCLocation> locations) {
+	    this.locations = locations;  
+  }
+
+  public void clearLocations(){
+	  locations.clear();
+  }
+  
+  public void addLocation(BioCLocation location) {
+    locations.add(location);
+  }
+
   public void setLocation(BioCLocation location){
 	  ArrayList<BioCLocation> locationList = new ArrayList<BioCLocation>();
       locationList.add(location);
@@ -84,11 +96,11 @@ public class BioCAnnotation {
   public void setLocation (int offset, int length){
 	setLocation(new BioCLocation(offset,length));  
   }
-  
-  public void setLocations(List<BioCLocation> locations) {
-    this.locations = locations;  
-  }
 
+  public String getText() {
+    return text;
+  }
+  
   public void setText(String text) {
     this.text = text;
   }

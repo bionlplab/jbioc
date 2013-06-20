@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Relationship between multiple {@link Annotation}s and possibly other
- * {@code Relation}s.
+ * Relationship between multiple {@link BioCAnnotation}s and possibly other
+ * {@code BioCRelation}s.
  */
 public class BioCRelation implements Iterable<BioCNode> {
 
@@ -41,36 +41,48 @@ public class BioCRelation implements Iterable<BioCNode> {
     nodes = new ArrayList<BioCNode>(relation.nodes);
   }
 
+  public String getID() {
+	    return id;
+	  }
+ 
+  public void setID(String id) {
+	    this.id = id;
+	  }
+
+  public Map<String, String> getInfons() {
+	    return infons;
+	  }
+
+  public void setInfons(Map<String, String> infons) {
+	  this.infons = infons;
+  }  
+
+  public void clearInfons(){
+	  infons.clear();
+  }
+
+  public String getInfon(String key) {
+      return infons.get(key);
+  }
+
+  public void putInfon(String key, String value) {
+	  infons.put(key, value);
+  }
+
+  public void removeInfon(String key){
+	  infons.remove(key);
+  }
+
   public void addNode(BioCNode node) {
     nodes.add(node);
   }
  
   public void addNode(String refId, String role) {
 	    addNode(new BioCNode (refId, role));
-	  }
+  }
   
-  public String getID() {
-    return id;
-  }
-
-  public String getInfon(String key) {
-    return infons.get(key);
-  }
-
-  public Map<String, String> getInfons() {
-    return infons;
-  }
-
   public List<BioCNode> getNodes() {
     return nodes;
-  }
-
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  public void setID(String id) {
-    this.id = id;
   }
 
   public void setNodes(List<BioCNode> nodes) {

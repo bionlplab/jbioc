@@ -82,6 +82,10 @@ public class BioCDocument implements Iterable<BioCPassage> {
     this.infons = infons;
   }
 
+  public void clearInfons(){
+	  infons.clear();
+  }
+  
   public String getInfon(String key) {
     return infons.get(key);
   }
@@ -90,11 +94,49 @@ public class BioCDocument implements Iterable<BioCPassage> {
     infons.put(key, value);
   }
 
+  public void removeInfon(String key){
+	  infons.remove(key);
+  }
+  
   /**
    * @return the passages
    */
   public List<BioCPassage> getPassages() {
     return passages;
+  }
+ 
+  /**
+   * @param passages the passage collection to set
+   */
+  public void setPassages (List<BioCPassage> passages){
+	  this.passages = passages;
+  }
+  
+  public void clearPassages(){
+	  passages.clear();
+  }
+
+  public int getSize(){
+	  return passages.size();
+  }
+  
+  public BioCPassage getPassage(int index) {
+	    return passages.get(index);
+	  }
+  /**
+   * @param passage the passage to add
+   */
+  public void addPassage(BioCPassage passage) {
+    passages.add(passage);
+  }
+ 
+  public void removePassage(BioCPassage passage){
+	  passages.remove(passage);
+  }
+  
+  @Override
+  public Iterator<BioCPassage> iterator() {
+    return passages.iterator();
   }
 
   /**
@@ -102,17 +144,33 @@ public class BioCDocument implements Iterable<BioCPassage> {
    */
   public List<BioCRelation> getRelations() {
     return relations;
-  }
+  } 
 
-  /**
-   * @param passages the passages to set
-   */
-  public void addPassage(BioCPassage passage) {
-    passages.add(passage);
+  public void setRelations (List<BioCRelation> relations){
+	  this.relations = relations;
   }
-
+  
+  public void clearRelations(){
+	  relations.clear();
+  }
+   
+  public BioCRelation getRelation(int index) {
+	    return relations.get(index);
+  }
+  
   public void addRelation(BioCRelation relation) {
     relations.add(relation);
+  }
+  
+  public void removeRelation(BioCRelation relation){
+	  relations.remove(relation);
+  }
+  
+  /**
+   * @return iterator over relations
+   */
+  public Iterator<BioCRelation> relationIterator() {
+    return relations.iterator();
   }
 
   @Override
@@ -128,8 +186,8 @@ public class BioCDocument implements Iterable<BioCPassage> {
     return s;
   }
 
-  @Override
-  public Iterator<BioCPassage> iterator() {
-    return passages.iterator();
-  }
+ 
+
+
+
 }
