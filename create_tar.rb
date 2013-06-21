@@ -3,18 +3,19 @@
 #### Create the Java distribution tar file
 
 require 'ftools'
+require 'fileutils'
 
-dir = 'BioC_Java_1.0'
+dir = 'BioC_Java_1.0.1'
 
 Dir.mkdir dir unless File.exists? dir
 
-files = %w{.classpath .gitignore .project BioC.dtd LICENSE.txt README.txt}
+files = %w{.classpath .gitignore .project BioC.dtd LICENSE.txt README.txt
+ReadMe_BioC_Java.txt ReleaseNotes.txt}
 files.each { |f| File.copy f, dir }
 
 
-lib = "#{dir}/lib"
-Dir.mkdir lib
-File.copy 'lib/bioc.jar', lib
+FileUtils.cp_r 'lib', dir
+
 
 scripts = "#{dir}/scripts"
 Dir.mkdir scripts
