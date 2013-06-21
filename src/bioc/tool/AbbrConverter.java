@@ -89,16 +89,19 @@ private void addAbbrInfo(AbbrInfo info, BioCPassage currentPassage) {
    counter++; 
    
    shortForm.setID(sfId); 
+   shortForm.putInfon("type", "ABBR");
    shortForm.putInfon("ABBR", "ShortForm");
    shortForm.setLocation(info.shortFormIndex+currentPassage.getOffset(), info.shortForm.length());
    shortForm.setText(info.shortForm);
    
    longForm.setID(lfId); 
+   longForm.putInfon("type", "ABBR");
    longForm.putInfon("ABBR", "LongForm");
    longForm.setLocation(info.longFormIndex+currentPassage.getOffset(), info.longForm.length());
    longForm.setText(info.longForm);
    
    abbreviation.setID(relId);
+   abbreviation.putInfon("type", "ABBR");
    abbreviation.addNode(sfId, "ShortForm");
    abbreviation.addNode(lfId, "LongForm");
    
@@ -119,16 +122,19 @@ private void addAbbrInfo(AbbrInfo info, BioCSentence currentSentence) {
 	   counter++; 
 	   
 	   shortForm.setID(sfId); 
+	   shortForm.putInfon("type", "ABBR");
 	   shortForm.putInfon("ABBR", "ShortForm");
 	   shortForm.setLocation(info.shortFormIndex+currentSentence.getOffset(), info.shortForm.length());
 	   shortForm.setText(info.shortForm);
 	   
 	   longForm.setID(lfId); 
+	   longForm.putInfon("type", "ABBR");
 	   longForm.putInfon("ABBR", "LongForm");
 	   longForm.setLocation(info.longFormIndex+currentSentence.getOffset(), info.longForm.length());
 	   longForm.setText(info.longForm);
 	   
 	   abbreviation.setID(relId);
+	   abbreviation.putInfon("type", "ABBR");
 	   abbreviation.addNode(sfId, "ShortForm");
 	   abbreviation.addNode(lfId, "LongForm");
 	   

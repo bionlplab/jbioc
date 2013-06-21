@@ -16,9 +16,11 @@ import bioc.tool.AbbrInfo;
 	 * A file consisting of short-form/long-form pairs (tab separated) can be specified
 	 * in tandem with the -testlist option for the purposes of evaluating the algorithm.
 	 *
-	 * @see <a href="http://biotext.berkeley.edu/papers/psb03.pdf">A Simple Algorithm for Identifying Abbreviation Definitions in Biomedical Text</a> 
+	 * A Simple Algorithm for Identifying Abbreviation Definitions in Biomedical Text
 	 * A.S. Schwartz, M.A. Hearst; Pacific Symposium on Biocomputing 8:451-462(2003) 
 	 * for a detailed description of the algorithm.  
+	 *
+	 * @see <a href="http://biotext.berkeley.edu/papers/psb03.pdf">A Simple Algorithm for Identifying Abbreviation Definitions in Biomedical Text</a>
 	 *
 	 * @author Ariel Schwartz
 	 * @version 03/12/03
