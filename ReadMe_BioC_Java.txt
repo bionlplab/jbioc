@@ -2,7 +2,7 @@ Java implementation of BioC
 Version 1.0
 Data structures and code to read / write BioC XML.
 
---------------------------------------------------------------------------------
+---------------------------------------------------------------------------
 BIOC
 
 BioC XML format can be used to exchange prepared biomedical corpora and
@@ -13,33 +13,33 @@ GOALS are to facilitate:
   - data exchange 
   - data and tool reuse
 
---------------------------------------------------------------------------------
-|*|  PUBLIC DOMAIN NOTICE							 
-|*|										 
-|*| This work is a "United States Government Work" under the terms of the    
-|*| United States Copyright Act. It was written as part of the authors'       
-|*| official duties as a United States Government employee and thus cannot    
-|*| be copyrighted within the United States. The data is freely available to 
-|*| the public for use. The National Library of Medicine and the U.S.       
-|*| Government have not placed any  restriction on its use or reproduction   
-|*|           								        
-|*| Although all reasonable efforts have been taken to ensure the accuracy and   
-|*| reliability of the data and its source code, the NLM and the U.S. Government 
-|*| do not and cannot warrant the performance or results that may be obtained by 
-|*| using it. The NLM and the U.S. Government disclaim all warranties, express   
-|*| or implied, including warranties of performance, merchantability or fitness  
-|*| for any particular purpose. 						 
-|*|										 
-|*| Please cite the authors in any work or product based on this material:	
-|*|
+---------------------------------------------------------------------------
+|*|  PUBLIC DOMAIN NOTICE                                                        
+|*| 
+|*| This work is a "United States Government Work" under the terms of the
+|*| United States Copyright Act. It was written as part of the authors'
+|*| official duties as a United States Government employee and thus cannot
+|*| be copyrighted within the United States. The data is freely available
+|*| to the public for use. The National Library of Medicine and the U.S.
+|*| Government have not placed any restriction on its use or reproduction
+|*|                                                                             
+|*| Although all reasonable efforts have been taken to ensure the accuracy
+|*| and reliability of the data and its source code, the NLM and the
+|*| U.S. Government do not and cannot warrant the performance or results
+|*| that may be obtained by using it. The NLM and the U.S. Government
+|*| disclaim all warranties, express or implied, including warranties of
+|*| performance, merchantability or fitness for any particular purpose.
+|*|                                                                              
+|*| Please cite the authors in any work or product based on this material:
+|*| 
 |*| BioC: A Minimalist Approach to Interoperability for Biomedical Text
 |*| Processing
 |*| Donald C. Comeau, Rezarta Islamaj Dogan, Paolo Ciccarese, Kevin
 |*| Bretonnel Cohen, Martin Krallinger, Florian Leitner, Zhiyong Lu, Yifan
 |*| Peng, Fabio Rinaldi, Manabu Torii, Alfonso Valencia, Karin Verspoor,
-|*| Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, submitted, DATABASE,
-|*| 2013.
---------------------------------------------------------------------------------
+|*| Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, submitted,
+|*| DATABASE, 2013.
+---------------------------------------------------------------------------
 
 
 This distribution includes following files and directories:
@@ -56,7 +56,8 @@ lib/
   bioc.jar. The compiled code.
   Several other libraries needed to use BioC code. Details below.
 scripts/
-  Unix test and demo scripts.
+  Unix test and demo scripts. They assume they are being run in the
+  unpacked BioC directory.
 src/
   BioC Java source files. In addition to the core files, includes test
   programs and a couple useful BioC-compatible tools.
@@ -213,16 +214,16 @@ extraction of abbreviations and their definitions from biomedical text.
 
 The Schwartz and Hearst code (@author Ariel Schwartz, @version 03/12/03)
 has been updated to work with the BioC classes: 
-	- given a BioC passage or BioC sentence, the FindAbbr.java class calls 
-	a slightly modified ExtractAbbrev method to find all abbreviation definitions
-	in the given text and their corresponding offsets. 
-	
-	the output is written back in BioC XML format, where the original BioC passage 
-	or BioC sentence is enriched with new annotations and relations that 
-	express the abbreviations:  
-	annotations: long form and short form, 
-	relation: the link between long form and corresponding short form
-	                                                 
+        - given a BioC passage or BioC sentence, the FindAbbr.java class calls 
+        a slightly modified ExtractAbbrev method to find all abbreviation definitions
+        in the given text and their corresponding offsets. 
+        
+        the output is written back in BioC XML format, where the original BioC passage 
+        or BioC sentence is enriched with new annotations and relations that 
+        express the abbreviations:  
+        annotations: long form and short form, 
+        relation: the link between long form and corresponding short form
+                                                         
 see key file for more. 
 
 
