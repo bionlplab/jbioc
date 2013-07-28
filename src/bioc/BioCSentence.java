@@ -53,7 +53,8 @@ public class BioCSentence {
   public BioCSentence(BioCSentence sentence) {
     offset = sentence.offset;
     text = sentence.text;
-
+    infons = new HashMap<String, String>(sentence.infons);
+    
     annotations = new ArrayList<BioCAnnotation>();
     for (BioCAnnotation ann : sentence.annotations) {
       annotations.add(new BioCAnnotation(ann));
