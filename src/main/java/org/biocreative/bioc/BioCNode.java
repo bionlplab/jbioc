@@ -1,5 +1,9 @@
 package org.biocreative.bioc;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 public class BioCNode {
 
   /**
@@ -42,11 +46,33 @@ public class BioCNode {
   }
 
   @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(refid)
+        .append(role)
+        .toHashCode();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    BioCNode rhs = (BioCNode) obj;
+    return new EqualsBuilder()
+        .append(role, rhs.role)
+        .append(refid, rhs.refid)
+        .isEquals();
+  }
+
+  @Override
   public String toString() {
-    String s = "refid: " + refid;
-    s += "\n";
-    s += "role: " + role;
-    s += "\n";
-    return s;
+    return new ToStringBuilder(this).
+        append("refid", refid).
+        append("rold", role).
+        toString();
   }
 }

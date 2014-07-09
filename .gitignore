@@ -7,3 +7,4 @@ doc/*
 \#*
 .\#*
 lib/bioc.jar
+/target/
