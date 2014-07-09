@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Relationship between multiple {@link BioCAnnotation}s and possibly other
  * {@code BioCRelation}s.
@@ -90,18 +94,40 @@ public class BioCRelation implements Iterable<BioCNode> {
   }
 
   @Override
-  public String toString() {
-    String s = "id: " + id;
-    s += "\n";
-    s += "infons: " + infons;
-    s += "\n";
-    s += "nodes: " + nodes;
-    s += "\n";
-    return s;
+  public Iterator<BioCNode> iterator() {
+    return nodes.iterator();
+  }
+  
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(id)
+        .append(infons)
+        .append(nodes)
+        .toHashCode();
+  }
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    BioCRelation rhs = (BioCRelation) obj;
+    return new EqualsBuilder()
+        .append(id, rhs.id)
+        .append(infons, rhs.infons)
+        .append(nodes, rhs.nodes)
+        .isEquals();
   }
 
   @Override
-  public Iterator<BioCNode> iterator() {
-    return nodes.iterator();
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("infons", infons)
+        .append("nodes", nodes)
+        .toString();
   }
 }
