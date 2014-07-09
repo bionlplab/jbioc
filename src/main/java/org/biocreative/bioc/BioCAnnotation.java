@@ -7,6 +7,10 @@ import java.util.Map;
 
 import javax.management.relation.Relation;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Stand off annotation. The connection to the original text can be made
  * through the {@code location} and the {@code text} fields.
@@ -16,14 +20,14 @@ public class BioCAnnotation {
   /**
    * Id used to identify this annotation in a {@link Relation}.
    */
-  protected String              id;
+  protected String id;
   protected Map<String, String> infons;
-  protected List<BioCLocation>  locations;
+  protected List<BioCLocation> locations;
 
   /**
    * The annotated text.
    */
-  protected String              text;
+  protected String text;
 
   public BioCAnnotation() {
     id = "";
@@ -40,25 +44,25 @@ public class BioCAnnotation {
   }
 
   public String getID() {
-	    return id;
+    return id;
   }
- 
+
   public void setID(String id) {
-	    this.id = id;
+    this.id = id;
   }
 
   public Map<String, String> getInfons() {
-	    return infons;
-	  }
+    return infons;
+  }
 
   public void setInfons(Map<String, String> infons) {
-	    this.infons = infons;
-  }  
-
-  public void clearInfons(){
-	  infons.clear();
+    this.infons = infons;
   }
-  
+
+  public void clearInfons() {
+    infons.clear();
+  }
+
   public String getInfon(String key) {
     return infons.get(key);
   }
@@ -67,53 +71,85 @@ public class BioCAnnotation {
     infons.put(key, value);
   }
 
-  public void removeInfon(String key){
-	  infons.remove(key);
-  }
-  
-  public List<BioCLocation> getLocations() {
-	    return locations;
-  }
- 
-  public void setLocations(List<BioCLocation> locations) {
-	    this.locations = locations;  
+  public void removeInfon(String key) {
+    infons.remove(key);
   }
 
-  public void clearLocations(){
-	  locations.clear();
+  public List<BioCLocation> getLocations() {
+    return locations;
   }
-  
+
+  public void setLocations(List<BioCLocation> locations) {
+    this.locations = locations;
+  }
+
+  public void clearLocations() {
+    locations.clear();
+  }
+
   public void addLocation(BioCLocation location) {
     locations.add(location);
   }
 
-  public void setLocation(BioCLocation location){
-	  ArrayList<BioCLocation> locationList = new ArrayList<BioCLocation>();
-      locationList.add(location);
-	  setLocations(locationList);
+  /**
+   * @deprecated use {@link addLocation()} instead
+   */
+  @Deprecated
+  public void setLocation(BioCLocation location) {
+    ArrayList<BioCLocation> locationList = new ArrayList<BioCLocation>();
+    locationList.add(location);
+    setLocations(locationList);
   }
-  
-  public void setLocation (int offset, int length){
-	setLocation(new BioCLocation(offset,length));  
+
+  /**
+   * @deprecated use {@link addLocation()} instead
+   */
+  @Deprecated
+  public void setLocation(int offset, int length) {
+    setLocation(new BioCLocation(offset, length));
   }
 
   public String getText() {
     return text;
   }
-  
+
   public void setText(String text) {
     this.text = text;
   }
 
   @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(id)
+        .append(text)
+        .append(infons)
+        .append(locations)
+        .toHashCode();
+  }
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    BioCAnnotation rhs = (BioCAnnotation) obj;
+    return new EqualsBuilder()
+        .append(id, rhs.id)
+        .append(text, rhs.text)
+        .append(infons, rhs.infons)
+        .append(locations, rhs.locations)
+        .isEquals();
+  }
+
+  @Override
   public String toString() {
-    String s = "id: " + id;
-    s += "\n";
-    s += infons;
-    s += "locations: " + locations;
-    s += "\n";
-    s += "text: " + text;
-    s += "\n";
-    return s;
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("text", text)
+        .append("infons", infons)
+        .append("locations", locations)
+        .toString();
   }
 }

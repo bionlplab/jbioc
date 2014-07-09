@@ -43,12 +43,12 @@ public class BioCLocation {
   }
 
   public void setLength(int length) {
-    Validate.isTrue(length > 0, "length has to be greater than 0");
+    Validate.isTrue(length > 0, "length has to be > 0");
     this.length = length;
   }
 
   public void setOffset(int offset) {
-    Validate.isTrue(offset > 0, "offset has to be greater than 0");
+    Validate.isTrue(offset >= 0, "offset has to be >= 0");
     this.offset = offset;
   }
   

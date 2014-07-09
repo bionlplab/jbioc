@@ -2,6 +2,7 @@ package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,10 +17,20 @@ public class BioCLocationTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+  
+  @Before
+  public void setUp() {
+    System.out.println(BASE);
+  }
 
   @Test
   public void test_equals() {
     assertEquals(BASE, BASE_COPY);
+  }
+  
+  @Test
+  public void test_copy() {
+    assertEquals(BASE, new BioCLocation(BASE));
   }
 
   @Test
@@ -38,5 +49,6 @@ public class BioCLocationTest {
   public void test_negOffset() {
     thrown.expect(IllegalArgumentException.class);
     new BioCLocation(-1, LENGTH);
+    new BioCLocation(0, LENGTH);
   }
 }
