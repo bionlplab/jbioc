@@ -18,7 +18,10 @@ import org.biocreative.bioc.BioCSentence;
 *
 * Not part of the {@code org.biocreative.bioc} proposal. The analog class has been useful in
 * C++ {@code org.biocreative.bioc} modules.
+* 
+* @deprecated use constructors or builders instead
 */
+@Deprecated
 public class CopyConverter {
 	
 	/**

@@ -179,6 +179,7 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return new HashCodeBuilder()
         .append(source)
         .append(date)
+        .append(key)
         .append(infons)
         .append(documents)
         .toHashCode();
@@ -195,6 +196,7 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return new EqualsBuilder()
         .append(source, rhs.source)
         .append(infons, rhs.infons)
+        .append(key, rhs.key)
         .append(date, rhs.date)
         .append(documents, rhs.documents)
         .isEquals();
@@ -205,6 +207,7 @@ public class BioCCollection implements Iterable<BioCDocument> {
     return new ToStringBuilder(this)
         .append("source", source)
         .append("date", date)
+        .append("key", key)
         .append("infons", infons)
         .append("documents", documents)
         .toString();

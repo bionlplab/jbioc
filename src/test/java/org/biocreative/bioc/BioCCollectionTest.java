@@ -25,6 +25,7 @@ public class BioCCollectionTest {
   @Before
   public void setUp() {
     base = new BioCCollection();
+    base.setKey(KEY);
     base.setSource(SOURCE);
     base.setDate(DATE);
     base.putInfon(KEY, VALUE);
@@ -32,6 +33,7 @@ public class BioCCollectionTest {
     System.out.println(base);
 
     baseCopy = new BioCCollection();
+    baseCopy.setKey(KEY);
     baseCopy.setSource(SOURCE);
     baseCopy.setDate(DATE);
     baseCopy.putInfon(KEY, VALUE);
@@ -51,6 +53,7 @@ public class BioCCollectionTest {
   public void test_allFields() {
     assertEquals(base.getSource(), SOURCE);
     assertEquals(base.getInfon(KEY), VALUE);
+    assertEquals(base.getKey(), KEY);
     assertTrue(base.getDocuments().isEmpty());
   }
 
