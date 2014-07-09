@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Collection of documents.
  * 
@@ -164,26 +168,45 @@ public class BioCCollection implements Iterable<BioCDocument> {
   public void removeDocument(BioCDocument document){
 	  documents.remove(document);
   }
-  
- 
-  
-  @Override
-  public String toString() {
-    String s = "source: " + source;
-    s += "\n";
-    s += "date: " + date;
-    s += "\n";
-    s += "key: " + key;
-    s += "\n";
-    s += infons;
-    s += "\n";
-    s += documents;
-    s += "\n";
-    return s;
-  }
 
   @Override
   public Iterator<BioCDocument> iterator() {
     return documents.iterator();
+  }
+  
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(source)
+        .append(date)
+        .append(infons)
+        .append(documents)
+        .toHashCode();
+  }
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    BioCCollection rhs = (BioCCollection) obj;
+    return new EqualsBuilder()
+        .append(source, rhs.source)
+        .append(infons, rhs.infons)
+        .append(date, rhs.date)
+        .append(documents, rhs.documents)
+        .isEquals();
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("source", source)
+        .append("date", date)
+        .append("infons", infons)
+        .append("documents", documents)
+        .toString();
   }
 }

@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 /**
  * Each {@code BioCDocument} in the {@link BioCCollection}.
  * 
@@ -174,16 +178,39 @@ public class BioCDocument implements Iterable<BioCPassage> {
   }
 
   @Override
+  public int hashCode() {
+    return new HashCodeBuilder()
+        .append(id)
+        .append(infons)
+        .append(passages)
+        .append(relations)
+        .toHashCode();
+  }
+
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (obj == null || obj.getClass() != getClass()) {
+      return false;
+    }
+    BioCDocument rhs = (BioCDocument) obj;
+    return new EqualsBuilder()
+        .append(id, rhs.id)
+        .append(infons, rhs.infons)
+        .append(passages, rhs.passages)
+        .append(relations, rhs.relations)
+        .isEquals();
+  }
+
+  @Override
   public String toString() {
-    String s = "id: " + id;
-    s += "\n";
-    s += "infon: " + infons;
-    s += "\n";
-    s += passages;
-    s += "\n";
-    s += relations;
-    s += "\n"; 
-    return s;
+    return new ToStringBuilder(this)
+        .append("id", id)
+        .append("infons", infons)
+        .append("passages", passages)
+        .append("relations", relations)
+        .toString();
   }
 
  
