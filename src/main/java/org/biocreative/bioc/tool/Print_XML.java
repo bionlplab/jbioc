@@ -9,6 +9,7 @@ import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.woodstox.ConnectorWoodstox;
 
+@Deprecated
 public class Print_XML {
 
   public static void main(String[] args)

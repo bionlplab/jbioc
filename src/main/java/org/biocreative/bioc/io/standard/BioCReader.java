@@ -29,16 +29,16 @@ import org.biocreative.bioc.BioCSentence;
  */
 abstract class BioCReader implements Closeable {
 
-  BioCCollection  collection;
-  BioCDocument    document;
-  BioCPassage     passage;
-  BioCSentence    sentence;
+  BioCCollection collection;
+  BioCDocument document;
+  BioCPassage passage;
+  BioCSentence sentence;
   XMLStreamReader reader;
-  int             state;
+  int state;
 
-  boolean         atSentenceLevel = false;
-  boolean         atDocumentLevel = false;
-  boolean         atPassageLevel  = false;
+  boolean atSentenceLevel = false;
+  boolean atDocumentLevel = false;
+  boolean atPassageLevel = false;
 
   public BioCReader(Reader reader)
       throws FactoryConfigurationError, XMLStreamException {
@@ -75,7 +75,7 @@ abstract class BioCReader implements Closeable {
     try {
       reader.close();
     } catch (XMLStreamException e) {
-      throw new IOException(e.getMessage(),e);
+      throw new IOException(e.getMessage(), e);
     }
   }
 
@@ -259,9 +259,13 @@ abstract class BioCReader implements Closeable {
           String infonKey = reader.getAttributeValue("", "key");
           ann.putInfon(infonKey, readText());
         } else if (localName.equals("location")) {
-          BioCLocation loc = new BioCLocation();
-          loc.setOffset(Integer.parseInt(reader.getAttributeValue("", "offset")));
-          loc.setLength(Integer.parseInt(reader.getAttributeValue("", "length")));
+          BioCLocation loc = BioCLocation
+              .newBuilder()
+              .setOffset(
+                  Integer.parseInt(reader.getAttributeValue(null, "offset")))
+              .setLength(
+                  Integer.parseInt(reader.getAttributeValue(null, "length")))
+              .build();
           ann.addLocation(loc);
         } else {
           ;
@@ -294,9 +298,10 @@ abstract class BioCReader implements Closeable {
           String infonKey = reader.getAttributeValue("", "key");
           rel.putInfon(infonKey, readText());
         } else if (localName.equals("node")) {
-          BioCNode node = new BioCNode();
-          node.setRefid(reader.getAttributeValue("", "refid"));
-          node.setRole(reader.getAttributeValue("", "role"));
+          BioCNode node = BioCNode.newBuilder()
+              .setRefid(reader.getAttributeValue(null, "refid"))
+              .setRole(reader.getAttributeValue(null, "role"))
+              .build();
           rel.addNode(node);
         } else {
           ;

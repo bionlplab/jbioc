@@ -4,6 +4,7 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * The connection to the original text can be made through the {@code offset},
@@ -15,20 +16,28 @@ public class BioCLocation {
    * Type of annotation. Options include "token", "noun phrase", "gene", and
    * "disease". The valid values should be described in the {@code key} file.
    */
-  protected int offset;
+  private int offset;
   /**
    * The length of the annotated text. While unlikely, this could be zero to
    * describe an annotation that belongs between two characters.
    */
-  protected int length;
+  private int length;
 
-  public BioCLocation() {
+  private BioCLocation() {
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public BioCLocation(BioCLocation location) {
     this(location.offset, location.length);
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public BioCLocation(int offset, int length) {
     setOffset(offset);
     setLength(length);
@@ -42,16 +51,24 @@ public class BioCLocation {
     return offset;
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public void setLength(int length) {
     Validate.isTrue(length > 0, "length has to be > 0");
     this.length = length;
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public void setOffset(int offset) {
     Validate.isTrue(offset >= 0, "offset has to be >= 0");
     this.offset = offset;
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
@@ -76,9 +93,56 @@ public class BioCLocation {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
         append("offset", offset).
         append("length", length).
         toString();
+  }
+
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+
+  public Builder getBuilder() {
+    return newBuilder()
+        .setLength(length)
+        .setOffset(offset);
+  }
+
+  public static class Builder {
+
+    private int offset;
+    private int length;
+
+    private Builder() {
+      offset = -1;
+      length = -1;
+    }
+
+    public Builder setLength(int length) {
+      Validate.isTrue(length > 0, "length has to be > 0");
+      this.length = length;
+      return this;
+    }
+
+    public Builder setOffset(int offset) {
+      Validate.isTrue(offset >= 0, "offset has to be >= 0");
+      this.offset = offset;
+      return this;
+    }
+
+    public BioCLocation build() {
+      checkArguments();
+
+      BioCLocation result = new BioCLocation();
+      result.offset = offset;
+      result.length = length;
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(offset != -1, "offset has to be set");
+      Validate.isTrue(length != -1, "length has to be set");
+    }
   }
 }

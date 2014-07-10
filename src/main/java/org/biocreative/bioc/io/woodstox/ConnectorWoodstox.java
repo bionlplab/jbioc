@@ -18,7 +18,6 @@ import javax.xml.stream.events.XMLEvent;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.codehaus.stax2.XMLStreamWriter2;
-
 import org.biocreative.bioc.BioCAnnotation;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
@@ -122,11 +121,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
   BioCLocation getBioCLocation()
       throws XMLStreamException {
-    BioCLocation location = new BioCLocation();
-    location
-        .setOffset(Integer.parseInt(xmlr.getAttributeValue(null, "offset")));
-    location
-        .setLength(Integer.parseInt(xmlr.getAttributeValue(null, "length")));
+    BioCLocation location = BioCLocation
+        .newBuilder()
+        .setOffset(
+            Integer.parseInt(xmlr.getAttributeValue(null, "offset")))
+        .setLength(
+            Integer.parseInt(xmlr.getAttributeValue(null, "length")))
+        .build();
     xmlr.hasNext();
     xmlr.next();
     if (!xmlr.getName().toString().equals("location")) {
@@ -138,9 +139,10 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
   BioCNode getBioCNode()
       throws XMLStreamException {
-    BioCNode node = new BioCNode();
-    node.setRefid(xmlr.getAttributeValue(null, "refid"));
-    node.setRole(xmlr.getAttributeValue(null, "role"));
+    BioCNode node = BioCNode.newBuilder()
+        .setRefid(xmlr.getAttributeValue(null, "refid"))
+        .setRole(xmlr.getAttributeValue(null, "role"))
+        .build();
     xmlr.hasNext();
     xmlr.next();
     if (!xmlr.getName().toString().equals("node")) {

@@ -1,8 +1,10 @@
 package org.biocreative.bioc;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 public class BioCNode {
 
@@ -10,20 +12,27 @@ public class BioCNode {
    * Id of an annotated object or another relation. Typically there will be one
    * label for each ref_id.
    */
-  protected String refid;
+  private String refid;
 
-  protected String role;
+  private String role;
 
-  public BioCNode() {
-    refid = "";
-    role = "";
+  private BioCNode() {
+
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public BioCNode(BioCNode node) {
     refid = node.refid;
     role = node.role;
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public BioCNode(String refid, String role) {
     this.refid = refid;
     this.role = role;
@@ -37,10 +46,18 @@ public class BioCNode {
     return role;
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public void setRefid(String refid) {
     this.refid = refid;
   }
 
+  /**
+   * @deprecated use {@link Builder} instead.
+   */
+  @Deprecated
   public void setRole(String role) {
     this.role = role;
   }
@@ -70,9 +87,54 @@ public class BioCNode {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this).
+    return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
         append("refid", refid).
-        append("rold", role).
+        append("role", role).
         toString();
+  }
+
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+
+  public Builder getBuilder() {
+    return newBuilder()
+        .setRefid(refid)
+        .setRole(role);
+  }
+
+  public static class Builder {
+
+    private String refid;
+    private String role;
+
+    private Builder() {
+    }
+
+    public Builder setRefid(String refid) {
+      Validate.notNull(refid, "refid cannot be null");
+      this.refid = refid;
+      return this;
+    }
+
+    public Builder setRole(String role) {
+      Validate.notNull(role, "role cannot be null");
+      this.role = role;
+      return this;
+    }
+
+    public BioCNode build() {
+      checkArguments();
+
+      BioCNode result = new BioCNode();
+      result.refid = refid;
+      result.role = role;
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(refid != null, "refid has to be set");
+      Validate.isTrue(role != null, "role has to be set");
+    }
   }
 }
