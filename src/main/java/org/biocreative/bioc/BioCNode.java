@@ -20,46 +20,12 @@ public class BioCNode {
 
   }
 
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public BioCNode(BioCNode node) {
-    refid = node.refid;
-    role = node.role;
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public BioCNode(String refid, String role) {
-    this.refid = refid;
-    this.role = role;
-  }
-
   public String getRefid() {
     return refid;
   }
 
   public String getRole() {
     return role;
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public void setRefid(String refid) {
-    this.refid = refid;
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public void setRole(String role) {
-    this.role = role;
   }
 
   @Override

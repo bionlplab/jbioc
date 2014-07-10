@@ -2,103 +2,65 @@ package org.biocreative.bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.UnmodifiableIterator;
+
 /**
  * Relationship between multiple {@link BioCAnnotation}s and possibly other
  * {@code BioCRelation}s.
  */
-public class BioCRelation implements Iterable<BioCNode> {
+public class BioCRelation {
 
   /**
    * Used to refer to this relation in other relationships.
    */
-  protected String              id;
+  private String id;
 
   /**
    * Information of relation. Implemented examples include abbreviation long
    * forms and short forms and protein events.
    */
-  protected Map<String, String> infons;
+  private ImmutableMap<String, String> infons;
 
   /**
    * Describes how the referenced annotated object or other relation
    * participates in the current relationship.
    */
-  protected List<BioCNode>      nodes;
+  private ImmutableList<BioCNode> nodes;
 
-  public BioCRelation() {
-    id = "";
-    infons = new HashMap<String, String>();
-    nodes = new ArrayList<BioCNode>();
-  }
-
-  public BioCRelation(BioCRelation relation) {
-    id = relation.id;
-    infons = new HashMap<String, String>(relation.infons);
-    nodes = new ArrayList<BioCNode>(relation.nodes);
+  private BioCRelation() {
   }
 
   public String getID() {
-	    return id;
-	  }
- 
-  public void setID(String id) {
-	    this.id = id;
-	  }
+    return id;
+  }
 
-  public Map<String, String> getInfons() {
-	    return infons;
-	  }
-
-  public void setInfons(Map<String, String> infons) {
-	  this.infons = infons;
-  }  
-
-  public void clearInfons(){
-	  infons.clear();
+  public ImmutableMap<String, String> getInfons() {
+    return infons;
   }
 
   public String getInfon(String key) {
-      return infons.get(key);
+    return infons.get(key);
   }
 
-  public void putInfon(String key, String value) {
-	  infons.put(key, value);
-  }
-
-  public void removeInfon(String key){
-	  infons.remove(key);
-  }
-
-  public void addNode(BioCNode node) {
-    nodes.add(node);
-  }
- 
-  public void addNode(String refId, String role) {
-	    addNode(new BioCNode (refId, role));
-  }
-  
-  public List<BioCNode> getNodes() {
+  public ImmutableList<BioCNode> getNodes() {
     return nodes;
   }
 
-  public void setNodes(List<BioCNode> nodes) {
-    this.nodes = nodes;
-  }
-
-  @Override
-  public Iterator<BioCNode> iterator() {
+  public UnmodifiableIterator<BioCNode> nodeIterator() {
     return nodes.iterator();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
@@ -130,5 +92,84 @@ public class BioCRelation implements Iterable<BioCNode> {
         .append("infons", infons)
         .append("nodes", nodes)
         .toString();
+  }
+
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+
+  public Builder getBuilder() {
+    return newBuilder()
+        .setID(id)
+        .setInfons(infons)
+        .setNodes(nodes);
+  }
+
+  public static class Builder {
+
+    private String id;
+    private Map<String, String> infons;
+    private List<BioCNode> nodes;
+
+    private Builder() {
+      infons = new HashMap<String, String>();
+      nodes = new ArrayList<BioCNode>();
+    }
+
+    public Builder setID(String id) {
+      Validate.notNull(id, "id cannot be null");
+      this.id = id;
+      return this;
+    }
+
+    public Builder setInfons(Map<String, String> infons) {
+      this.infons = new HashMap<String, String>(infons);
+      return this;
+    }
+
+    public Builder clearInfons() {
+      infons.clear();
+      return this;
+    }
+
+    public Builder putInfon(String key, String value) {
+      infons.put(key, value);
+      return this;
+    }
+
+    public Builder removeInfon(String key) {
+      infons.remove(key);
+      return this;
+    }
+
+    public Builder addNode(BioCNode node) {
+      nodes.add(node);
+      return this;
+    }
+
+    public Builder setNodes(List<BioCNode> nodes) {
+      this.nodes = new ArrayList<BioCNode>(nodes);
+      return this;
+    }
+
+    public Builder addNode(String refId, String role) {
+      addNode(BioCNode.newBuilder().setRefid(refId).setRole(role).build());
+      return this;
+    }
+
+    public BioCRelation build() {
+      checkArguments();
+
+      BioCRelation result = new BioCRelation();
+      result.id = id;
+      result.infons = ImmutableMap.copyOf(infons);
+      result.nodes = ImmutableList.copyOf(nodes);
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(id != null, "id has to be set");
+      Validate.isTrue(!nodes.isEmpty(), "there must be some nodes");
+    }
   }
 }

@@ -26,47 +26,12 @@ public class BioCLocation {
   private BioCLocation() {
   }
 
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public BioCLocation(BioCLocation location) {
-    this(location.offset, location.length);
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public BioCLocation(int offset, int length) {
-    setOffset(offset);
-    setLength(length);
-  }
-
   public int getLength() {
     return length;
   }
 
   public int getOffset() {
     return offset;
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public void setLength(int length) {
-    Validate.isTrue(length > 0, "length has to be > 0");
-    this.length = length;
-  }
-
-  /**
-   * @deprecated use {@link Builder} instead.
-   */
-  @Deprecated
-  public void setOffset(int offset) {
-    Validate.isTrue(offset >= 0, "offset has to be >= 0");
-    this.offset = offset;
   }
 
   @Override

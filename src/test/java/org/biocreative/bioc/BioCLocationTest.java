@@ -12,38 +12,35 @@ public class BioCLocationTest {
 
   private static final int LENGTH = 1;
   private static final int OFFSET = 2;
-  
+
   private static final int LENGTH_2 = 2;
   private static final int OFFSET_2 = 3;
+
+  private static final BioCLocation.Builder BUILDER = BioCLocation.newBuilder()
+      .setOffset(OFFSET)
+      .setLength(LENGTH);
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void test_allFields() {
-    BioCLocation.Builder builder = BioCLocation.newBuilder()
-        .setOffset(OFFSET)
-        .setLength(LENGTH);
 
-    BioCLocation base = builder.build();
+    BioCLocation base = BUILDER.build();
 
     System.out.println(base);
 
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getLength(), LENGTH);
   }
-  
+
   @Test
   public void test_equals() {
-    BioCLocation.Builder builder = BioCLocation.newBuilder()
-        .setOffset(OFFSET)
-        .setLength(LENGTH);
+    BioCLocation base = BUILDER.build();
+    BioCLocation baseCopy = BUILDER.build();
 
-    BioCLocation base = builder.build();
-    BioCLocation baseCopy = builder.build();
-
-    BioCLocation diffOffset = builder.setOffset(OFFSET_2).build();
-    BioCLocation diffLength = builder.setLength(LENGTH_2).build();
+    BioCLocation diffOffset = BUILDER.setOffset(OFFSET_2).build();
+    BioCLocation diffLength = BUILDER.setLength(LENGTH_2).build();
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)

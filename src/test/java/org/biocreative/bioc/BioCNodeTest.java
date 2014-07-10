@@ -16,20 +16,21 @@ public class BioCNodeTest {
   private static final String REFID_2 = "2";
   private static final String ROLE_2 = "role2";
 
+  private static final BioCNode.Builder BUILDER = BioCNode.newBuilder()
+      .setRefid(REFID)
+      .setRole(ROLE);
+
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
   public void test_equals() {
-    BioCNode.Builder builder = BioCNode.newBuilder()
-        .setRefid(REFID)
-        .setRole(ROLE);
 
-    BioCNode base = builder.build();
-    BioCNode baseCopy = builder.build();
+    BioCNode base = BUILDER.build();
+    BioCNode baseCopy = BUILDER.build();
 
-    BioCNode diffRefid = builder.setRefid(REFID_2).build();
-    BioCNode diffRole = builder.setRole(ROLE_2).build();
+    BioCNode diffRefid = BUILDER.setRefid(REFID_2).build();
+    BioCNode diffRole = BUILDER.setRole(ROLE_2).build();
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -40,11 +41,7 @@ public class BioCNodeTest {
 
   @Test
   public void test_allFields() {
-    BioCNode.Builder builder = BioCNode.newBuilder()
-        .setRefid(REFID)
-        .setRole(ROLE);
-
-    BioCNode base = builder.build();
+    BioCNode base = BUILDER.build();
 
     System.out.println(base);
 
