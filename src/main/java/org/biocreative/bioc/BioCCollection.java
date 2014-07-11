@@ -140,6 +140,7 @@ public class BioCCollection {
         .setSource(source)
         .setDate(date)
         .setInfons(infons)
+        .setKey(key)
         .setDocuments(documents);
     return builder;
   }

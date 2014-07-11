@@ -120,9 +120,9 @@ abstract class BioCReader implements Closeable {
           break;
         case XMLStreamConstants.END_ELEMENT:
           if (reader.getLocalName().equals("collection")) {
-            sentenceBuilder = BioCSentence.newBuilder();
-            passageBuilder = BioCPassage.newBuilder();
-            documentBuilder = BioCDocument.newBuilder();
+            sentenceBuilder = null;
+            passageBuilder = null;
+            documentBuilder = null;
             state = 0;
           }
           break;
@@ -139,7 +139,7 @@ abstract class BioCReader implements Closeable {
             documentBuilder.putInfon(infonKey, readText());
           } else if (localName.equals("passage")) {
             // read passage
-            passageBuilder.clear();
+            passageBuilder = BioCPassage.newBuilder();
             state = 3;
           } else if (localName.equals("relation")) {
             // read relation
@@ -178,7 +178,7 @@ abstract class BioCReader implements Closeable {
             passageBuilder.addRelation(readRelation());
           } else if (localName.equals("sentence")) {
             // read sentence
-            sentenceBuilder.clear();
+            sentenceBuilder = BioCSentence.newBuilder();
             state = 4;
           } else {
             ;
@@ -243,7 +243,7 @@ abstract class BioCReader implements Closeable {
   private BioCAnnotation readAnnotation()
       throws XMLStreamException {
     BioCAnnotation.Builder annBuilder = BioCAnnotation.newBuilder();
-    annBuilder.setID(reader.getAttributeValue("", "id"));
+    annBuilder.setID(reader.getAttributeValue(null, "id"));
 
     String localName = null;
 
