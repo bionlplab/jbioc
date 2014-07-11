@@ -53,7 +53,11 @@ public class BioCPassageIteratorTest {
 
   @Test
   public void test_empty() {
-    BioCCollection collection = new BioCCollection();
+    BioCCollection collection = BioCCollection.newBuilder()
+        .setDate("today")
+        .setKey("key")
+        .setSource("nowhere")
+        .build();
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
   }

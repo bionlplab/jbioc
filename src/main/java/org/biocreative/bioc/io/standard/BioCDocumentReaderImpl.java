@@ -46,11 +46,11 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
   @Override
   public BioCDocument readDocument()
       throws XMLStreamException {
-    BioCDocument thisDocument = document;
+    BioCDocument thisDocument = documentBuilder.build();
 
     sentenceBuilder = null;
     passageBuilder = null;
-    document = null;
+    documentBuilder = null;
     read();
 
     return thisDocument;
@@ -59,7 +59,7 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
   @Override
   public BioCCollection readCollectionInfo()
       throws XMLStreamException {
-    return collection;
+    return collectionBuilder.build();
   }
 
   @Override
@@ -68,15 +68,15 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
 
       @Override
       public boolean hasNext() {
-        return document != null;
+        return documentBuilder != null;
       }
 
       @Override
       public BioCDocument next() {
-        BioCDocument thisDocument = document;
+        BioCDocument thisDocument = documentBuilder.build();
         sentenceBuilder = null;
         passageBuilder = null;
-        document = null;
+        documentBuilder = null;
         try {
           read();
         } catch (XMLStreamException e) {

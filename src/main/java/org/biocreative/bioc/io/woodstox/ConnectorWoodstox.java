@@ -53,7 +53,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       xtw.close();
   }
 
-  void fromXML(BioCDocument document)
+  void fromXML(BioCDocument.Builder documentBuilder)
       throws XMLStreamException {
     while (xmlr.hasNext()) {
       int eventType = xmlr.next();
@@ -61,15 +61,15 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       case XMLEvent.START_ELEMENT:
         String name = xmlr.getName().toString();
         if (name.equals("id")) {
-          document.setID(getString("id"));
+          documentBuilder.setID(getString("id"));
         } else if (name.equals("infon")) {
-            document.putInfon(
+            documentBuilder.putInfon(
                     xmlr.getAttributeValue("", "key"),
                     getString("infon"));
         } else if (name.equals("passage")) {
-          document.addPassage(getBioCPassage());
+          documentBuilder.addPassage(getBioCPassage());
         } else if (name.equals("relation")) {
-            document.addRelation(getBioCRelation());
+            documentBuilder.addRelation(getBioCRelation());
         }
         break;
       case XMLEvent.END_ELEMENT:
@@ -155,31 +155,31 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
   BioCPassage getBioCPassage()
       throws XMLStreamException {
 
-    BioCPassage passage = new BioCPassage();
+    BioCPassage.Builder passageBuilder =  BioCPassage.newBuilder();
     while (xmlr.hasNext()) {
       int eventType = xmlr.next();
       switch (eventType) {
       case XMLEvent.START_ELEMENT:
         String name = xmlr.getName().toString();
         if (name.equals("infon")) {
-          passage.putInfon(
+          passageBuilder.putInfon(
               xmlr.getAttributeValue("", "key"),
               getString("infon"));
         } else if (name.equals("offset")) {
-          passage.setOffset(getInt("offset"));
+          passageBuilder.setOffset(getInt("offset"));
         } else if (name.equals("text")) {
-          passage.setText(getString("text"));
+          passageBuilder.setText(getString("text"));
         } else if (name.equals("sentence")) {
-          passage.addSentence(getBioCSentence());
+          passageBuilder.addSentence(getBioCSentence());
         } else if (name.equals("annotation")) {
-          passage.addAnnotation(getBioCAnnotation());
+          passageBuilder.addAnnotation(getBioCAnnotation());
         } else if (name.equals("relation")) {
-          passage.addRelation(getBioCRelation());
+          passageBuilder.addRelation(getBioCRelation());
         }
         break;
       case XMLEvent.END_ELEMENT:
         if (xmlr.getName().toString().equals("passage")) {
-          return passage;
+          return passageBuilder.build();
         } else if (xmlr.getName().toString().equals("infon")) {
           ;
         }
@@ -187,7 +187,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
             + xmlr.getName().toString());
       }
     }
-    return passage;
+    return passageBuilder.build();
   }
 
   BioCRelation getBioCRelation()
@@ -338,7 +338,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    */
   @Override
   public BioCDocument next() {
-    BioCDocument document = new BioCDocument();
+    BioCDocument.Builder documentBuilder = BioCDocument.newBuilder();
     try {
       if (finishedXML) {
         return null;
@@ -353,11 +353,11 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         }
       }
 
-      fromXML(document);
+      fromXML(documentBuilder);
     } catch (XMLStreamException ex) {
       throw new NoSuchElementException( ex.getMessage() );
     }
-    return document;
+    return documentBuilder.build();
   }
 
   public BioCCollection parseXMLCollection(Reader xmlReader) 
@@ -373,7 +373,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
     xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
     xmlif.configureForSpeed();
-    BioCCollection collection = new BioCCollection();
+    BioCCollection.Builder collectionBuilder =  BioCCollection.newBuilder();
 
     xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(xmlReader);
     int eventType = xmlr.getEventType();
@@ -389,13 +389,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (curElement.equals("document")) {
           inDocument = true;
         } else if (curElement.equals("source")) {
-          collection.setSource(getString("source"));
+          collectionBuilder.setSource(getString("source"));
         } else if (curElement.equals("date")) {
-          collection.setDate(getString("date"));
+          collectionBuilder.setDate(getString("date"));
         } else if (curElement.equals("key")) {
-          collection.setKey(getString("key"));
+          collectionBuilder.setKey(getString("key"));
         } else if (curElement.equals("infon")) {
-          collection.putInfon(
+          collectionBuilder.putInfon(
               xmlr.getAttributeValue("", "key"),
               getString("infon"));
         }
@@ -414,9 +414,9 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     }
     while (hasNext()) {
       BioCDocument document = next();
-      collection.addDocument(document);
+      collectionBuilder.addDocument(document);
     }
-    return collection;
+    return collectionBuilder.build();
   }
 
   public BioCCollection parseXMLCollection(String xml)
@@ -449,7 +449,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
     xmlif.configureForSpeed();
 
-    BioCCollection collection = new BioCCollection();
+    BioCCollection.Builder collectionBuilder =  BioCCollection.newBuilder();
 
     xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(in);
     int eventType = xmlr.getEventType();
@@ -465,13 +465,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (curElement.equals("document")) {
           inDocument = true;
         } else if (curElement.equals("source")) {
-          collection.setSource(getString("source"));
+          collectionBuilder.setSource(getString("source"));
         } else if (curElement.equals("date")) {
-          collection.setDate(getString("date"));
+          collectionBuilder.setDate(getString("date"));
         } else if (curElement.equals("key")) {
-          collection.setKey(getString("key"));
+          collectionBuilder.setKey(getString("key"));
         } else if (curElement.equals("infon")) {
-          collection.putInfon(
+          collectionBuilder.putInfon(
               xmlr.getAttributeValue("", "key"),
               getString("infon"));
         }
@@ -489,7 +489,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       }
     }
 
-    return collection;
+    return collectionBuilder.build();
   }
 
   /**

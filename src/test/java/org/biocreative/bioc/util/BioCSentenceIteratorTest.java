@@ -78,7 +78,11 @@ public class BioCSentenceIteratorTest {
 
   @Test
   public void test_empty() {
-    BioCCollection collection = new BioCCollection();
+    BioCCollection collection = BioCCollection.newBuilder()
+        .setDate("today")
+        .setKey("key")
+        .setSource("nowhere")
+        .build();
     BioCSentenceIterator itr = new BioCSentenceIterator(collection);
     assertFalse(itr.hasNext());
   }

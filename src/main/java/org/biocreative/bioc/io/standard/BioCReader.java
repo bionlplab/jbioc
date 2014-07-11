@@ -30,8 +30,8 @@ import org.biocreative.bioc.BioCSentence;
  */
 abstract class BioCReader implements Closeable {
 
-  BioCCollection collection;
-  BioCDocument document;
+  BioCCollection.Builder collectionBuilder;
+  BioCDocument.Builder documentBuilder;
   BioCPassage.Builder passageBuilder;
   BioCSentence.Builder sentenceBuilder;
   XMLStreamReader reader;
@@ -91,7 +91,7 @@ abstract class BioCReader implements Closeable {
       case 0:
         if (type == XMLStreamConstants.START_ELEMENT) {
           if (reader.getLocalName().equals("collection")) {
-            collection = new BioCCollection();
+            collectionBuilder = BioCCollection.newBuilder();
             state = 1;
           }
         }
@@ -101,17 +101,18 @@ abstract class BioCReader implements Closeable {
         case XMLStreamConstants.START_ELEMENT:
           localName = reader.getLocalName();
           if (localName.equals("source")) {
-            collection.setSource(readText());
+            collectionBuilder.setSource(readText());
           } else if (localName.equals("date")) {
-            collection.setDate(readText());
+            collectionBuilder.setDate(readText());
           } else if (localName.equals("key")) {
-            collection.setKey(readText());
+            collectionBuilder.setKey(readText());
           } else if (localName.equals("infon")) {
-            String infonKey = reader.getAttributeValue("", "key");
-            collection.putInfon(infonKey, readText());
+            collectionBuilder.putInfon(
+                reader.getAttributeValue(null, "key"),
+                readText());
           } else if (localName.equals("document")) {
             // read document
-            document = new BioCDocument();
+            documentBuilder = BioCDocument.newBuilder();
             state = 2;
           } else {
             ;
@@ -121,7 +122,7 @@ abstract class BioCReader implements Closeable {
           if (reader.getLocalName().equals("collection")) {
             sentenceBuilder = BioCSentence.newBuilder();
             passageBuilder = BioCPassage.newBuilder();
-            document = null;
+            documentBuilder = BioCDocument.newBuilder();
             state = 0;
           }
           break;
@@ -132,18 +133,17 @@ abstract class BioCReader implements Closeable {
         case XMLStreamConstants.START_ELEMENT:
           localName = reader.getLocalName();
           if (localName.equals("id")) {
-            document.setID(readText());
+            documentBuilder.setID(readText());
           } else if (localName.equals("infon")) {
             String infonKey = reader.getAttributeValue("", "key");
-            document.putInfon(infonKey, readText());
+            documentBuilder.putInfon(infonKey, readText());
           } else if (localName.equals("passage")) {
             // read passage
             passageBuilder.clear();
             state = 3;
           } else if (localName.equals("relation")) {
             // read relation
-            BioCRelation rel = readRelation();
-            document.addRelation(rel);
+            documentBuilder.addRelation(readRelation());
           } else {
             ;
           }
@@ -153,8 +153,8 @@ abstract class BioCReader implements Closeable {
             state = 1;
             if (atDocumentLevel) {
               return;
-            } else if (document != null) {
-              collection.addDocument(document);
+            } else if (documentBuilder != null) {
+              collectionBuilder.addDocument(documentBuilder.build());
             }
           }
           break;
@@ -173,7 +173,7 @@ abstract class BioCReader implements Closeable {
                 reader.getAttributeValue("", "key"),
                 readText());
           } else if (localName.equals("annotation")) {
-            passageBuilder.addAnnotation( readAnnotation());
+            passageBuilder.addAnnotation(readAnnotation());
           } else if (localName.equals("relation")) {
             passageBuilder.addRelation(readRelation());
           } else if (localName.equals("sentence")) {
@@ -190,7 +190,7 @@ abstract class BioCReader implements Closeable {
             if (atPassageLevel) {
               return;
             } else if (passageBuilder != null) {
-              document.addPassage(passageBuilder.build());
+              documentBuilder.addPassage(passageBuilder.build());
             }
           }
           break;
@@ -206,7 +206,7 @@ abstract class BioCReader implements Closeable {
             sentenceBuilder.setText(readText());
           } else if (localName.equals("infon")) {
             sentenceBuilder.putInfon(
-                reader.getAttributeValue(null, "key"), 
+                reader.getAttributeValue(null, "key"),
                 readText());
           } else if (localName.equals("annotation")) {
             sentenceBuilder.addAnnotation(readAnnotation());

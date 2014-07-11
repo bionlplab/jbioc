@@ -42,10 +42,10 @@ class BioCCollectionReaderImpl extends BioCReader implements
       throws XMLStreamException {
     sentenceBuilder = null;
     passageBuilder = null;
-    document = null;
-    collection = null;
+    documentBuilder = null;
+    collectionBuilder = null;
     read();
-    return collection;
+    return collectionBuilder.build();
   }
 
 }
