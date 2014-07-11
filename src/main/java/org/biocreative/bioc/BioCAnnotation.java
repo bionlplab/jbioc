@@ -12,7 +12,6 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.biocreative.bioc.BioCRelation.Builder;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -106,6 +105,10 @@ public class BioCAnnotation {
         .append("locations", locations)
         .toString();
   }
+  
+  public static Builder newBuilder() {
+    return new Builder();
+  }
 
   public static class Builder {
 
@@ -174,9 +177,10 @@ public class BioCAnnotation {
           .build());
     }
     
-    public void setText(String text) {
+    public Builder setText(String text) {
       Validate.notNull(text, "text cannot be null");
       this.text = text;
+      return this;
     }
 
     public BioCAnnotation build() {

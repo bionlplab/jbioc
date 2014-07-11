@@ -80,6 +80,12 @@ public class BioCRelationTest {
   @Test
   public void test_empty() {
     thrown.expect(IllegalArgumentException.class);
-    BioCNode.newBuilder().build();
+    BioCRelation.newBuilder().build();
+  }
+  
+  @Test
+  public void test_nullID() {
+    thrown.expect(NullPointerException.class);
+    BioCRelation.newBuilder().setID(null).build();
   }
 }
