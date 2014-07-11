@@ -145,11 +145,15 @@ public class BioCRelation {
       return this;
     }
 
-    public Builder clear() {
+    public Builder clearID() {
       id = null;
-      clearInfons();
-      clearNodes();
       return this;
+    }
+
+    public Builder clear() {
+      return clearID()
+          .clearInfons()
+          .clearNodes();
     }
 
     public Builder putInfon(String key, String value) {

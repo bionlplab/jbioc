@@ -88,6 +88,21 @@ public class BioCNode {
       this.role = role;
       return this;
     }
+    
+    public Builder clearRefid() {
+      this.refid = null;
+      return this;
+    }
+
+    public Builder clearRole() {
+      this.role = null;
+      return this;
+    }
+    
+    public Builder clear() {
+      return clearRefid()
+          .clearRole();
+    }
 
     public BioCNode build() {
       checkArguments();

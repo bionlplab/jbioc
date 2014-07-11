@@ -8,50 +8,55 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.common.testing.EqualsTester;
+
 public class BioCSentenceTest {
 
   private static final int OFFSET = 1;
   private static final String TEXT = "ABC";
-
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
 
-  // private static final BioCAnnotation ANN_1 = new BioCAnnotation(0, 1);
-  // private static final BioCAnnotation ANN_2 = new BioCAnnotation(1, 2);
+  private static final int OFFSET_2 = 2;
+  private static final String TEXT_2 = "DEF";
+  private static final String KEY_2 = "KEY2";
+  private static final String VALUE_2 = "VALUE2";
 
-  private static BioCSentence base;
-  private static BioCSentence baseCopy;
+  private BioCSentence.Builder baseBuilder;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    base = new BioCSentence();
-    base.setOffset(OFFSET);
-    base.setText(TEXT);
-    base.putInfon(KEY, VALUE);
-
-    System.out.println(base);
-
-    baseCopy = new BioCSentence();
-    baseCopy.setOffset(OFFSET);
-    baseCopy.setText(TEXT);
-    baseCopy.putInfon(KEY, VALUE);
+    baseBuilder = BioCSentence.newBuilder()
+        .setOffset(OFFSET)
+        .setText(TEXT)
+        .putInfon(KEY, VALUE);
   }
 
   @Test
   public void test_equals() {
-    assertEquals(base, baseCopy);
-  }
+    BioCSentence base = baseBuilder.build();
+    BioCSentence baseCopy = baseBuilder.build();
 
-  @Test
-  public void test_copy() {
-    assertEquals(base, new BioCSentence(baseCopy));
+    BioCSentence diffOffset = baseBuilder.setOffset(OFFSET_2).build();
+    BioCSentence diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
+    BioCSentence diffText = baseBuilder.setText(TEXT_2).build();
+
+    new EqualsTester()
+        .addEqualityGroup(base, baseCopy)
+        .addEqualityGroup(diffOffset)
+        .addEqualityGroup(diffText)
+        .addEqualityGroup(diffInfon)
+        .testEquals();
   }
 
   @Test
   public void test_allFields() {
+    
+    BioCSentence base = baseBuilder.build();
+    
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText(), TEXT);
     assertEquals(base.getInfon(KEY), VALUE);
@@ -61,8 +66,14 @@ public class BioCSentenceTest {
 
   @Test
   public void test_negOffset() {
-    base = new BioCSentence();
     thrown.expect(IllegalArgumentException.class);
-    base.setOffset(-1);
+    baseBuilder.setOffset(-1);
   }
+  
+  @Test
+  public void test_empty() {
+    thrown.expect(IllegalArgumentException.class);
+    BioCSentence.newBuilder().build();
+  }
+
 }

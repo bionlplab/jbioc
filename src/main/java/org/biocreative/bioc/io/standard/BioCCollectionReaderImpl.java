@@ -40,7 +40,7 @@ class BioCCollectionReaderImpl extends BioCReader implements
   @Override
   public BioCCollection readCollection()
       throws XMLStreamException {
-    sentence = null;
+    sentenceBuilder = null;
     passage = null;
     document = null;
     collection = null;

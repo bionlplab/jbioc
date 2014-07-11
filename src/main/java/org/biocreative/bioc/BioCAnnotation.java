@@ -50,7 +50,7 @@ public class BioCAnnotation {
     return infons.get(key);
   }
 
-  public List<BioCLocation> getLocations() {
+  public ImmutableList<BioCLocation> getLocations() {
     return locations;
   }
   
@@ -144,10 +144,10 @@ public class BioCAnnotation {
     }
 
     public Builder clear() {
-      id = null;
-      text = null;
       return clearInfons()
-          .clearLocations();
+          .clearLocations()
+          .clearID()
+          .clearText();
     }
 
     public Builder putInfon(String key, String value) {
@@ -180,6 +180,16 @@ public class BioCAnnotation {
     public Builder setText(String text) {
       Validate.notNull(text, "text cannot be null");
       this.text = text;
+      return this;
+    }
+    
+    public Builder clearText() {
+      text = null;
+      return this;
+    }
+    
+    public Builder clearID() {
+      id = null;
       return this;
     }
 

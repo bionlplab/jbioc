@@ -48,7 +48,7 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
       throws XMLStreamException {
     BioCDocument thisDocument = document;
 
-    sentence = null;
+    sentenceBuilder = null;
     passage = null;
     document = null;
     read();
@@ -73,15 +73,15 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
 
       @Override
       public BioCDocument next() {
-    	BioCDocument thisDocument = document;
-    	sentence = null;
-    	passage = null;
-    	document = null;
-    	try {
+        BioCDocument thisDocument = document;
+        sentenceBuilder = null;
+        passage = null;
+        document = null;
+        try {
           read();
-    	} catch (XMLStreamException e) {
-          throw new NoSuchElementException( e.getMessage() );
-    	}
+        } catch (XMLStreamException e) {
+          throw new NoSuchElementException(e.getMessage());
+        }
         return thisDocument;
       }
 

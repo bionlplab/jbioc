@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.biocreative.bioc.BioCSentence.Builder;
 
 /**
  * The connection to the original text can be made through the {@code offset},
@@ -94,6 +95,21 @@ public class BioCLocation {
       Validate.isTrue(offset >= 0, "offset has to be >= 0");
       this.offset = offset;
       return this;
+    }
+    
+    public Builder clearOffset() {
+      offset = -1;
+      return this;
+    }
+    
+    public Builder clearLength() {
+      length = -1;
+      return this;
+    }
+    
+    public Builder clear() {
+      return clearOffset()
+          .clearLength();
     }
 
     public BioCLocation build() {

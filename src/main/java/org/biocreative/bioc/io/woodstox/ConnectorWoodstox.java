@@ -229,7 +229,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
   BioCSentence getBioCSentence()
       throws XMLStreamException {
 
-    BioCSentence sentence = new BioCSentence();
+    BioCSentence.Builder sentenceBuilder = BioCSentence.newBuilder();
 
     while (xmlr.hasNext()) {
       int eventType = xmlr.next();
@@ -237,22 +237,22 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       case XMLEvent.START_ELEMENT:
         String name = xmlr.getName().toString();
         if (name.equals("infon")) {
-          sentence.putInfon(
+          sentenceBuilder.putInfon(
               xmlr.getAttributeValue("", "key"),
               getString("infon"));
         } else if (name.equals("offset")) {
-          sentence.setOffset(getInt("offset"));
+          sentenceBuilder.setOffset(getInt("offset"));
         } else if (name.equals("text")) {
-          sentence.setText(getString("text"));
+          sentenceBuilder.setText(getString("text"));
         } else if (name.equals("annotation")) {
-          sentence.addAnnotation(getBioCAnnotation());
+          sentenceBuilder.addAnnotation(getBioCAnnotation());
         } else if (name.equals("relation")) {
-          sentence.addRelation(getBioCRelation());
+          sentenceBuilder.addRelation(getBioCRelation());
         }
         break;
       case XMLEvent.END_ELEMENT:
         if (xmlr.getName().toString().equals("sentence")) {
-          return sentence;
+          return sentenceBuilder.build();
         } else if (xmlr.getName().toString().equals("infon")) {
           ;
         }
@@ -260,7 +260,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
             + xmlr.getName().toString());
       }
     }
-    return sentence;
+    return sentenceBuilder.build();
   }
 
   int getInt(String name)
