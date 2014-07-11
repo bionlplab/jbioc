@@ -57,6 +57,14 @@ public class BioCRelation {
     return nodes;
   }
 
+  public BioCNode getNode(int index) {
+    return nodes.get(index);
+  }
+
+  public int getNodeCount() {
+    return nodes.size();
+  }
+
   public UnmodifiableIterator<BioCNode> nodeIterator() {
     return nodes.iterator();
   }
@@ -132,6 +140,18 @@ public class BioCRelation {
       return this;
     }
 
+    public Builder clearNodes() {
+      nodes.clear();
+      return this;
+    }
+
+    public Builder clear() {
+      id = null;
+      clearInfons();
+      clearNodes();
+      return this;
+    }
+
     public Builder putInfon(String key, String value) {
       infons.put(key, value);
       return this;
@@ -153,8 +173,10 @@ public class BioCRelation {
     }
 
     public Builder addNode(String refId, String role) {
-      addNode(BioCNode.newBuilder().setRefid(refId).setRole(role).build());
-      return this;
+      return addNode(BioCNode.newBuilder()
+          .setRefid(refId)
+          .setRole(role)
+          .build());
     }
 
     public BioCRelation build() {

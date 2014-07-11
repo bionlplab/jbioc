@@ -7,10 +7,16 @@ import java.util.Map;
 
 import javax.management.relation.Relation;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.biocreative.bioc.BioCRelation.Builder;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * Stand off annotation. The connection to the original text can be made
@@ -21,101 +27,48 @@ public class BioCAnnotation {
   /**
    * Id used to identify this annotation in a {@link Relation}.
    */
-  protected String id;
-  protected Map<String, String> infons;
-  protected List<BioCLocation> locations;
+  private String id;
+  private ImmutableMap<String, String> infons;
+  private ImmutableList<BioCLocation> locations;
 
   /**
    * The annotated text.
    */
-  protected String text;
+  private String text;
 
-  public BioCAnnotation() {
-    id = "";
-    infons = new HashMap<String, String>();
-    locations = new ArrayList<BioCLocation>();
-    text = "";
-  }
-
-  public BioCAnnotation(BioCAnnotation annotation) {
-    id = annotation.id;
-    infons = new HashMap<String, String>(annotation.infons);
-    locations = new ArrayList<BioCLocation>(annotation.locations);
-    text = annotation.text;
+  private BioCAnnotation() {
   }
 
   public String getID() {
     return id;
   }
 
-  public void setID(String id) {
-    this.id = id;
-  }
-
-  public Map<String, String> getInfons() {
+  public ImmutableMap<String, String> getInfons() {
     return infons;
-  }
-
-  public void setInfons(Map<String, String> infons) {
-    this.infons = infons;
-  }
-
-  public void clearInfons() {
-    infons.clear();
   }
 
   public String getInfon(String key) {
     return infons.get(key);
   }
 
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  public void removeInfon(String key) {
-    infons.remove(key);
-  }
-
   public List<BioCLocation> getLocations() {
     return locations;
   }
-
-  public void setLocations(List<BioCLocation> locations) {
-    this.locations = locations;
+  
+  public BioCLocation getLocation(int i) {
+    return locations.get(i);
   }
-
-  public void clearLocations() {
-    locations.clear();
+  
+  public int getLocationCount() {
+    return locations.size();
   }
-
-  public void addLocation(BioCLocation location) {
-    locations.add(location);
-  }
-
-  /**
-   * @deprecated use {@link addLocation()} instead
-   */
-  @Deprecated
-  public void setLocation(BioCLocation location) {
-    ArrayList<BioCLocation> locationList = new ArrayList<BioCLocation>();
-    locationList.add(location);
-    setLocations(locationList);
-  }
-
-  /**
-   * @deprecated use {@link addLocation()} instead
-   */
-  @Deprecated
-  public void setLocation(int offset, int length) {
-    setLocation(new BioCLocation(offset, length));
+  
+  public UnmodifiableIterator<BioCLocation> locationIterator() {
+    return locations.iterator();
   }
 
   public String getText() {
     return text;
-  }
-
-  public void setText(String text) {
-    this.text = text;
   }
 
   @Override
@@ -152,5 +105,94 @@ public class BioCAnnotation {
         .append("infons", infons)
         .append("locations", locations)
         .toString();
+  }
+
+  public static class Builder {
+
+    private String id;
+    private String text;
+    private Map<String, String> infons;
+    private List<BioCLocation> locations;
+
+    private Builder() {
+      infons = new HashMap<String, String>();
+      locations = new ArrayList<BioCLocation>();
+    }
+
+    public Builder setID(String id) {
+      Validate.notNull(id, "id cannot be null");
+      this.id = id;
+      return this;
+    }
+
+    public Builder setInfons(Map<String, String> infons) {
+      this.infons = new HashMap<String, String>(infons);
+      return this;
+    }
+
+    public Builder clearInfons() {
+      infons.clear();
+      return this;
+    }
+
+    public Builder clearLocations() {
+      locations.clear();
+      return this;
+    }
+
+    public Builder clear() {
+      id = null;
+      text = null;
+      return clearInfons()
+          .clearLocations();
+    }
+
+    public Builder putInfon(String key, String value) {
+      infons.put(key, value);
+      return this;
+    }
+
+    public Builder removeInfon(String key) {
+      infons.remove(key);
+      return this;
+    }
+
+    public Builder addLocation(BioCLocation location) {
+      locations.add(location);
+      return this;
+    }
+
+    public Builder setLocations(List<BioCLocation> locations) {
+      this.locations = new ArrayList<BioCLocation>(locations);
+      return this;
+    }
+
+    public Builder addLocation(int offset, int length) {
+      return addLocation(BioCLocation.newBuilder()
+          .setOffset(offset)
+          .setLength(length)
+          .build());
+    }
+    
+    public void setText(String text) {
+      Validate.notNull(text, "text cannot be null");
+      this.text = text;
+    }
+
+    public BioCAnnotation build() {
+      checkArguments();
+
+      BioCAnnotation result = new BioCAnnotation();
+      result.id = id;
+      result.text = text;
+      result.infons = ImmutableMap.copyOf(infons);
+      result.locations = ImmutableList.copyOf(locations);
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(id != null, "id has to be set");
+      Validate.isTrue(!locations.isEmpty(), "there must be at least one location");
+    }
   }
 }
