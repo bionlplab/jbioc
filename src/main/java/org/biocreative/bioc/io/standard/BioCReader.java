@@ -15,6 +15,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.apache.commons.lang3.Validate;
 import org.biocreative.bioc.BioCAnnotation;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
@@ -243,8 +244,8 @@ abstract class BioCReader implements Closeable {
 
   private BioCAnnotation readAnnotation()
       throws XMLStreamException {
-    BioCAnnotation ann = new BioCAnnotation();
-    ann.setID(reader.getAttributeValue("", "id"));
+    BioCAnnotation.Builder annBuilder = BioCAnnotation.newBuilder();
+    annBuilder.setID(reader.getAttributeValue("", "id"));
 
     String localName = null;
 
@@ -254,26 +255,25 @@ abstract class BioCReader implements Closeable {
       case XMLStreamConstants.START_ELEMENT:
         localName = reader.getLocalName();
         if (localName.equals("text")) {
-          ann.setText(readText());
+          annBuilder.setText(readText());
         } else if (localName.equals("infon")) {
           String infonKey = reader.getAttributeValue("", "key");
-          ann.putInfon(infonKey, readText());
+          annBuilder.putInfon(infonKey, readText());
         } else if (localName.equals("location")) {
-          BioCLocation loc = BioCLocation
+          annBuilder.addLocation(BioCLocation
               .newBuilder()
               .setOffset(
                   Integer.parseInt(reader.getAttributeValue(null, "offset")))
               .setLength(
                   Integer.parseInt(reader.getAttributeValue(null, "length")))
-              .build();
-          ann.addLocation(loc);
+              .build());
         } else {
           ;
         }
         break;
       case XMLStreamConstants.END_ELEMENT:
         if (reader.getLocalName().equals("annotation")) {
-          return ann;
+          return annBuilder.build();
         }
         break;
       }
@@ -284,8 +284,8 @@ abstract class BioCReader implements Closeable {
 
   private BioCRelation readRelation()
       throws XMLStreamException {
-    BioCRelation rel = new BioCRelation();
-    rel.setID(reader.getAttributeValue("", "id"));
+    BioCRelation.Builder relBuilder = BioCRelation.newBuilder();
+    relBuilder.setID(reader.getAttributeValue("", "id"));
 
     String localName = null;
 
@@ -296,25 +296,25 @@ abstract class BioCReader implements Closeable {
         localName = reader.getLocalName();
         if (localName.equals("infon")) {
           String infonKey = reader.getAttributeValue("", "key");
-          rel.putInfon(infonKey, readText());
+          relBuilder.putInfon(infonKey, readText());
         } else if (localName.equals("node")) {
           BioCNode node = BioCNode.newBuilder()
               .setRefid(reader.getAttributeValue(null, "refid"))
               .setRole(reader.getAttributeValue(null, "role"))
               .build();
-          rel.addNode(node);
+          relBuilder.addNode(node);
         } else {
           ;
         }
         break;
       case XMLStreamConstants.END_ELEMENT:
         if (reader.getLocalName().equals("relation")) {
-          return rel;
+          return relBuilder.build();
         }
         break;
       }
     }
-    assert false;
+    Validate.isTrue(false, "should not reach here");
     return null;
   }
 }
