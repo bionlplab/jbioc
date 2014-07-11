@@ -2,14 +2,18 @@ package org.biocreative.bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * Collection of documents.
@@ -19,162 +23,75 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 
  * Documents may appear empty if doing document at a time IO.
  */
-public class BioCCollection implements Iterable<BioCDocument> {
+public class BioCCollection {
 
   /**
    * Describe the original source of the documents.
    */
-  protected String              source;
+  private String source;
 
   /**
    * Date the documents obtained from the source.
    */
-  protected String              date;
+  private String date;
 
   /**
    * Name of a file describing the contents and conventions used in this XML
    * file.
    */
-  protected String              key;
-  protected Map<String, String> infons;
+  private String key;
+  private ImmutableMap<String, String> infons;
 
   /**
    * All the documents in the collection. This will be empty if document at a
    * time IO is used to read the XML file. Any contents will be ignored if
    * written with document at a time IO.
    */
-  protected List<BioCDocument>  documents;
+  private ImmutableList<BioCDocument> documents;
 
-  public BioCCollection() {
-    source = "";
-    date = "";
-    key = "";
-    infons = new HashMap<String, String>();
-    documents = new ArrayList<BioCDocument>();
+  private BioCCollection() {
   }
 
-  public BioCCollection(BioCCollection collection) {
-    date = collection.date;
-    source = collection.source;
-    key = collection.key;
-    infons = new HashMap<String, String>(collection.infons);
-    documents = new ArrayList<BioCDocument>(collection.documents);
-  }
-
-  /**
-   * @return the source
-   */
   public String getSource() {
     return source;
   }
 
-  /**
-   * @param source the source to set
-   */
   public void setSource(String source) {
     this.source = source;
   }
 
-  /**
-   * @return the date
-   */
   public String getDate() {
     return date;
   }
 
-  /**
-   * @param date the date to set
-   */
-  public void setDate(String date) {
-    this.date = date;
-  }
-
-  /**
-   * @return the key
-   */
   public String getKey() {
     return key;
   }
 
-  /**
-   * @param key the key to set
-   */
-  public void setKey(String key) {
-    this.key = key;
-  }
-
-  /**
-   * @return the infons
-   */
-  public Map<String, String> getInfons() {
+  public ImmutableMap<String, String> getInfons() {
     return infons;
   }
 
-  /**
-   * @param infons the infons to set
-   */
-  public void setInfons(Map<String,String> infons) {
-    this.infons = infons;
-  }
-
-  public void clearInfons(){
-	  infons.clear();
-  }
-  
   public String getInfon(String key) {
     return infons.get(key);
   }
 
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  public void removeInfon(String key){
-	  infons.remove(key);
-  }
-  
-  /**
-   * @return the documents
-   */
-  public List<BioCDocument> getDocuments() {
+  public ImmutableList<BioCDocument> getDocuments() {
     return documents;
   }
 
-  /**
-   * @param documents the documents to set
-   */
-  public void setDocuments (List <BioCDocument> documents){
-	  this.documents = documents;	  
-  }
-  
-  public void clearDocuments(){
-	  documents.clear();
+  public int getDocmentCount() {
+    return documents.size();
   }
 
-  public int getSize(){
-	return documents.size();  
-  }
-  
   public BioCDocument getDocument(int index) {
-	    return documents.get(index);
-	  }
-  
-  /**
-   * @param document the document to add
-   */
-  public void addDocument(BioCDocument document) {
-    documents.add(document);
+    return documents.get(index);
   }
 
-  public void removeDocument(BioCDocument document){
-	  documents.remove(document);
-  }
-
-  @Override
-  public Iterator<BioCDocument> iterator() {
+  public UnmodifiableIterator<BioCDocument> documentIterator() {
     return documents.iterator();
   }
-  
+
   @Override
   public int hashCode() {
     return new HashCodeBuilder()
@@ -212,5 +129,126 @@ public class BioCCollection implements Iterable<BioCDocument> {
         .append("infons", infons)
         .append("documents", documents)
         .toString();
+  }
+
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+
+  public Builder getBuilder() {
+    Builder builder = newBuilder()
+        .setSource(source)
+        .setDate(date)
+        .setInfons(infons)
+        .setDocuments(documents);
+    return builder;
+  }
+
+  public static class Builder {
+
+    private String source;
+    private String date;
+    private String key;
+    private Map<String, String> infons;
+    private List<BioCDocument> documents;
+
+    private Builder() {
+      infons = new HashMap<String, String>();
+      documents = new ArrayList<BioCDocument>();
+    }
+
+    public Builder setSource(String source) {
+      Validate.notNull(source, "source cannot be null");
+      this.source = source;
+      return this;
+    }
+
+    public Builder setDate(String date) {
+      Validate.notNull(date, "date cannot be null");
+      this.date = date;
+      return this;
+    }
+    
+    public Builder setKey(String key) {
+      Validate.notNull(key, "key cannot be null");
+      this.key = key;
+      return this;
+    }
+
+    public Builder setInfons(Map<String, String> infons) {
+      this.infons = new HashMap<String, String>(infons);
+      return this;
+    }
+
+    public Builder clearInfons() {
+      infons.clear();
+      return this;
+    }
+
+    public Builder putInfon(String key, String value) {
+      infons.put(key, value);
+      return this;
+    }
+
+    public Builder removeInfon(String key) {
+      infons.remove(key);
+      return this;
+    }
+
+    public Builder setDocuments(List<BioCDocument> documents) {
+      this.documents = new ArrayList<BioCDocument>(documents);
+      return this;
+    }
+
+    public Builder addDocument(BioCDocument document) {
+      this.documents.add(document);
+      return this;
+    }
+
+    public Builder clearDocuments() {
+      documents.clear();
+      return this;
+    }
+
+    public Builder clear() {
+      return clearSource()
+          .clearDate()
+          .clearKey()
+          .clearDocuments();
+    }
+
+    public Builder clearSource() {
+      source = null;
+      return this;
+    }
+
+    public Builder clearDate() {
+      date = null;
+      return this;
+    }
+    
+    public Builder clearKey() {
+      key = null;
+      return this;
+    }
+
+    public BioCCollection build() {
+      checkArguments();
+
+      BioCCollection result = new BioCCollection();
+      result.source = source;
+      result.date = date;
+      result.key = key;
+      result.infons = ImmutableMap.copyOf(infons);
+      result.documents = ImmutableList.copyOf(documents);
+
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(source != null, "source has to be set");
+      Validate.isTrue(date != null, "date has to be set");
+      Validate.isTrue(key != null, "key has to be set");
+    }
   }
 }

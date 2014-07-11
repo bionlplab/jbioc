@@ -106,9 +106,17 @@ public class BioCPassage {
   public UnmodifiableIterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
+  
+  public int getRelationCount() {
+    return relations.size();
+  }
 
   public ImmutableList<BioCSentence> getSentences() {
     return sentences;
+  }
+  
+  public int getSentenceCount() {
+    return sentences.size();
   }
 
   public BioCSentence getSentence(int index) {
@@ -117,6 +125,10 @@ public class BioCPassage {
 
   public UnmodifiableIterator<BioCSentence> sentenceIterator() {
     return sentences.iterator();
+  }
+  
+  public int getAnnotationCount() {
+    return annotations.size();
   }
 
   @Override
