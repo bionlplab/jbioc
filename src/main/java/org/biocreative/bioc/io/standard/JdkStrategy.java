@@ -10,9 +10,9 @@ import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCCollectionWriter;
 import org.biocreative.bioc.io.BioCDocumentReader;
 import org.biocreative.bioc.io.BioCDocumentWriter;
-import org.biocreative.bioc.io.BioCFactory;
+import org.biocreative.bioc.io.BioCXMLStrategy;
 
-public class BioCFactoryImpl extends BioCFactory {
+public class JdkStrategy implements BioCXMLStrategy{
 
   @Override
   public BioCCollectionWriter createBioCCollectionWriter(Writer out)

@@ -9,7 +9,7 @@ import org.biocreative.bioc.io.BioCDocumentReader;
 import org.biocreative.bioc.io.BioCDocumentWriter;
 import org.biocreative.bioc.io.BioCFactory;
 
-public class BioCFactoryImpl extends BioCFactory {
+public class WoodstoxStrategy implements org.biocreative.bioc.io.BioCXMLStrategy {
 
   @Override
   public BioCCollectionWriter createBioCCollectionWriter(Writer out) {

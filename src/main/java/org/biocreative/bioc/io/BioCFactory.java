@@ -3,35 +3,69 @@ package org.biocreative.bioc.io;
 import java.io.Reader;
 import java.io.Writer;
 
-import javax.xml.parsers.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-public abstract class BioCFactory {
+import org.apache.commons.lang3.Validate;
+import org.biocreative.bioc.io.standard.JdkStrategy;
+import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
+
+public class BioCFactory {
 
   public static final String WOODSTOX = "WOODSTOX";
   public static final String STANDARD = "STANDARD";
 
+  private BioCXMLStrategy strategy;
+
+  private BioCFactory(BioCXMLStrategy stragegy) {
+    this.strategy = stragegy;
+  }
+  
+  public BioCXMLStrategy getStrategy() {
+    return strategy;
+  }
+
+  /**
+   * @deprecated use {@link newFactory(BioCXMLStrategy strategy)}} instead
+   * @param stragegy
+   */
+  @Deprecated
   public static BioCFactory newFactory(String flags) {
+
+    Validate.isTrue(
+        flags.equals(STANDARD) || flags.equals(WOODSTOX),
+        "only %s and %s are supported",
+        STANDARD,
+        WOODSTOX);
+
     if (flags.equals(STANDARD)) {
-      return new org.biocreative.bioc.io.standard.BioCFactoryImpl();
-    } else if (flags.equals(WOODSTOX)) {
-      return new org.biocreative.bioc.io.woodstox.BioCFactoryImpl();
+      return newFactory(new JdkStrategy());
     } else {
-      throw new FactoryConfigurationError(
-          "only " + STANDARD + " and " + WOODSTOX + " are supported.");
+      return newFactory(new WoodstoxStrategy());
     }
   }
 
-  public abstract BioCCollectionWriter createBioCCollectionWriter(Writer out)
-    throws XMLStreamException;
+  public static BioCFactory newFactory(BioCXMLStrategy strategy) {
+    return new BioCFactory(strategy);
+  }
 
-  public abstract BioCDocumentWriter createBioCDocumentWriter(Writer out) 
-      throws XMLStreamException;
+  public BioCCollectionWriter createBioCCollectionWriter(Writer out)
+      throws XMLStreamException {
+    return strategy.createBioCCollectionWriter(out);
+  }
 
-  public abstract BioCCollectionReader createBioCCollectionReader(Reader in)
-      throws XMLStreamException;
+  public BioCDocumentWriter createBioCDocumentWriter(Writer out)
+      throws XMLStreamException {
+    return strategy.createBioCDocumentWriter(out);
+  }
 
-  public abstract BioCDocumentReader createBioCDocumentReader(Reader in)
-      throws XMLStreamException;
+  public BioCCollectionReader createBioCCollectionReader(Reader in)
+      throws XMLStreamException {
+    return strategy.createBioCCollectionReader(in);
+  }
+
+  public BioCDocumentReader createBioCDocumentReader(Reader in)
+      throws XMLStreamException {
+    return strategy.createBioCDocumentReader(in);
+  }
 
 }
