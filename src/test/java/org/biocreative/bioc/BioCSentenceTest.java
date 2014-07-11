@@ -57,6 +57,8 @@ public class BioCSentenceTest {
     
     BioCSentence base = baseBuilder.build();
     
+    System.out.println(base);
+    
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText(), TEXT);
     assertEquals(base.getInfon(KEY), VALUE);

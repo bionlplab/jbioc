@@ -41,7 +41,7 @@ class BioCCollectionReaderImpl extends BioCReader implements
   public BioCCollection readCollection()
       throws XMLStreamException {
     sentenceBuilder = null;
-    passage = null;
+    passageBuilder = null;
     document = null;
     collection = null;
     read();

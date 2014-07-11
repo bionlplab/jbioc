@@ -144,6 +144,18 @@ public class BioCSentence {
   public static Builder newBuilder() {
     return new Builder();
   }
+  
+  public Builder getBuilder() {
+    Builder builder = newBuilder()
+        .setOffset(offset)
+        .setAnnotations(annotations)
+        .setInfons(infons)
+        .setRelations(relations);
+    if (getText() != null) {
+      builder.setText(text);
+    }
+    return builder;
+  }
 
   public static class Builder {
 

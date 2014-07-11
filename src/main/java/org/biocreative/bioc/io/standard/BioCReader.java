@@ -32,7 +32,7 @@ abstract class BioCReader implements Closeable {
 
   BioCCollection collection;
   BioCDocument document;
-  BioCPassage passage;
+  BioCPassage.Builder passageBuilder;
   BioCSentence.Builder sentenceBuilder;
   XMLStreamReader reader;
   int state;
@@ -120,7 +120,7 @@ abstract class BioCReader implements Closeable {
         case XMLStreamConstants.END_ELEMENT:
           if (reader.getLocalName().equals("collection")) {
             sentenceBuilder = BioCSentence.newBuilder();
-            passage = null;
+            passageBuilder = BioCPassage.newBuilder();
             document = null;
             state = 0;
           }
@@ -138,7 +138,7 @@ abstract class BioCReader implements Closeable {
             document.putInfon(infonKey, readText());
           } else if (localName.equals("passage")) {
             // read passage
-            passage = new BioCPassage();
+            passageBuilder.clear();
             state = 3;
           } else if (localName.equals("relation")) {
             // read relation
@@ -165,18 +165,17 @@ abstract class BioCReader implements Closeable {
         case XMLStreamConstants.START_ELEMENT:
           localName = reader.getLocalName();
           if (localName.equals("offset")) {
-            passage.setOffset(Integer.parseInt(readText()));
+            passageBuilder.setOffset(Integer.parseInt(readText()));
           } else if (localName.equals("text")) {
-            passage.setText(readText());
+            passageBuilder.setText(readText());
           } else if (localName.equals("infon")) {
-            String infonKey = reader.getAttributeValue("", "key");
-            passage.putInfon(infonKey, readText());
+            passageBuilder.putInfon(
+                reader.getAttributeValue("", "key"),
+                readText());
           } else if (localName.equals("annotation")) {
-            BioCAnnotation ann = readAnnotation();
-            passage.addAnnotation(ann);
+            passageBuilder.addAnnotation( readAnnotation());
           } else if (localName.equals("relation")) {
-            BioCRelation rel = readRelation();
-            passage.addRelation(rel);
+            passageBuilder.addRelation(readRelation());
           } else if (localName.equals("sentence")) {
             // read sentence
             sentenceBuilder.clear();
@@ -190,8 +189,8 @@ abstract class BioCReader implements Closeable {
             state = 2;
             if (atPassageLevel) {
               return;
-            } else if (passage != null) {
-              document.addPassage(passage);
+            } else if (passageBuilder != null) {
+              document.addPassage(passageBuilder.build());
             }
           }
           break;
@@ -223,7 +222,7 @@ abstract class BioCReader implements Closeable {
             if (atSentenceLevel) {
               return;
             } else if (sentenceBuilder != null) {
-              passage.addSentence(sentenceBuilder.build());
+              passageBuilder.addSentence(sentenceBuilder.build());
             }
           }
           break;

@@ -2,7 +2,6 @@ package org.biocreative.bioc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.UnmodifiableIterator;
+
 /**
  * One passage in a {@link BioCDocument}.
  * 
@@ -20,7 +23,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * s in the passage. In either case it might include {@link BioCRelation}s over
  * annotations on the passage.
  */
-public class BioCPassage implements Iterable<BioCSentence> {
+public class BioCPassage {
 
   /**
    * The offset of the passage in the parent document. The significance of the
@@ -29,12 +32,12 @@ public class BioCPassage implements Iterable<BioCSentence> {
    * from an XML file, the title has an offset of zero, while the abstract is
    * assumed to begin after the title and one space.
    */
-  protected int offset;
+  private int offset;
 
   /**
    * The original text of the passage.
    */
-  protected String text;
+  private String text;
 
   /**
    * Information of text in the passage.
@@ -43,190 +46,68 @@ public class BioCPassage implements Iterable<BioCSentence> {
    * papers, it might be Introduction, Methods, Results, or Conclusions. Or
    * they might be paragraphs.
    */
-  protected Map<String, String> infons;
+  private ImmutableMap<String, String> infons;
 
   /**
    * The sentences of the passage.
    */
-  protected List<BioCSentence> sentences;
+  private ImmutableList<BioCSentence> sentences;
 
   /**
    * Annotations on the text of the passage.
    */
-  protected List<BioCAnnotation> annotations;
+  private ImmutableList<BioCAnnotation> annotations;
 
   /**
    * Relations between the annotations and possibly other relations on the text
    * of the passage.
    */
-  protected List<BioCRelation> relations;
+  private ImmutableList<BioCRelation> relations;
 
-  public BioCPassage() {
-    offset = -1;
-    text = "";
-    infons = new HashMap<String, String>();
-    sentences = new ArrayList<BioCSentence>();
-    annotations = new ArrayList<BioCAnnotation>();
-    relations = new ArrayList<BioCRelation>();
+  private BioCPassage() {
   }
 
-  public BioCPassage(BioCPassage passage) {
-    offset = passage.offset;
-    text = passage.text;
-    infons = new HashMap<String, String>(passage.infons);
-
-    sentences = new ArrayList<BioCSentence>();
-    for (BioCSentence sen : passage.sentences) {
-      sentences.add(new BioCSentence(sen));
-    }
-
-    annotations = new ArrayList<BioCAnnotation>();
-    for (BioCAnnotation ann : passage.annotations) {
-      annotations.add(new BioCAnnotation(ann));
-    }
-
-    relations = new ArrayList<BioCRelation>();
-    for (BioCRelation rel : passage.relations) {
-      relations.add(new BioCRelation(rel));
-    }
-  }
-
-  /**
-   * @return the offset
-   */
   public int getOffset() {
     return offset;
   }
 
-  /**
-   * @param offset the offset to set
-   */
-  public void setOffset(int offset) {
-    Validate.isTrue(offset >= 0, "offset must be >= 0");
-    this.offset = offset;
-  }
-
-  /**
-   * @return the text
-   */
   public String getText() {
     return text;
   }
 
-  /**
-   * @param text the text to set
-   */
-  public void setText(String text) {
-    this.text = text;
-  }
-
-  /**
-   * @return the infons
-   */
-  public Map<String, String> getInfons() {
+  public ImmutableMap<String, String> getInfons() {
     return infons;
-  }
-
-  /**
-   * @param infons the infons to set
-   */
-  public void setInfons(Map<String, String> infons) {
-    this.infons = infons;
-  }
-
-  public void clearInfons() {
-    infons.clear();
   }
 
   public String getInfon(String key) {
     return infons.get(key);
   }
 
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  public void removeInfon(String key) {
-    infons.remove(key);
-  }
-
-  public List<BioCAnnotation> getAnnotations() {
+  public ImmutableList<BioCAnnotation> getAnnotations() {
     return annotations;
-  }
-
-  public void setAnnotations(List<BioCAnnotation> annotations) {
-    this.annotations = annotations;
-  }
-
-  public void clearAnnotations() {
-    annotations.clear();
   }
 
   public BioCAnnotation getAnnotation(int index) {
     return annotations.get(index);
   }
 
-  public void addAnnotation(BioCAnnotation annotation) {
-    annotations.add(annotation);
-  }
-
-  public void removeAnnotation(BioCAnnotation annotation) {
-    annotations.remove(annotation);
-  }
-
-  public void removeAnnotation(int index) {
-    annotations.remove(index);
-  }
-
-  /**
-   * @return iterator over annotations
-   */
-  public Iterator<BioCAnnotation> annotationIterator() {
+  public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
 
-  /**
-   * @return the relations
-   */
-  public List<BioCRelation> getRelations() {
+  public ImmutableList<BioCRelation> getRelations() {
     return relations;
-  }
-
-  public void setRelations(List<BioCRelation> relations) {
-    this.relations = relations;
-  }
-
-  public void clearRelations() {
-    relations.clear();
   }
 
   public BioCRelation getRelation(int index) {
     return relations.get(index);
   }
 
-  public void addRelation(BioCRelation relation) {
-    relations.add(relation);
-  }
-
-  public void removeRelation(BioCRelation relation) {
-    relations.remove(relation);
-  }
-
-  public void removeRelation(int index) {
-    relations.remove(index);
-  }
-
-  /**
-   * @return iterator over relations
-   */
-  public Iterator<BioCRelation> relationIterator() {
+  public UnmodifiableIterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
 
-  /**
-   * @return the sentences
-   */
-  public List<BioCSentence> getSentences() {
+  public ImmutableList<BioCSentence> getSentences() {
     return sentences;
   }
 
@@ -234,36 +115,7 @@ public class BioCPassage implements Iterable<BioCSentence> {
     return sentences.get(index);
   }
 
-  public void removeSentence(BioCSentence sentence) {
-    sentences.remove(sentence);
-  }
-
-  public void removeSentence(int index) {
-    sentences.remove(index);
-  }
-
-  public void clearSentences() {
-    sentences.clear();
-  }
-
-  /**
-   * @param sentence the sentence to add
-   */
-  public void addSentence(BioCSentence sentence) {
-    sentences.add(sentence);
-  }
-
-  /**
-   * @param sentences the collection of sentences to set
-   */
-  public void setSentences(List<BioCSentence> sentences) {
-    this.sentences = sentences;
-  }
-
-  /**
-   * @return iterator over {@link BioCSentence}s
-   */
-  public Iterator<BioCSentence> iterator() {
+  public UnmodifiableIterator<BioCSentence> sentenceIterator() {
     return sentences.iterator();
   }
 
@@ -307,5 +159,154 @@ public class BioCPassage implements Iterable<BioCSentence> {
         .append("annotations", annotations)
         .append("relations", relations)
         .toString();
+  }
+  
+  public static Builder newBuilder() {
+    return new Builder();
+  }
+  
+  public Builder getBuilder() {
+    Builder builder = newBuilder()
+        .setOffset(offset)
+        .setAnnotations(annotations)
+        .setInfons(infons)
+        .setRelations(relations)
+        .setSentences(sentences);
+    if (getText() != null) {
+      builder.setText(text);
+    }
+    return builder;
+  }
+
+  public static class Builder {
+
+    private int offset;
+    private String text;
+    private Map<String, String> infons;
+    private List<BioCAnnotation> annotations;
+    private List<BioCRelation> relations;
+    private List<BioCSentence> sentences;
+
+    private Builder() {
+      offset = -1;
+      infons = new HashMap<String, String>();
+      annotations = new ArrayList<BioCAnnotation>();
+      relations = new ArrayList<BioCRelation>();
+      sentences = new ArrayList<BioCSentence>();
+    }
+
+    public Builder setOffset(int offset) {
+      Validate.isTrue(offset >= 0, "offset has to be >= 0");
+      this.offset = offset;
+      return this;
+    }
+
+    public Builder setInfons(Map<String, String> infons) {
+      this.infons = new HashMap<String, String>(infons);
+      return this;
+    }
+
+    public Builder clearInfons() {
+      infons.clear();
+      return this;
+    }
+    
+    public Builder putInfon(String key, String value) {
+      infons.put(key, value);
+      return this;
+    }
+
+    public Builder removeInfon(String key) {
+      infons.remove(key);
+      return this;
+    }
+
+    public Builder setText(String text) {
+      Validate.notNull(text, "text cannot be null");
+      this.text = text;
+      return this;
+    }
+
+    public Builder setAnnotations(List<BioCAnnotation> annotations) {
+      this.annotations = new ArrayList<BioCAnnotation>(annotations);
+      return this;
+    }
+
+    public Builder addAnnotation(BioCAnnotation annotation) {
+      this.annotations.add(annotation);
+      return this;
+    }
+
+    public Builder clearAnnotations() {
+      annotations.clear();
+      return this;
+    }
+
+    public Builder setRelations(List<BioCRelation> relations) {
+      this.relations = new ArrayList<BioCRelation>(relations);
+      return this;
+    }
+
+    public Builder clearRelations() {
+      annotations.clear();
+      return this;
+    }
+
+    public Builder addRelation(BioCRelation relation) {
+      this.relations.add(relation);
+      return this;
+    }
+    
+    public Builder setSentences(List<BioCSentence> sentences) {
+      this.sentences = new ArrayList<BioCSentence>(sentences);
+      return this;
+    }
+
+    public Builder addSentence(BioCSentence sentence) {
+      this.sentences.add(sentence);
+      return this;
+    }
+
+    public Builder clearSentences() {
+      sentences.clear();
+      return this;
+    }
+
+    public Builder clear() {
+      return clearOffset()
+          .clearText()
+          .clearAnnotations()
+          .clearInfons()
+          .clearRelations()
+          .clearSentences();
+    }
+
+    public Builder clearOffset() {
+      offset = -1;
+      return this;
+    }
+
+    public Builder clearText() {
+      text = null;
+      return this;
+    }
+
+    public BioCPassage build() {
+      checkArguments();
+
+      BioCPassage result = new BioCPassage();
+      result.offset = offset;
+      result.text = text;
+      result.infons = ImmutableMap.copyOf(infons);
+      result.annotations = ImmutableList.copyOf(annotations);
+      result.relations = ImmutableList.copyOf(relations);
+      result.sentences = ImmutableList.copyOf(sentences);
+
+      return result;
+    }
+
+    private void checkArguments() {
+      Validate.isTrue(offset != -1, "offset has to be set");
+    }
   }
 }

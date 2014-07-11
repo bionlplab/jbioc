@@ -49,7 +49,7 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
     BioCDocument thisDocument = document;
 
     sentenceBuilder = null;
-    passage = null;
+    passageBuilder = null;
     document = null;
     read();
 
@@ -75,7 +75,7 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
       public BioCDocument next() {
         BioCDocument thisDocument = document;
         sentenceBuilder = null;
-        passage = null;
+        passageBuilder = null;
         document = null;
         try {
           read();
