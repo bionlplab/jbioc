@@ -3,7 +3,9 @@ package org.biocreative.bioc.io.standard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 import javax.xml.stream.FactoryConfigurationError;
@@ -11,21 +13,24 @@ import javax.xml.stream.XMLStreamException;
 
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.io.BioCCollectionReader;
+import org.biocreative.bioc.io.standard.BioCReader2.Level;
 
-class BioCCollectionReaderImpl extends BioCReader implements
+class BioCCollectionReaderImpl implements
     BioCCollectionReader {
   
-  private boolean hasRead;
+  private BioCCollection collection;
+  private BioCReader2 reader;
 
   BioCCollectionReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
-    super(inputStream);
-    hasRead = false;
+    this(new InputStreamReader(inputStream));
   }
 
   BioCCollectionReaderImpl(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
-    super(in);
+    reader = new BioCReader2(in, Level.COLLECTION_LEVEL);
+    reader.read();
+    collection = reader.collectionBuilder.build();
   }
 
   BioCCollectionReaderImpl(File inputFile)
@@ -43,16 +48,23 @@ class BioCCollectionReaderImpl extends BioCReader implements
   @Override
   public BioCCollection readCollection()
       throws XMLStreamException {
-    if (hasRead) {
-      return null;
+    if (collection != null) {
+      BioCCollection thisCollection = collection;
+      collection = null;
+      return thisCollection;
     }
-    sentenceBuilder = null;
-    passageBuilder = null;
-    documentBuilder = null;
-    collectionBuilder = null;
-    read();
-    hasRead = true;
-    return collectionBuilder.build();
+    return null;
+  }
+
+  @Override
+  public String getDTD() {
+    return reader.getDtd();
+  }
+
+  @Override
+  public void close()
+      throws IOException {
+    reader.close();
   }
 
 }

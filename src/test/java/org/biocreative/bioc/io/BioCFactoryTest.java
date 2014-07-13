@@ -14,9 +14,10 @@ public class BioCFactoryTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static final String WOODSTOX = "WOODSTOX";
-  private static final String STANDARD = "STANDARD";
+  private static final BioCXMLStrategy WOODSTOX = new WoodstoxStrategy();
+  private static final BioCXMLStrategy STANDARD = new JdkStrategy();
 
+  @SuppressWarnings("deprecation")
   @Test
   public void test_illegalString() {
     thrown.expect(IllegalArgumentException.class);

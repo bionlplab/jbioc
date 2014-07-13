@@ -21,6 +21,8 @@ public interface BioCDocumentReader extends Closeable, Iterable<BioCDocument> {
   public BioCCollection readCollectionInfo()
       throws XMLStreamException;
   
+  public String getDTD();
+  
 //  /**
 //   * Reset the stream to the most recent mark.
 //   */

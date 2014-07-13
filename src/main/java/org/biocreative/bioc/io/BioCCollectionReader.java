@@ -7,6 +7,8 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 
 public interface BioCCollectionReader extends Closeable {
+  
+  public String getDTD();
 
   public BioCCollection readCollection()
       throws XMLStreamException;

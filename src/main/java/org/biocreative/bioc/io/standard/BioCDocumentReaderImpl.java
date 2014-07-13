@@ -3,7 +3,9 @@ package org.biocreative.bioc.io.standard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -14,21 +16,21 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.BioCDocumentReader;
+import org.biocreative.bioc.io.standard.BioCReader2.Level;
 
-class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
+class BioCDocumentReaderImpl implements BioCDocumentReader {
+  
+  BioCReader2 reader;
 
   BioCDocumentReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
-    super(inputStream);
-    atDocumentLevel = true;
-    read();
+    this(new InputStreamReader(inputStream));
   }
 
   BioCDocumentReaderImpl(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
-    super(in);
-    atDocumentLevel = true;
-    read();
+   reader = new BioCReader2(in, Level.DOCUMENT_LEVEL);
+   reader.read();
   }
 
   BioCDocumentReaderImpl(File inputFile)
@@ -46,20 +48,20 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
   @Override
   public BioCDocument readDocument()
       throws XMLStreamException {
-    BioCDocument thisDocument = documentBuilder.build();
-
-    sentenceBuilder = null;
-    passageBuilder = null;
-    documentBuilder = null;
-    read();
-
-    return thisDocument;
+    
+    if (reader.documentBuilder != null) {
+      BioCDocument thisDocument = reader.documentBuilder.build();
+      reader.read();
+      return thisDocument;
+    } else {
+      return null;
+    }
   }
 
   @Override
   public BioCCollection readCollectionInfo()
       throws XMLStreamException {
-    return collectionBuilder.build();
+    return reader.collectionBuilder.build();
   }
 
   @Override
@@ -68,17 +70,17 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
 
       @Override
       public boolean hasNext() {
-        return documentBuilder != null;
+        return reader.documentBuilder != null;
       }
 
       @Override
       public BioCDocument next() {
-        BioCDocument thisDocument = documentBuilder.build();
-        sentenceBuilder = null;
-        passageBuilder = null;
-        documentBuilder = null;
+        BioCDocument thisDocument = reader.documentBuilder.build();
+        reader.sentenceBuilder = null;
+        reader.passageBuilder = null;
+        reader.documentBuilder = null;
         try {
-          read();
+          reader.read();
         } catch (XMLStreamException e) {
           throw new NoSuchElementException(e.getMessage());
         }
@@ -91,6 +93,17 @@ class BioCDocumentReaderImpl extends BioCReader implements BioCDocumentReader {
       }
 
     };
+  }
+
+  @Override
+  public String getDTD() {
+    return reader.getDtd();
+  }
+
+  @Override
+  public void close()
+      throws IOException {
+    reader.close();
   }
 
 }
