@@ -98,15 +98,15 @@ class BioCReader2 implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("source")) {
-            collectionBuilder.setSource(readText());
+            collectionBuilder.setSource(getText());
           } else if (localName.equals("date")) {
-            collectionBuilder.setDate(readText());
+            collectionBuilder.setDate(getText());
           } else if (localName.equals("key")) {
-            collectionBuilder.setKey(readText());
+            collectionBuilder.setKey(getText());
           } else if (localName.equals("infon")) {
             collectionBuilder.putInfon(
-                startElement.getAttributeByName(new QName("key")).getValue(),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("document")) {
             // read document
             documentBuilder = BioCDocument.newBuilder();
@@ -132,11 +132,11 @@ class BioCReader2 implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("id")) {
-            documentBuilder.setID(readText());
+            documentBuilder.setID(getText());
           } else if (localName.equals("infon")) {
             documentBuilder.putInfon(
-                startElement.getAttributeByName(new QName("key")).getValue(),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("passage")) {
             // read passage
             passageBuilder = BioCPassage.newBuilder();
@@ -167,13 +167,13 @@ class BioCReader2 implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("offset")) {
-            passageBuilder.setOffset(Integer.parseInt(readText()));
+            passageBuilder.setOffset(Integer.parseInt(getText()));
           } else if (localName.equals("text")) {
-            passageBuilder.setText(readText());
+            passageBuilder.setText(getText());
           } else if (localName.equals("infon")) {
             passageBuilder.putInfon(
-                startElement.getAttributeByName(new QName("key")).getValue(),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("annotation")) {
             passageBuilder.addAnnotation(readAnnotation(startElement));
           } else if (localName.equals("relation")) {
@@ -205,13 +205,13 @@ class BioCReader2 implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("offset")) {
-            sentenceBuilder.setOffset(Integer.parseInt(readText()));
+            sentenceBuilder.setOffset(Integer.parseInt(getText()));
           } else if (localName.equals("text")) {
-            sentenceBuilder.setText(readText());
+            sentenceBuilder.setText(getText());
           } else if (localName.equals("infon")) {
             sentenceBuilder.putInfon(
-                startElement.getAttributeByName(new QName("key")).getValue(),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("annotation")) {
             sentenceBuilder.addAnnotation(readAnnotation(startElement));
           } else if (localName.equals("relation")) {
@@ -238,7 +238,7 @@ class BioCReader2 implements Closeable {
     return collectionBuilder.build();
   }
 
-  private String readText()
+  private String getText()
       throws XMLStreamException {
     return reader.nextEvent().asCharacters().getData();
   }
@@ -246,8 +246,7 @@ class BioCReader2 implements Closeable {
   private BioCAnnotation readAnnotation(StartElement annotationEvent)
       throws XMLStreamException {
     BioCAnnotation.Builder annBuilder = BioCAnnotation.newBuilder();
-    annBuilder.setID(annotationEvent.getAttributeByName(new QName("id"))
-        .getValue());
+    annBuilder.setID(getAttribute(annotationEvent, "id"));
 
     String localName = null;
 
@@ -257,20 +256,18 @@ class BioCReader2 implements Closeable {
         StartElement startElement = event.asStartElement();
         localName = startElement.getName().getLocalPart();
         if (localName.equals("text")) {
-          annBuilder.setText(readText());
+          annBuilder.setText(getText());
         } else if (localName.equals("infon")) {
           annBuilder.putInfon(
               startElement.getAttributeByName(new QName("key")).getValue(),
-              readText());
+              getText());
         } else if (localName.equals("location")) {
           annBuilder.addLocation(BioCLocation
               .newBuilder()
               .setOffset(
-                  Integer.parseInt(startElement.getAttributeByName(
-                      new QName("offset")).getValue()))
+                  Integer.parseInt(getAttribute(startElement, "offset")))
               .setLength(
-                  Integer.parseInt(startElement.getAttributeByName(
-                      new QName("length")).getValue()))
+                  Integer.parseInt(getAttribute(startElement, "length")))
               .build());
         }
       }
@@ -289,8 +286,7 @@ class BioCReader2 implements Closeable {
   private BioCRelation readRelation(StartElement relationEvent)
       throws XMLStreamException {
     BioCRelation.Builder relBuilder = BioCRelation.newBuilder();
-    relBuilder.setID(relationEvent.getAttributeByName(new QName("id"))
-        .getValue());
+    relBuilder.setID(getAttribute(relationEvent, "id"));
 
     String localName = null;
 
@@ -301,16 +297,13 @@ class BioCReader2 implements Closeable {
         localName = startElement.getName().getLocalPart();
         if (localName.equals("infon")) {
           relBuilder.putInfon(
-              startElement.getAttributeByName(new QName("key")).getValue(),
-              readText());
+              getAttribute(startElement, "key"),
+              getText());
         } else if (localName.equals("node")) {
           BioCNode node = BioCNode
               .newBuilder()
-              .setRefid(
-                  startElement.getAttributeByName(new QName("refid"))
-                      .getValue())
-              .setRole(
-                  startElement.getAttributeByName(new QName("role")).getValue())
+              .setRefid(getAttribute(startElement, "refid"))
+              .setRole(getAttribute(startElement, "role"))
               .build();
           relBuilder.addNode(node);
         }
@@ -325,5 +318,9 @@ class BioCReader2 implements Closeable {
     }
     Validate.isTrue(false, "should not reach here");
     return null;
+  }
+
+  private String getAttribute(StartElement startElement, String key) {
+    return startElement.getAttributeByName(new QName(key)).getValue();
   }
 }
