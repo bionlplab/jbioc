@@ -106,6 +106,14 @@ public class BioCAnnotation {
         .toString();
   }
   
+  public Builder getBuilder() {
+    return newBuilder()
+        .setID(id)
+        .setText(text)
+        .setInfons(infons)
+        .setLocations(locations);
+  }
+  
   public static Builder newBuilder() {
     return new Builder();
   }

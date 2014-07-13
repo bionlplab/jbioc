@@ -29,85 +29,34 @@ public class CopyConverter {
 	*/
 	
 	public BioCCollection getCollection(BioCCollection in) {
-		BioCCollection out = new BioCCollection();
-		out.setDate( in.getDate() );
-		out.setSource( in.getSource() );
-		out.setKey( in.getKey() );
-		out.setInfons( in.getInfons() );
-	
-		for ( BioCDocument doc : in.getDocuments() ) {
-			out.addDocument( getDocument(doc) );
-		}
-		return out;
+		return in.getBuilder().build();
 	}
 	
 	/**
 	* Copy a {@code BioCDocument}.
 	*/
 	public BioCDocument getDocument(BioCDocument in) {
-		BioCDocument out = new BioCDocument();
-		out.setID( in.getID() );
-		out.setInfons( in.getInfons() );
-		for ( BioCPassage passage : in.getPassages() ) {
-			out.addPassage( getPassage(passage) );
-		}
-		for (BioCRelation rel : in.getRelations() ) {
-			out.addRelation( rel );
-		}
-	
-		return out;
+	  return in.getBuilder().build();
 	}
 	
 	/**
 	* Copy a {@code BioCPassage}.
 	*/
 	public BioCPassage getPassage(BioCPassage in) {
-		BioCPassage out = new BioCPassage();
-		out.setOffset( in.getOffset() );
-		out.setText( in.getText() );
-		out.setInfons( in.getInfons() );
-		for ( BioCSentence sentence : in.getSentences() ) {
-			out.addSentence( getSentence(sentence) );
-		}
-		for (BioCAnnotation note : in.getAnnotations() ) {
-			out.addAnnotation( getAnnotation(note) );
-		}
-		for (BioCRelation rel : in.getRelations() ) {
-			out.addRelation( rel );
-		}
-	
-		return out;
+	  return in.getBuilder().build();
 	}
 	
 	/**
 	* Copy a {@code BioCSentence}.
 	*/
 	public BioCSentence getSentence(BioCSentence in) {
-		BioCSentence out = new BioCSentence();
-		out.setOffset( in.getOffset() );
-		out.setText( in.getText() );
-		out.setInfons( in.getInfons() );
-	
-		for (BioCAnnotation note : in.getAnnotations() ) {
-			out.addAnnotation( getAnnotation(note) );
-		}
-		for (BioCRelation rel : in.getRelations() ) {
-			out.addRelation( rel );
-		}
-	
-		return out;
+	  return in.getBuilder().build();
 	}
 	
 	/**
 	  * Copy a {@code BioCAnnotation}.
 	  */
 	  public BioCAnnotation getAnnotation(BioCAnnotation in) {
-	    BioCAnnotation out = new BioCAnnotation();
-	    out.setID(in.getID());
-	    out.setInfons(in.getInfons());
-	    out.setText(in.getText());
-	    out.setLocations(in.getLocations());
-	    
-	    return out;
+	    return in.getBuilder().build();
 	  }
 }

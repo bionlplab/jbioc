@@ -1,8 +1,11 @@
 package org.biocreative.bioc.io;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.io.InputStreamReader;
 import java.io.StringReader;
+
 import javax.xml.stream.XMLStreamException;
 
 import org.junit.Rule;
@@ -28,7 +31,7 @@ public class BioCCollectionReaderTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void test_jdkSuccess()
+  public void testJdk_success()
       throws Exception {
     BioCCollectionReader reader = BioCFactory.newFactory(JDK_STRATEGY)
         .createBioCCollectionReader(
@@ -42,7 +45,7 @@ public class BioCCollectionReaderTest {
   }
   
   @Test
-  public void test_woodstoxSuccess()
+  public void testWoodstox_success()
       throws Exception {
     BioCCollectionReader reader = BioCFactory.newFactory(WOODSTOX_STRATEGY)
         .createBioCCollectionReader(
@@ -58,7 +61,7 @@ public class BioCCollectionReaderTest {
   }
   
   @Test
-  public void test_emptyJdkReader() throws Exception{
+  public void testJdk_emptyReader() throws Exception{
     BioCCollectionReader reader = BioCFactory.newFactory(JDK_STRATEGY)
         .createBioCCollectionReader(new StringReader(""));
     thrown.expect(XMLStreamException.class);
@@ -66,10 +69,22 @@ public class BioCCollectionReaderTest {
   }
   
   @Test
-  public void test_emptyWoodstoxReader() throws Exception{
+  public void testyWoodstox_emptReader() throws Exception{
     BioCCollectionReader reader = BioCFactory.newFactory(WOODSTOX_STRATEGY)
         .createBioCCollectionReader(new StringReader(""));
     thrown.expect(XMLStreamException.class);
     reader.readCollection();
+  }
+  
+  @Test
+  public void testJdk_readTwice() throws Exception{
+    BioCCollectionReader reader = BioCFactory.newFactory(JDK_STRATEGY)
+        .createBioCCollectionReader(
+            new InputStreamReader(Thread.currentThread()
+                .getContextClassLoader()
+                .getResourceAsStream(XML_FILENAME)));
+    reader.readCollection();
+    // twice
+    assertNull(reader.readCollection());
   }
 }

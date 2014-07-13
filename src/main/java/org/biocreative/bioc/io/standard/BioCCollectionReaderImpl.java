@@ -14,10 +14,13 @@ import org.biocreative.bioc.io.BioCCollectionReader;
 
 class BioCCollectionReaderImpl extends BioCReader implements
     BioCCollectionReader {
+  
+  private boolean hasRead;
 
   BioCCollectionReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
     super(inputStream);
+    hasRead = false;
   }
 
   BioCCollectionReaderImpl(Reader in)
@@ -40,11 +43,15 @@ class BioCCollectionReaderImpl extends BioCReader implements
   @Override
   public BioCCollection readCollection()
       throws XMLStreamException {
+    if (hasRead) {
+      return null;
+    }
     sentenceBuilder = null;
     passageBuilder = null;
     documentBuilder = null;
     collectionBuilder = null;
     read();
+    hasRead = true;
     return collectionBuilder.build();
   }
 
