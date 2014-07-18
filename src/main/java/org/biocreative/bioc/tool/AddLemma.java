@@ -49,7 +49,7 @@ public class AddLemma {
     BioCCollection collection = reader.readCollectionInfo();
     
     
-    writer.writeCollectionInfo(collection);
+    writer.writeBeginCollectionInfo(collection);
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) { 
       BioCDocument outDoc = converter.getDocument(doc);

@@ -12,11 +12,12 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.biocreative.bioc.BioCCollection;
+import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
 import org.biocreative.bioc.io.standard.JdkStrategy;
 
-public class BioCCollectionWriterTest {
+public class BioCDocumentWriterTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
   private static final JdkStrategy STRATEGY = new JdkStrategy();
@@ -42,10 +43,15 @@ public class BioCCollectionWriterTest {
 
     // write
     File tmpFile = testFolder.newFile();
-    BioCCollectionWriter writer = BioCFactory.newFactory(STRATEGY)
-        .createBioCCollectionWriter(new FileWriter(tmpFile));
+    BioCDocumentWriter writer = BioCFactory.newFactory(STRATEGY)
+        .createBioCDocumentWriter(new FileWriter(tmpFile));
     writer.setDTD(dtd);
-    writer.writeCollection(collection);
+    writer.writeBeginCollectionInfo(collection);
+    
+    for(BioCDocument document: collection.getDocuments()) {
+      writer.writeDocument(document);
+    }
+    
     writer.close();
 
     // test

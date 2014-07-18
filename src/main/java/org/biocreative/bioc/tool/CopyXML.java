@@ -58,7 +58,7 @@ public class CopyXML {
 //	  factory.createBioCDocumentWriter(new FileWriter(outXML));
 
     BioCCollection collection = reader.readCollectionInfo();
-    writer.writeCollectionInfo(collection);
+    writer.writeBeginCollectionInfo(collection);
 
     for (BioCDocument document : reader) {
     	writer.writeDocument(document);

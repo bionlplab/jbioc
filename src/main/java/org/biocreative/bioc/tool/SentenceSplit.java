@@ -93,7 +93,7 @@ public class SentenceSplit {
     	SentenceConverter converter = new SentenceConverter();
     	BioCCollection outCollection = converter.getCollection(collection);
         outCollection.setKey("sentence.key");
-    	writer.writeCollectionInfo(outCollection);
+    	writer.writeBeginCollectionInfo(outCollection);
 
         for ( BioCDocument document : reader ) {
         	BioCDocument outDocument = converter.getDocument(document);

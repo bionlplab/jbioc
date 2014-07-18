@@ -8,14 +8,19 @@ import java.io.Writer;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
+import org.apache.commons.lang3.Validate;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.BioCCollectionWriter;
 
-class BioCCollectionWriterImpl extends BioCAllWriter implements
+class BioCCollectionWriterImpl implements
     BioCCollectionWriter {
 
-  String  dtd;
+  BioCWriter writer;
+  String dtd;
+  String encoding;
+  String version;
+  boolean standalone;
   boolean hasWritten;
 
   BioCCollectionWriterImpl(OutputStream out)
@@ -25,21 +30,43 @@ class BioCCollectionWriterImpl extends BioCAllWriter implements
 
   BioCCollectionWriterImpl(Writer out)
       throws FactoryConfigurationError, XMLStreamException {
-    super(out);
-    dtd = "org.biocreative.bioc.dtd";
+    writer = new BioCWriter(out);
     hasWritten = false;
+    encoding = "UTF-8";
+    version = "1.0";
+    standalone = true;
+  }
+  @Override
+  public String getEncoding() {
+    return encoding;
+  }
+  @Override
+  public void setEncoding(String encoding) {
+    Validate.notNull(encoding);
+    this.encoding = encoding;
+  }
+  @Override
+  public String getVersion() {
+    return version;
+  }
+  @Override
+  public void setVersion(String version) {
+    Validate.notNull(version);
+    this.version = version;
+  }
+  @Override
+  public boolean isStandalone() {
+    return standalone;
+  }
+  @Override
+  public void setStandalone(boolean standalone) {
+    this.standalone = standalone;
   }
 
   @Override
   public final void close()
       throws IOException {
-    try {
-      writer.writeEndDocument();
-      writer.flush();
-      writer.close();
-    } catch (XMLStreamException e) {
-      throw new IOException(e.getMessage());
-    }
+    writer.close();
   }
 
   @Override
@@ -56,28 +83,24 @@ class BioCCollectionWriterImpl extends BioCAllWriter implements
     }
     hasWritten = true;
 
-    writer.writeDTD("<!DOCTYPE collection SYSTEM \"org.biocreative.bioc.dtd\">");
-    writer.writeStartElement("collection");
-    // source
-    writer.writeStartElement("source");
-    writer.writeCharacters(collection.getSource());
-    writer.writeEndElement();
-    // date
-    writer.writeStartElement("date");
-    writer.writeCharacters(collection.getDate());
-    writer.writeEndElement();
-    // key
-    writer.writeStartElement("key");
-    writer.writeCharacters(collection.getKey());
-    writer.writeEndElement();
-    // infon
-    write(collection.getInfons());
+    Validate.notNull(dtd, "haven't set DTD yet");
+
+    writer
+        .writeStartDocument(encoding, version, standalone)
+        .writeDTD(dtd)
+        .writeBeginCollectionInfo(collection);
 
     for (BioCDocument doc : collection.getDocuments()) {
-      write(doc);
+      writer.write(doc);
     }
 
     // end collection
-    writer.writeEndElement();
+    writer.writeEndCollection()
+        .writeEndDocument();
+  }
+
+  @Override
+  public String getDTD() {
+    return dtd;
   }
 }

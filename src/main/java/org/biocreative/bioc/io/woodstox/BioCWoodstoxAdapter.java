@@ -63,14 +63,14 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   @Override
   public void writeCollection(BioCCollection collection)
       throws XMLStreamException {
-    writeCollectionInfo(collection);
+    writeBeginCollectionInfo(collection);
     for (BioCDocument doc : collection.getDocuments()) {
       writeDocument(doc);
     }
   }
 
   @Override
-  public void writeCollectionInfo(BioCCollection collection)
+  public void writeBeginCollectionInfo(BioCCollection collection)
       throws XMLStreamException {
     outConnector.startWrite(out, collection);
   }

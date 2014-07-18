@@ -48,7 +48,7 @@ public class FindAbbr {
 
     BioCCollection collection = reader.readCollectionInfo();
     collection.setKey( "abbr_snh.key" );
-    writer.writeCollectionInfo(collection);
+    writer.writeBeginCollectionInfo(collection);
 
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) { 

@@ -12,4 +12,18 @@ public interface BioCCollectionWriter extends Closeable {
       throws XMLStreamException;
 
   public void setDTD(String dtd);
+  
+  public String getDTD();
+  
+  public String getEncoding();
+
+  public void setEncoding(String encoding);
+
+  public String getVersion();
+
+  public void setVersion(String version);
+
+  public boolean isStandalone();
+
+  public void setStandalone(boolean standalone);
 }

@@ -49,7 +49,7 @@ public class CopyConverterXML {
 
     CopyConverter converter = new CopyConverter();
     BioCCollection outCollection = converter.getCollection(collection);
-    writer.writeCollectionInfo(outCollection);
+    writer.writeBeginCollectionInfo(outCollection);
 
     for ( BioCDocument document : reader ) {
     	BioCDocument outDocument = converter.getDocument(document);

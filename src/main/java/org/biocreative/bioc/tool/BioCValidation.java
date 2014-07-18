@@ -1,4 +1,4 @@
-package org.biocreative.bioc;
+package org.biocreative.bioc.tool;
 
 import java.io.File;
 import java.io.FileNotFoundException;
