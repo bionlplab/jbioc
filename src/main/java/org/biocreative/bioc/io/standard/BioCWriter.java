@@ -65,8 +65,8 @@ class BioCWriter implements Closeable {
         .writeCharacters(Integer.toString(passage.getOffset()))
         .writeEndElement("offset");
     // text
-    if (passage.getText() != null && !passage.getText().isEmpty()) {
-      write(passage.getText());
+    if (passage.getText().isPresent()) {
+      write(passage.getText().get());
     }
     // sen
     for (BioCSentence sen : passage.getSentences()) {
@@ -96,8 +96,8 @@ class BioCWriter implements Closeable {
         .writeEndElement("offset");
 
     // text
-    if (sentence.getText() != null && !sentence.getText().isEmpty()) {
-      write(sentence.getText());
+    if (sentence.getText().isPresent()) {
+      write(sentence.getText().get());
     }
     // ann
     for (BioCAnnotation ann : sentence.getAnnotations()) {

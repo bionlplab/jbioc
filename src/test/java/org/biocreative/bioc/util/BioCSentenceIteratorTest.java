@@ -12,6 +12,8 @@ import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCSentence;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
+import org.biocreative.bioc.io.BioCXMLStrategy;
+import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.hasItems;
@@ -25,7 +27,7 @@ import static org.junit.Assert.assertThat;
 public class BioCSentenceIteratorTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final String FLAG = BioCFactory.STANDARD;
+  private static final BioCXMLStrategy STRATEGY = new JdkStrategy();
 
   private static final String EXPECTED_SEN_0 = "Active Raf-1 phosphorylates and activates "
       + "the mitogen-activated protein (MAP) kinase/extracellular signal-regulated kinase "
@@ -47,7 +49,7 @@ public class BioCSentenceIteratorTest {
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    BioCCollectionReader reader = BioCFactory.newFactory(FLAG)
+    BioCCollectionReader reader = BioCFactory.newFactory(STRATEGY)
         .createBioCCollectionReader(
             new InputStreamReader(Thread.currentThread()
                 .getContextClassLoader()
@@ -59,7 +61,7 @@ public class BioCSentenceIteratorTest {
     BioCSentenceIterator itr = new BioCSentenceIterator(collection);
     while (itr.hasNext()) {
       BioCSentence sentence = itr.next();
-      sentences.add(sentence.getText());
+      sentences.add(sentence.getText().get());
       System.out.println(sentence.getText());
     }
 

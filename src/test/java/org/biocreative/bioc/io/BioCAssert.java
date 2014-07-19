@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
+import junit.framework.AssertionFailedError;
+
 import org.custommonkey.xmlunit.DetailedDiff;
 import org.custommonkey.xmlunit.Diff;
 import org.custommonkey.xmlunit.Difference;
@@ -29,6 +31,19 @@ public class BioCAssert {
       e.printStackTrace();
     } catch (SAXException e) {
       e.printStackTrace();
+    }
+  }
+  
+  public static void assertAndPrintDtdValid(Reader reader, String dtdFilename) {
+    try {
+      Validator v = new Validator(reader, dtdFilename);
+      v.assertIsValid();
+    } catch (ConfigurationException e) {
+      e.printStackTrace();
+    } catch (SAXException e) {
+      e.printStackTrace();
+    } catch (AssertionFailedError e) {
+      System.out.println(e.getMessage());
     }
   }
 

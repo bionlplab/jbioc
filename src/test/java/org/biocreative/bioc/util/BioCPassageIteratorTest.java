@@ -14,6 +14,8 @@ import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
+import org.biocreative.bioc.io.BioCXMLStrategy;
+import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.biocreative.bioc.util.BioCPassageIterator;
 import org.junit.Test;
 
@@ -23,12 +25,12 @@ import org.junit.Test;
 public class BioCPassageIteratorTest {
   
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final String FLAG = BioCFactory.STANDARD;
+  private static final BioCXMLStrategy STRATEGY = new JdkStrategy();
 
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    BioCCollectionReader reader = BioCFactory.newFactory(FLAG)
+    BioCCollectionReader reader = BioCFactory.newFactory(STRATEGY)
         .createBioCCollectionReader(
             new InputStreamReader(Thread.currentThread()
                 .getContextClassLoader()

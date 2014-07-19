@@ -16,11 +16,11 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.BioCDocumentReader;
-import org.biocreative.bioc.io.standard.BioCReader2.Level;
+import org.biocreative.bioc.io.standard.BioCReader.Level;
 
 class BioCDocumentReaderImpl implements BioCDocumentReader {
   
-  BioCReader2 reader;
+  BioCReader reader;
 
   BioCDocumentReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
@@ -29,7 +29,7 @@ class BioCDocumentReaderImpl implements BioCDocumentReader {
 
   BioCDocumentReaderImpl(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
-   reader = new BioCReader2(in, Level.DOCUMENT_LEVEL);
+   reader = new BioCReader(in, Level.DOCUMENT_LEVEL);
    reader.read();
   }
 

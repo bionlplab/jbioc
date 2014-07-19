@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
@@ -71,8 +72,8 @@ public class BioCPassage {
     return offset;
   }
 
-  public String getText() {
-    return text;
+  public Optional<String> getText() {
+    return Optional.fromNullable(text);
   }
 
   public ImmutableMap<String, String> getInfons() {

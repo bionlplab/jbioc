@@ -1,21 +1,19 @@
 package org.biocreative.bioc.io.standard;
 
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.List;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLResolver;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.events.DTD;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang3.Validate;
 import org.biocreative.bioc.BioCAnnotation;
@@ -29,25 +27,24 @@ import org.biocreative.bioc.BioCSentence;
 
 /**
  * can only read collection DTD or sentence DTD
- * 
- * @deprecated use BioCReader2 instead
  */
-@Deprecated
 class BioCReader implements Closeable {
+
+  static enum Level {
+    COLLECTION_LEVEL, DOCUMENT_LEVEL, PASSAGE_LEVEL, SENTENCE_LEVEL
+  }
 
   BioCCollection.Builder collectionBuilder;
   BioCDocument.Builder documentBuilder;
   BioCPassage.Builder passageBuilder;
   BioCSentence.Builder sentenceBuilder;
-  XMLStreamReader reader;
+  XMLEventReader reader;
   String dtd;
-  int state;
+  private int state;
 
-  boolean atSentenceLevel = false;
-  boolean atDocumentLevel = false;
-  boolean atPassageLevel = false;
+  Level level;
 
-  public BioCReader(Reader reader)
+  public BioCReader(Reader reader, Level level)
       throws FactoryConfigurationError, XMLStreamException {
     XMLInputFactory factory = XMLInputFactory.newInstance();
     factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
@@ -55,26 +52,10 @@ class BioCReader implements Closeable {
     factory.setProperty(XMLInputFactory.IS_COALESCING, false);
     factory.setProperty(XMLInputFactory.IS_VALIDATING, false);
     factory.setProperty(XMLInputFactory.SUPPORT_DTD, true);
-    this.reader = factory.createXMLStreamReader(reader);
+    this.reader = factory.createXMLEventReader(reader);
+    this.level = level;
     state = 0;
   }
-
-//  public BioCReader(InputStream inputStream)
-//      throws FactoryConfigurationError, XMLStreamException {
-//    this(new InputStreamReader(inputStream));
-//  }
-//
-//  public BioCReader(File inputFile)
-//      throws FactoryConfigurationError, XMLStreamException,
-//      FileNotFoundException {
-//    this(new FileInputStream(inputFile));
-//  }
-//
-//  public BioCReader(String inputFilename)
-//      throws FactoryConfigurationError, XMLStreamException,
-//      FileNotFoundException {
-//    this(new FileInputStream(inputFilename));
-//  }
 
   protected String getDtd() {
     return dtd;
@@ -90,45 +71,42 @@ class BioCReader implements Closeable {
     }
   }
 
-  protected void read()
+  protected Object read()
       throws XMLStreamException {
 
     String localName = null;
 
     while (reader.hasNext()) {
-      int type = reader.next();
+      XMLEvent event = reader.nextEvent();
       switch (state) {
       case 0:
-        if (type == XMLStreamConstants.START_ELEMENT) {
-          localName = reader.getLocalName();
+        if (event.isStartElement()) {
+          StartElement startElement = event.asStartElement();
+          localName = startElement.getName().getLocalPart();
           if (localName.equals("collection")) {
             collectionBuilder = BioCCollection.newBuilder();
             state = 1;
           }
-        } else if (type == XMLStreamConstants.DTD) {
-//          if (reader.hasText()) {
-//            dtd = reader.getText();
-//          }
-//          List l = (List) reader.getProperty("javax.xml.stream.entities");
-//          System.out.println(l);
-////          System.out.println(reader.getElementText());
-//          reader.
+        }
+        if (event.getEventType() == XMLStreamConstants.DTD) {
+          DTD dtd = (DTD) event;
+          this.dtd = dtd.getDocumentTypeDeclaration();
         }
         break;
       case 1:
-        switch (type) {
-        case XMLStreamConstants.START_ELEMENT:
-          localName = reader.getLocalName();
+        if (event.isStartElement()) {
+          StartElement startElement = event.asStartElement();
+          localName = startElement.getName().getLocalPart();
           if (localName.equals("source")) {
-            collectionBuilder.setSource(readText());
+            collectionBuilder.setSource(getText());
           } else if (localName.equals("date")) {
-            collectionBuilder.setDate(readText());
+            collectionBuilder.setDate(getText());
           } else if (localName.equals("key")) {
-            collectionBuilder.setKey(readText());
+            collectionBuilder.setKey(getText());
           } else if (localName.equals("infon")) {
             collectionBuilder.putInfon(
-                reader.getAttributeValue(null, "key"),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("document")) {
             // read document
             documentBuilder = BioCDocument.newBuilder();
@@ -136,9 +114,11 @@ class BioCReader implements Closeable {
           } else {
             ;
           }
-          break;
-        case XMLStreamConstants.END_ELEMENT:
-          if (reader.getLocalName().equals("collection")) {
+        }
+        else if (event.isEndElement()) {
+          EndElement endElement = event.asEndElement();
+          localName = endElement.getName().getLocalPart();
+          if (localName.equals("collection")) {
             sentenceBuilder = null;
             passageBuilder = null;
             documentBuilder = null;
@@ -148,30 +128,33 @@ class BioCReader implements Closeable {
         }
         break;
       case 2:
-        switch (type) {
-        case XMLStreamConstants.START_ELEMENT:
-          localName = reader.getLocalName();
+        if (event.isStartElement()) {
+          StartElement startElement = event.asStartElement();
+          localName = startElement.getName().getLocalPart();
           if (localName.equals("id")) {
-            documentBuilder.setID(readText());
+            documentBuilder.setID(getText());
           } else if (localName.equals("infon")) {
-            String infonKey = reader.getAttributeValue("", "key");
-            documentBuilder.putInfon(infonKey, readText());
+            documentBuilder.putInfon(
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("passage")) {
             // read passage
             passageBuilder = BioCPassage.newBuilder();
             state = 3;
           } else if (localName.equals("relation")) {
             // read relation
-            documentBuilder.addRelation(readRelation());
+            documentBuilder.addRelation(readRelation(startElement));
           } else {
             ;
           }
-          break;
-        case XMLStreamConstants.END_ELEMENT:
-          if (reader.getLocalName().equals("document")) {
+        }
+        else if (event.isEndElement()) {
+          EndElement endElement = event.asEndElement();
+          localName = endElement.getName().getLocalPart();
+          if (localName.equals("document")) {
             state = 1;
-            if (atDocumentLevel) {
-              return;
+            if (level == Level.DOCUMENT_LEVEL) {
+              return documentBuilder.build();
             } else if (documentBuilder != null) {
               collectionBuilder.addDocument(documentBuilder.build());
             }
@@ -180,21 +163,21 @@ class BioCReader implements Closeable {
         }
         break;
       case 3:
-        switch (type) {
-        case XMLStreamConstants.START_ELEMENT:
-          localName = reader.getLocalName();
+        if (event.isStartElement()) {
+          StartElement startElement = event.asStartElement();
+          localName = startElement.getName().getLocalPart();
           if (localName.equals("offset")) {
-            passageBuilder.setOffset(Integer.parseInt(readText()));
+            passageBuilder.setOffset(Integer.parseInt(getText()));
           } else if (localName.equals("text")) {
-            passageBuilder.setText(readText());
+            passageBuilder.setText(getText());
           } else if (localName.equals("infon")) {
             passageBuilder.putInfon(
-                reader.getAttributeValue("", "key"),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("annotation")) {
-            passageBuilder.addAnnotation(readAnnotation());
+            passageBuilder.addAnnotation(readAnnotation(startElement));
           } else if (localName.equals("relation")) {
-            passageBuilder.addRelation(readRelation());
+            passageBuilder.addRelation(readRelation(startElement));
           } else if (localName.equals("sentence")) {
             // read sentence
             sentenceBuilder = BioCSentence.newBuilder();
@@ -202,12 +185,14 @@ class BioCReader implements Closeable {
           } else {
             ;
           }
-          break;
-        case XMLStreamConstants.END_ELEMENT:
-          if (reader.getLocalName().equals("passage")) {
+        }
+        else if (event.isEndElement()) {
+          EndElement endElement = event.asEndElement();
+          localName = endElement.getName().getLocalPart();
+          if (localName.equals("passage")) {
             state = 2;
-            if (atPassageLevel) {
-              return;
+            if (level == Level.PASSAGE_LEVEL) {
+              return passageBuilder.build();
             } else if (passageBuilder != null) {
               documentBuilder.addPassage(passageBuilder.build());
             }
@@ -216,30 +201,32 @@ class BioCReader implements Closeable {
         }
         break;
       case 4:
-        switch (type) {
-        case XMLStreamConstants.START_ELEMENT:
-          localName = reader.getLocalName();
+        if (event.isStartElement()) {
+          StartElement startElement = event.asStartElement();
+          localName = startElement.getName().getLocalPart();
           if (localName.equals("offset")) {
-            sentenceBuilder.setOffset(Integer.parseInt(readText()));
+            sentenceBuilder.setOffset(Integer.parseInt(getText()));
           } else if (localName.equals("text")) {
-            sentenceBuilder.setText(readText());
+            sentenceBuilder.setText(getText());
           } else if (localName.equals("infon")) {
             sentenceBuilder.putInfon(
-                reader.getAttributeValue(null, "key"),
-                readText());
+                getAttribute(startElement, "key"),
+                getText());
           } else if (localName.equals("annotation")) {
-            sentenceBuilder.addAnnotation(readAnnotation());
+            sentenceBuilder.addAnnotation(readAnnotation(startElement));
           } else if (localName.equals("relation")) {
-            sentenceBuilder.addRelation(readRelation());
+            sentenceBuilder.addRelation(readRelation(startElement));
           } else {
             ;
           }
-          break;
-        case XMLStreamConstants.END_ELEMENT:
-          if (reader.getLocalName().equals("sentence")) {
+        }
+        else if (event.isEndElement()) {
+          EndElement endElement = event.asEndElement();
+          localName = endElement.getName().getLocalPart();
+          if (localName.equals("sentence")) {
             state = 3;
-            if (atSentenceLevel) {
-              return;
+            if (level == Level.SENTENCE_LEVEL) {
+              return sentenceBuilder.build();
             } else if (sentenceBuilder != null) {
               passageBuilder.addSentence(sentenceBuilder.build());
             }
@@ -248,90 +235,92 @@ class BioCReader implements Closeable {
         }
       }
     }
+    return collectionBuilder.build();
   }
 
-  private String readText()
+  private String getText()
       throws XMLStreamException {
-    StringBuilder sb = new StringBuilder();
-    while (reader.next() == XMLStreamConstants.CHARACTERS) {
-      sb.append(reader.getText());
-    }
-    return sb.toString();
+    return reader.nextEvent().asCharacters().getData();
   }
 
-  private BioCAnnotation readAnnotation()
+  private BioCAnnotation readAnnotation(StartElement annotationEvent)
       throws XMLStreamException {
     BioCAnnotation.Builder annBuilder = BioCAnnotation.newBuilder();
-    annBuilder.setID(reader.getAttributeValue(null, "id"));
+    annBuilder.setID(getAttribute(annotationEvent, "id"));
 
     String localName = null;
 
     while (reader.hasNext()) {
-      int type = reader.next();
-      switch (type) {
-      case XMLStreamConstants.START_ELEMENT:
-        localName = reader.getLocalName();
+      XMLEvent event = reader.nextEvent();
+      if (event.isStartElement()) {
+        StartElement startElement = event.asStartElement();
+        localName = startElement.getName().getLocalPart();
         if (localName.equals("text")) {
-          annBuilder.setText(readText());
+          annBuilder.setText(getText());
         } else if (localName.equals("infon")) {
-          String infonKey = reader.getAttributeValue("", "key");
-          annBuilder.putInfon(infonKey, readText());
+          annBuilder.putInfon(
+              startElement.getAttributeByName(new QName("key")).getValue(),
+              getText());
         } else if (localName.equals("location")) {
           annBuilder.addLocation(BioCLocation
               .newBuilder()
               .setOffset(
-                  Integer.parseInt(reader.getAttributeValue(null, "offset")))
+                  Integer.parseInt(getAttribute(startElement, "offset")))
               .setLength(
-                  Integer.parseInt(reader.getAttributeValue(null, "length")))
+                  Integer.parseInt(getAttribute(startElement, "length")))
               .build());
-        } else {
-          ;
         }
-        break;
-      case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals("annotation")) {
+      }
+      else if (event.isEndElement()) {
+        EndElement endElement = event.asEndElement();
+        localName = endElement.getName().getLocalPart();
+        if (localName.equals("annotation")) {
           return annBuilder.build();
         }
-        break;
-      }
-    }
-    assert false;
-    return null;
-  }
-
-  private BioCRelation readRelation()
-      throws XMLStreamException {
-    BioCRelation.Builder relBuilder = BioCRelation.newBuilder();
-    relBuilder.setID(reader.getAttributeValue("", "id"));
-
-    String localName = null;
-
-    while (reader.hasNext()) {
-      int type = reader.next();
-      switch (type) {
-      case XMLStreamConstants.START_ELEMENT:
-        localName = reader.getLocalName();
-        if (localName.equals("infon")) {
-          String infonKey = reader.getAttributeValue("", "key");
-          relBuilder.putInfon(infonKey, readText());
-        } else if (localName.equals("node")) {
-          BioCNode node = BioCNode.newBuilder()
-              .setRefid(reader.getAttributeValue(null, "refid"))
-              .setRole(reader.getAttributeValue(null, "role"))
-              .build();
-          relBuilder.addNode(node);
-        } else {
-          ;
-        }
-        break;
-      case XMLStreamConstants.END_ELEMENT:
-        if (reader.getLocalName().equals("relation")) {
-          return relBuilder.build();
-        }
-        break;
       }
     }
     Validate.isTrue(false, "should not reach here");
     return null;
+  }
+
+  private BioCRelation readRelation(StartElement relationEvent)
+      throws XMLStreamException {
+    BioCRelation.Builder relBuilder = BioCRelation.newBuilder();
+    relBuilder.setID(getAttribute(relationEvent, "id"));
+
+    String localName = null;
+
+    while (reader.hasNext()) {
+      XMLEvent event = reader.nextEvent();
+      if (event.isStartElement()) {
+        StartElement startElement = event.asStartElement();
+        localName = startElement.getName().getLocalPart();
+        if (localName.equals("infon")) {
+          relBuilder.putInfon(
+              getAttribute(startElement, "key"),
+              getText());
+        } else if (localName.equals("node")) {
+          BioCNode node = BioCNode
+              .newBuilder()
+              .setRefid(getAttribute(startElement, "refid"))
+              .setRole(getAttribute(startElement, "role"))
+              .build();
+          relBuilder.addNode(node);
+        }
+      }
+      else if (event.isEndElement()) {
+        EndElement endElement = event.asEndElement();
+        localName = endElement.getName().getLocalPart();
+        if (localName.equals("relation")) {
+          return relBuilder.build();
+        }
+      }
+    }
+    Validate.isTrue(false, "should not reach here");
+    return null;
+  }
+
+  private String getAttribute(StartElement startElement, String key) {
+    return startElement.getAttributeByName(new QName(key)).getValue();
   }
 }

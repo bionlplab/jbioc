@@ -13,13 +13,13 @@ import javax.xml.stream.XMLStreamException;
 
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.io.BioCCollectionReader;
-import org.biocreative.bioc.io.standard.BioCReader2.Level;
+import org.biocreative.bioc.io.standard.BioCReader.Level;
 
 class BioCCollectionReaderImpl implements
     BioCCollectionReader {
   
   private BioCCollection collection;
-  private BioCReader2 reader;
+  private BioCReader reader;
 
   BioCCollectionReaderImpl(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
@@ -28,7 +28,7 @@ class BioCCollectionReaderImpl implements
 
   BioCCollectionReaderImpl(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
-    reader = new BioCReader2(in, Level.COLLECTION_LEVEL);
+    reader = new BioCReader(in, Level.COLLECTION_LEVEL);
     reader.read();
     collection = reader.collectionBuilder.build();
   }
