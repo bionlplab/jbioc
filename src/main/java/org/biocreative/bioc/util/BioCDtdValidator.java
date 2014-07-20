@@ -18,7 +18,7 @@ import com.google.common.annotations.VisibleForTesting;
 
 public class BioCDtdValidator {
 
-  @Option(name = "-h", usage = "print this help")
+  @Option(name = "-h", help=true, usage = "print this help")
   private boolean help = false;
 
   @Option(name = "-dtd", required = true, usage = "set DTD file")
