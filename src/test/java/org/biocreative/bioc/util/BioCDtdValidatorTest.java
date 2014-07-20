@@ -1,7 +1,8 @@
-package org.biocreative.bioc.tool;
+package org.biocreative.bioc.util;
 
 import static org.junit.Assert.*;
 
+import org.biocreative.bioc.util.BioCDtdValidator;
 import org.junit.Before;
 import org.junit.Test;
 

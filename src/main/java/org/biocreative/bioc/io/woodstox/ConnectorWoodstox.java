@@ -606,8 +606,8 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     xtw.writeStartElement("passage");
     writeXML(passage.getInfons());
     writeXML("offset", passage.getOffset());
-    if (passage.getText().length() > 0) {
-      writeXML("text", passage.getText());
+    if (passage.getText().isPresent()) {
+      writeXML("text", passage.getText().get());
     }
     for (BioCSentence sentence : passage.getSentences()) {
       writeXML(sentence);
@@ -639,8 +639,8 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     xtw.writeStartElement("sentence");
     writeXML(sentence.getInfons());
     writeXML("offset", sentence.getOffset());
-    if (sentence.getText().length() > 0) {
-      writeXML("text", sentence.getText());
+    if (sentence.getText().isPresent()) {
+      writeXML("text", sentence.getText().get());
     }
     for (BioCAnnotation annotation : sentence.getAnnotations()) {
       writeXML(annotation);

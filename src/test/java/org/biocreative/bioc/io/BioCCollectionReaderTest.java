@@ -18,11 +18,12 @@ import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
 import org.biocreative.bioc.io.standard.JdkStrategy;
+import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
 public class BioCCollectionReaderTest {
   
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final JdkStrategy STRATEGY = new JdkStrategy();
+  private static final BioCXMLStrategy STRATEGY = new WoodstoxStrategy();
   private static final String DTD = "<!DOCTYPE collection SYSTEM \"BioC.dtd\" []>";
 
   @Rule

@@ -1,4 +1,4 @@
-package org.biocreative.bioc.tool;
+package org.biocreative.bioc.util;
 
 import static org.biocreative.bioc.io.BioCAssert.assertAndPrintDtdValid;
 

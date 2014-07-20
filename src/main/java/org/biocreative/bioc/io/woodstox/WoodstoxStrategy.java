@@ -7,7 +7,6 @@ import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCCollectionWriter;
 import org.biocreative.bioc.io.BioCDocumentReader;
 import org.biocreative.bioc.io.BioCDocumentWriter;
-import org.biocreative.bioc.io.BioCFactory;
 
 public class WoodstoxStrategy implements org.biocreative.bioc.io.BioCXMLStrategy {
 

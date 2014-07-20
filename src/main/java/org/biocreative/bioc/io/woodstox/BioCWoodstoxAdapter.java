@@ -21,6 +21,11 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   ConnectorWoodstox outConnector;
   Reader in;
   Writer out;
+  
+  private String dtd;
+  private String encoding;
+  private String version;
+  private boolean standalone;
 
   BioCWoodstoxAdapter(Reader in) {
     inConnector = new ConnectorWoodstox();
@@ -100,6 +105,41 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   @Override
   public Iterator<BioCDocument> iterator() {
     return inConnector;
+  }
+
+  @Override
+  public String getEncoding() {
+    return encoding;
+  }
+
+  @Override
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  @Override
+  public String getVersion() {
+    return version;
+  }
+
+  @Override
+  public void setVersion(String version) {
+    this.version = version;
+  }
+
+  @Override
+  public boolean isStandalone() {
+    return standalone;
+  }
+
+  @Override
+  public void setStandalone(boolean standalone) {
+    this.standalone = standalone;
+  }
+
+  @Override
+  public String getDTD() {
+    return dtd;
   }
 
 }
