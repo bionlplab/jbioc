@@ -15,11 +15,11 @@ import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
 import org.biocreative.bioc.io.standard.JdkStrategy;
+import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
 public class BioCCollectionWriterTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final JdkStrategy STRATEGY = new JdkStrategy();
 
   @Rule
   public TemporaryFolder testFolder = new TemporaryFolder();
@@ -28,10 +28,21 @@ public class BioCCollectionWriterTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void test_success()
+  public void test_success_jdk()
+      throws Exception {
+    test_success(new JdkStrategy());
+  }
+
+  @Test
+  public void test_success_woodstox()
+      throws Exception {
+    test_success(new WoodstoxStrategy());
+  }
+
+  private void test_success(BioCXMLStrategy strategy)
       throws Exception {
     // read
-    BioCCollectionReader reader = BioCFactory.newFactory(STRATEGY)
+    BioCCollectionReader reader = BioCFactory.newFactory(strategy)
         .createBioCCollectionReader(
             new InputStreamReader(Thread.currentThread()
                 .getContextClassLoader()
@@ -42,7 +53,7 @@ public class BioCCollectionWriterTest {
 
     // write
     File tmpFile = testFolder.newFile();
-    BioCCollectionWriter writer = BioCFactory.newFactory(STRATEGY)
+    BioCCollectionWriter writer = BioCFactory.newFactory(strategy)
         .createBioCCollectionWriter(new FileWriter(tmpFile));
     writer.setDTD(dtd);
     writer.writeCollection(collection);

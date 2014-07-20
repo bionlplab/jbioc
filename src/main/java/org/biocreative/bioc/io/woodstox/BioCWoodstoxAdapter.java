@@ -21,11 +21,12 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   ConnectorWoodstox outConnector;
   Reader in;
   Writer out;
-  
-  private String dtd;
+
   private String encoding;
   private String version;
   private boolean standalone;
+
+  private BioCCollection collection;
 
   BioCWoodstoxAdapter(Reader in) {
     inConnector = new ConnectorWoodstox();
@@ -62,7 +63,10 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
   @Override
   public BioCCollection readCollectionInfo()
       throws XMLStreamException {
-    return inConnector.startRead(in);
+    if (collection == null) {
+      collection = inConnector.startRead(in);
+    }
+    return collection;
   }
 
   @Override
@@ -88,13 +92,18 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
 
   @Override
   public void setDTD(String dtd) {
+    outConnector.dtd = dtd;
   }
 
   @Override
   public BioCCollection readCollection()
       throws XMLStreamException {
-    BioCCollection.Builder collectionBuilder = readCollectionInfo()
-        .getBuilder();
+    if (collection != null) {
+      return null;
+    }
+    collection = readCollectionInfo();
+
+    BioCCollection.Builder collectionBuilder = collection.getBuilder();
     BioCDocument doc = null;
     while ((doc = readDocument()) != null) {
       collectionBuilder.addDocument(doc);
@@ -139,7 +148,7 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
 
   @Override
   public String getDTD() {
-    return dtd;
+    return inConnector.dtd;
   }
 
 }

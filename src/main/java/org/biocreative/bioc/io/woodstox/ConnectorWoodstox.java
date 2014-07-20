@@ -10,12 +10,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLOutputFactory;
+// import javax.xml.stream.XMLInputFactory;
+// import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
 
 import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLOutputFactory2;
 import org.codehaus.stax2.XMLStreamReader2;
 import org.codehaus.stax2.XMLStreamWriter2;
 import org.biocreative.bioc.BioCAnnotation;
@@ -30,27 +31,31 @@ import org.biocreative.bioc.BioCSentence;
 ;
 
 /**
- * Read and write org.biocreative.bioc data using the woodstox StAX XML parser. BioCDocument at
- * a time IO avoids using excessive memory.
+ * Read and write org.biocreative.bioc data using the woodstox StAX XML parser.
+ * BioCDocument at a time IO avoids using excessive memory.
  */
 public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
-  boolean          inDocument;
-  boolean          finishedXML;
+  boolean inDocument;
+  boolean finishedXML;
   XMLStreamReader2 xmlr;
 
   XMLStreamWriter2 xtw = null;
+  
+  String dtd = null;
 
   /**
    * Call after last document has been written. Performs any needed cleanup and
    * closes the XML file.
-   * @throws XMLStreamException 
+   * 
+   * @throws XMLStreamException
    */
-  public void endWrite() throws XMLStreamException {
-      xtw.writeEndElement();
-      xtw.writeEndDocument();
-      xtw.flush();
-      xtw.close();
+  public void endWrite()
+      throws XMLStreamException {
+    xtw.writeEndElement();
+    xtw.writeEndDocument();
+    xtw.flush();
+    xtw.close();
   }
 
   void fromXML(BioCDocument.Builder documentBuilder)
@@ -63,13 +68,13 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         if (name.equals("id")) {
           documentBuilder.setID(getString("id"));
         } else if (name.equals("infon")) {
-            documentBuilder.putInfon(
-                    xmlr.getAttributeValue("", "key"),
-                    getString("infon"));
+          documentBuilder.putInfon(
+              xmlr.getAttributeValue("", "key"),
+              getString("infon"));
         } else if (name.equals("passage")) {
           documentBuilder.addPassage(getBioCPassage());
         } else if (name.equals("relation")) {
-            documentBuilder.addRelation(getBioCRelation());
+          documentBuilder.addRelation(getBioCRelation());
         }
         break;
       case XMLEvent.END_ELEMENT:
@@ -155,7 +160,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
   BioCPassage getBioCPassage()
       throws XMLStreamException {
 
-    BioCPassage.Builder passageBuilder =  BioCPassage.newBuilder();
+    BioCPassage.Builder passageBuilder = BioCPassage.newBuilder();
     while (xmlr.hasNext()) {
       int eventType = xmlr.next();
       switch (eventType) {
@@ -318,10 +323,10 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
         }
       }
     } catch (XMLStreamException ex) {
-      /* This loses the exception, but hasNext is not allowed to throw
-       * an exception. Could store the exception so it could be retrieved
-       * later, but calling code would never know to retrieve the 
-       * exception.
+      /*
+       * This loses the exception, but hasNext is not allowed to throw an
+       * exception. Could store the exception so it could be retrieved later,
+       * but calling code would never know to retrieve the exception.
        */
       inDocument = false;
       return false;
@@ -355,25 +360,25 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
       fromXML(documentBuilder);
     } catch (XMLStreamException ex) {
-      throw new NoSuchElementException( ex.getMessage() );
+      throw new NoSuchElementException(ex.getMessage());
     }
     return documentBuilder.build();
   }
 
-  public BioCCollection parseXMLCollection(Reader xmlReader) 
+  public BioCCollection parseXMLCollection(Reader xmlReader)
       throws XMLStreamException {
     XMLInputFactory2 xmlif = null;
     xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
     xmlif.setProperty(
-        XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
+        XMLInputFactory2.IS_REPLACING_ENTITY_REFERENCES,
         Boolean.FALSE);
     xmlif.setProperty(
-        XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
+        XMLInputFactory2.IS_SUPPORTING_EXTERNAL_ENTITIES,
         Boolean.FALSE);
-    xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-    xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
+    xmlif.setProperty(XMLInputFactory2.SUPPORT_DTD, false);
+    xmlif.setProperty(XMLInputFactory2.IS_COALESCING, Boolean.FALSE);
     xmlif.configureForSpeed();
-    BioCCollection.Builder collectionBuilder =  BioCCollection.newBuilder();
+    BioCCollection.Builder collectionBuilder = BioCCollection.newBuilder();
 
     xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(xmlReader);
     int eventType = xmlr.getEventType();
@@ -433,23 +438,23 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * Start reading XML file
    * 
    * @param in Reader with XML to read
-   * @throws XMLStreamException 
+   * @throws XMLStreamException
    */
-  public BioCCollection startRead(Reader in) 
+  public BioCCollection startRead(Reader in)
       throws XMLStreamException {
     XMLInputFactory2 xmlif = null;
     xmlif = (XMLInputFactory2) XMLInputFactory2.newInstance();
     xmlif.setProperty(
-        XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES,
+        XMLInputFactory2.IS_REPLACING_ENTITY_REFERENCES,
         Boolean.FALSE);
     xmlif.setProperty(
-        XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES,
+        XMLInputFactory2.IS_SUPPORTING_EXTERNAL_ENTITIES,
         Boolean.FALSE);
-    //      xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-    xmlif.setProperty(XMLInputFactory.IS_COALESCING, Boolean.FALSE);
+    // xmlif.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+    xmlif.setProperty(XMLInputFactory2.IS_COALESCING, Boolean.FALSE);
     xmlif.configureForSpeed();
 
-    BioCCollection.Builder collectionBuilder =  BioCCollection.newBuilder();
+    BioCCollection.Builder collectionBuilder = BioCCollection.newBuilder();
 
     xmlr = (XMLStreamReader2) xmlif.createXMLStreamReader(in);
     int eventType = xmlr.getEventType();
@@ -460,6 +465,9 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     while (xmlr.hasNext() && !inDocument) {
       eventType = xmlr.next();
       switch (eventType) {
+      case XMLEvent.DTD:
+        dtd = xmlr.getDTDInfo().getDTDSystemId();
+        break;
       case XMLEvent.START_ELEMENT:
         curElement = xmlr.getName().toString();
         if (curElement.equals("document")) {
@@ -500,20 +508,20 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * 
    *          Since this class is for document at a time IO, any documents in
    *          the collection are ignored.
-   * @throws XMLStreamException 
+   * @throws XMLStreamException
    */
   public void startWrite(Writer out, BioCCollection collection)
       throws XMLStreamException {
-    
+
     // ?? if filename == '-', write to Print.out ??
-    XMLOutputFactory xof = XMLOutputFactory.newInstance();
+    XMLOutputFactory2 xof = (XMLOutputFactory2) XMLOutputFactory2.newInstance();
     xtw = null;
     xtw = (XMLStreamWriter2) xof.createXMLStreamWriter(out);
     // new FileWriter(filename));
 
     // xtw.writeStartBioCDocument(null,"1.0");
     xtw.writeStartDocument();
-    xtw.writeDTD("collection", "org.biocreative.bioc.dtd", null, null);
+    xtw.writeDTD("collection", dtd, null, null);
     xtw.writeStartElement("collection");
     writeXML("source", collection.getSource());
     writeXML("date", collection.getDate());
@@ -524,11 +532,11 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
 
   public String toXML(BioCCollection collection)
       throws Exception {
-    XMLOutputFactory xof = XMLOutputFactory.newInstance();
+    XMLOutputFactory2 xof = (XMLOutputFactory2) XMLOutputFactory2.newInstance();
     StringWriter xml = new StringWriter();
     xtw = (XMLStreamWriter2) xof.createXMLStreamWriter(xml);
     xtw.writeStartDocument();
-    xtw.writeDTD("collection", "org.biocreative.bioc.dtd", null, null);
+    xtw.writeDTD("collection", dtd, null, null);
     xtw.writeStartElement("collection");
     writeXML("source", collection.getSource());
     writeXML("date", collection.getDate());
@@ -550,7 +558,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
    * Write the next document to the XML file.
    * 
    * @param document document to write
-   * @throws XMLStreamException 
+   * @throws XMLStreamException
    */
   public void writeNext(BioCDocument document)
       throws XMLStreamException {
@@ -580,7 +588,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
       writeXML(passage);
     }
     for (BioCRelation relation : document.getRelations()) {
-    	writeXML(relation);
+      writeXML(relation);
     }
     xtw.writeEndElement();
   }

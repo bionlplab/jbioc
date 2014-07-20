@@ -12,6 +12,7 @@ import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
+import org.kohsuke.args4j.ParserProperties;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -19,8 +20,8 @@ public class BioCDtdValidator {
 
   @Option(name = "-h", usage = "print this help")
   private boolean help = false;
-  
-  @Option(name = "-dtd", required=true, usage = "set DTD file")
+
+  @Option(name = "-dtd", required = true, usage = "set DTD file")
   private String dtdFilename;
 
   @Argument
@@ -34,17 +35,17 @@ public class BioCDtdValidator {
   public static void main(String[] args) {
     new BioCDtdValidator().doMain(args);
   }
-  
+
   @VisibleForTesting
   protected String getDtdFilename() {
     return dtdFilename;
   }
-  
+
   @VisibleForTesting
   protected boolean getHelp() {
     return help;
   }
-  
+
   @VisibleForTesting
   protected List<String> getArguments() {
     return arguments;
@@ -52,8 +53,9 @@ public class BioCDtdValidator {
 
   public void doMain(String[] args) {
 
+    ParserProperties.defaults()
+        .withUsageWidth(80);
     CmdLineParser parser = new CmdLineParser(this);
-    parser.setUsageWidth(80);
 
     try {
       parser.parseArgument(args);
@@ -68,7 +70,7 @@ public class BioCDtdValidator {
       System.err.println();
       return;
     }
-    
+
     if (help) {
       System.err.println("java BioCValidation [options...] arguments...");
       // print the list of available options
@@ -82,19 +84,21 @@ public class BioCDtdValidator {
       System.err.println("cannot find the DTD file");
       return;
     }
-    
+
     if (arguments.isEmpty()) {
       System.err.println("No argument is given");
       return;
     }
 
-    for (String biocFilename: arguments) {
+    for (String biocFilename : arguments) {
       File biocFile = new File(biocFilename);
       if (!biocFile.exists()) {
         System.err.println("cannot read bioc file: " + biocFilename);
       } else {
         try {
-          assertAndPrintDtdValid(new FileReader(biocFile), dtdFile.getAbsolutePath());
+          assertAndPrintDtdValid(
+              new FileReader(biocFile),
+              dtdFile.getAbsolutePath());
         } catch (FileNotFoundException e) {
           e.printStackTrace();
         }
