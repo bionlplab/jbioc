@@ -1,7 +1,7 @@
 package org.biocreative.bioc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -120,7 +120,7 @@ public class BioCRelation {
     private List<BioCNode> nodes;
 
     private Builder() {
-      infons = new HashMap<String, String>();
+      infons = new Hashtable<String, String>();
       nodes = new ArrayList<BioCNode>();
     }
 
@@ -131,7 +131,7 @@ public class BioCRelation {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new HashMap<String, String>(infons);
+      this.infons = new Hashtable<String, String>(infons);
       return this;
     }
 
@@ -148,12 +148,6 @@ public class BioCRelation {
     public Builder clearID() {
       id = null;
       return this;
-    }
-
-    public Builder clear() {
-      return clearID()
-          .clearInfons()
-          .clearNodes();
     }
 
     public Builder putInfon(String key, String value) {

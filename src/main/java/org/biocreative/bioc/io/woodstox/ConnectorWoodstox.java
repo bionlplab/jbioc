@@ -41,7 +41,7 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
   XMLStreamReader2 xmlr;
 
   XMLStreamWriter2 xtw = null;
-  
+
   String dtd = null;
 
   /**
@@ -575,7 +575,9 @@ public class ConnectorWoodstox implements Iterator<BioCDocument> {
     for (BioCLocation location : annotation.getLocations()) {
       writeXML(location);
     }
-    writeXML("text", annotation.getText());
+    if (annotation.getText().isPresent()) {
+      writeXML("text", annotation.getText().get());
+    }
     xtw.writeEndElement();
   }
 

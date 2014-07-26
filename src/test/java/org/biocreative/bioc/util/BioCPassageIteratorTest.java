@@ -42,7 +42,7 @@ public class BioCPassageIteratorTest {
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     while (itr.hasNext()) {
       BioCPassage passage = itr.next();
-      System.out.println(passage);
+//      System.out.println(passage);
       passages.add(passage);
     }
     

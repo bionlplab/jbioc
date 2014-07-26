@@ -17,7 +17,6 @@ public class BioCNode {
   private String role;
 
   private BioCNode() {
-
   }
 
   public String getRefid() {
@@ -97,11 +96,6 @@ public class BioCNode {
     public Builder clearRole() {
       this.role = null;
       return this;
-    }
-    
-    public Builder clear() {
-      return clearRefid()
-          .clearRole();
     }
 
     public BioCNode build() {

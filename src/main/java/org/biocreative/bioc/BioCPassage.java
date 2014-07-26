@@ -1,7 +1,7 @@
 package org.biocreative.bioc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -202,7 +202,7 @@ public class BioCPassage {
 
     private Builder() {
       offset = -1;
-      infons = new HashMap<String, String>();
+      infons = new Hashtable<String, String>();
       annotations = new ArrayList<BioCAnnotation>();
       relations = new ArrayList<BioCRelation>();
       sentences = new ArrayList<BioCSentence>();
@@ -215,7 +215,7 @@ public class BioCPassage {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new HashMap<String, String>(infons);
+      this.infons = new Hashtable<String, String>(infons);
       return this;
     }
 
@@ -283,15 +283,6 @@ public class BioCPassage {
     public Builder clearSentences() {
       sentences.clear();
       return this;
-    }
-
-    public Builder clear() {
-      return clearOffset()
-          .clearText()
-          .clearAnnotations()
-          .clearInfons()
-          .clearRelations()
-          .clearSentences();
     }
 
     public Builder clearOffset() {

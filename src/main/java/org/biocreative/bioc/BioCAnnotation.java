@@ -1,7 +1,7 @@
 package org.biocreative.bioc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +13,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
@@ -46,8 +47,8 @@ public class BioCAnnotation {
     return infons;
   }
 
-  public String getInfon(String key) {
-    return infons.get(key);
+  public Optional<String> getInfon(String key) {
+    return Optional.fromNullable(infons.get(key));
   }
 
   public ImmutableList<BioCLocation> getLocations() {
@@ -66,8 +67,8 @@ public class BioCAnnotation {
     return locations.iterator();
   }
 
-  public String getText() {
-    return text;
+  public Optional<String> getText() {
+    return Optional.fromNullable(text);
   }
 
   @Override
@@ -126,7 +127,7 @@ public class BioCAnnotation {
     private List<BioCLocation> locations;
 
     private Builder() {
-      infons = new HashMap<String, String>();
+      infons = new Hashtable<String, String>();
       locations = new ArrayList<BioCLocation>();
     }
 
@@ -137,7 +138,7 @@ public class BioCAnnotation {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new HashMap<String, String>(infons);
+      this.infons = new Hashtable<String, String>(infons);
       return this;
     }
 
@@ -149,13 +150,6 @@ public class BioCAnnotation {
     public Builder clearLocations() {
       locations.clear();
       return this;
-    }
-
-    public Builder clear() {
-      return clearInfons()
-          .clearLocations()
-          .clearID()
-          .clearText();
     }
 
     public Builder putInfon(String key, String value) {

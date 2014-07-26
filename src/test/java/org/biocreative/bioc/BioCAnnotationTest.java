@@ -1,8 +1,8 @@
 package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,27 +37,21 @@ public class BioCAnnotationTest {
       .setLength(3)
       .build();
 
-  private static BioCAnnotation.Builder baseBuilder;
+  private static BioCAnnotation.Builder baseBuilder = BioCAnnotation
+      .newBuilder()
+      .setID(ID)
+      .addLocation(LOC_1)
+      .addLocation(LOC_2)
+      .setText(TEXT)
+      .putInfon(KEY, VALUE);
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Before
-  public void setUp() {
-    baseBuilder = BioCAnnotation.newBuilder()
-        .setID(ID)
-        .addLocation(LOC_1)
-        .addLocation(LOC_2)
-        .setText(TEXT)
-        .putInfon(KEY, VALUE);
-
-  }
-
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCAnnotation base = baseBuilder.build();
     BioCAnnotation baseCopy = baseBuilder.build();
-
     BioCAnnotation diffId = baseBuilder.setID(ID_2).build();
     BioCAnnotation diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
     BioCAnnotation diffLocation = baseBuilder.addLocation(LOC_3).build();
@@ -73,25 +67,57 @@ public class BioCAnnotationTest {
   @Test
   public void test_allFields() {
     BioCAnnotation base = baseBuilder.build();
-    System.out.println(base);
 
-    assertEquals(base.getID(), ID);
-    assertEquals(base.getText(), TEXT);
-    assertEquals(base.getInfon(KEY), VALUE);
-    assertEquals(base.getLocationCount(), 2);
-    assertEquals(base.getLocation(0), LOC_1);
-    assertEquals(base.getLocation(1), LOC_2);
+    assertEquals(ID, base.getID());
+    assertEquals(TEXT, base.getText().get());
+    assertEquals(VALUE, base.getInfon(KEY).get());
+    assertEquals(2, base.getLocationCount());
+    assertEquals(LOC_1, base.getLocation(0));
+    assertEquals(LOC_2, base.getLocation(1));
   }
 
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
-    BioCRelation.newBuilder().build();
+    BioCAnnotation.newBuilder().build();
   }
 
   @Test
-  public void test_nullID() {
+  public void testBuilder_nullID() {
     thrown.expect(NullPointerException.class);
-    BioCRelation.newBuilder().setID(null).build();
+    BioCAnnotation.newBuilder().setID(null).build();
+  }
+
+  @Test
+  public void testBuilder_nullNode() {
+    thrown.expect(NullPointerException.class);
+    BioCAnnotation.newBuilder()
+        .setID(ID)
+        .addLocation(null)
+        .build();
+  }
+
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCAnnotation base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+  
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    BioCAnnotation.newBuilder()
+        .setID(ID)
+        .putInfon(null, VALUE)
+        .build();
+  }
+  
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    BioCAnnotation.newBuilder()
+        .setID(ID)
+        .putInfon(KEY, null)
+        .build();
   }
 }

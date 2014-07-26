@@ -1,7 +1,7 @@
 package org.biocreative.bioc;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -154,7 +154,7 @@ public class BioCCollection {
     private List<BioCDocument> documents;
 
     private Builder() {
-      infons = new HashMap<String, String>();
+      infons = new Hashtable<String, String>();
       documents = new ArrayList<BioCDocument>();
     }
 
@@ -177,7 +177,7 @@ public class BioCCollection {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new HashMap<String, String>(infons);
+      this.infons = new Hashtable<String, String>(infons);
       return this;
     }
 
@@ -209,13 +209,6 @@ public class BioCCollection {
     public Builder clearDocuments() {
       documents.clear();
       return this;
-    }
-
-    public Builder clear() {
-      return clearSource()
-          .clearDate()
-          .clearKey()
-          .clearDocuments();
     }
 
     public Builder clearSource() {

@@ -62,7 +62,7 @@ public class BioCSentenceIteratorTest {
     while (itr.hasNext()) {
       BioCSentence sentence = itr.next();
       sentences.add(sentence.getText().get());
-      System.out.println(sentence.getText());
+      System.out.println(sentence.getText().get());
     }
 
     assertEquals(sentences.size(), 7);

@@ -32,7 +32,8 @@ class BioCWriter implements Closeable {
   protected BioCWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
     XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
-    this.writer = new IndentingXMLEventWriter(xmlOutputFactory.createXMLEventWriter(writer));
+    this.writer = new IndentingXMLEventWriter(
+        xmlOutputFactory.createXMLEventWriter(writer));
   }
 
   protected BioCWriter writeStartDocument(String encoding,
@@ -123,7 +124,9 @@ class BioCWriter implements Closeable {
       write(loc);
     }
     // text
-    write(annotation.getText());
+    if (annotation.getText().isPresent()) {
+      write(annotation.getText().get());
+    }
     //
     writeEndElement("annotation");
     return this;

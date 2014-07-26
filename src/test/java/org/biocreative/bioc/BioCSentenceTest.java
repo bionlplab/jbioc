@@ -60,7 +60,7 @@ public class BioCSentenceTest {
     System.out.println(base);
     
     assertEquals(base.getOffset(), OFFSET);
-    assertEquals(base.getText(), TEXT);
+    assertEquals(base.getText().get(), TEXT);
     assertEquals(base.getInfon(KEY), VALUE);
     assertTrue(base.getRelations().isEmpty());
     assertTrue(base.getAnnotations().isEmpty());

@@ -105,11 +105,6 @@ public class BioCLocation {
       length = -1;
       return this;
     }
-    
-    public Builder clear() {
-      return clearOffset()
-          .clearLength();
-    }
 
     public BioCLocation build() {
       checkArguments();
