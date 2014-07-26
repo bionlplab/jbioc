@@ -8,6 +8,7 @@ import java.io.StringReader;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -135,6 +136,7 @@ public class BioCDocumentReaderTest {
   }
 
   @Test
+  @Ignore
   public void test_dtd_woodstox()
       throws Exception {
     test_dtd(new WoodstoxStrategy(), WOODSTOX_DTD);
