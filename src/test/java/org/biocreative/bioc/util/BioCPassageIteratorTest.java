@@ -1,22 +1,19 @@
 package org.biocreative.bioc.util;
 
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.biocreative.bioc.BioCCollection;
+import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
-import org.biocreative.bioc.io.BioCCollectionReader;
-import org.biocreative.bioc.io.BioCFactory;
-import org.biocreative.bioc.io.BioCXMLStrategy;
-import org.biocreative.bioc.io.standard.JdkStrategy;
-import org.biocreative.bioc.util.BioCPassageIterator;
 import org.junit.Test;
 
 /**
@@ -24,43 +21,67 @@ import org.junit.Test;
  */
 public class BioCPassageIteratorTest {
   
-  private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final BioCXMLStrategy STRATEGY = new JdkStrategy();
+  private static final String DATE = "date";
+  private static final String KEY = "key";
+  private static final String SOURCE = "source";
+  
+  private static final BioCPassage EXPECTED_PASSAGE_0 = createPassage(
+      0,
+      "Active Raf-1 phosphorylates and activates "
+          + "the mitogen-activated protein (MAP) kinase/extracellular signal-regulated kinase "
+          + "kinase 1 (MEK1), which in turn phosphorylates and activates the MAP "
+          + "kinases/extracellular signal regulated kinases, ERK1 and ERK2.");
+  private static final BioCPassage EXPECTED_PASSAGE_1 = createPassage(
+      1,
+      "Active Raf-1 phosphorylates MEK1."
+      + "Active Raf-1 activates MEK1."
+      + "MEK1 in turn phosphorylates ERK1.");
+
+  private static final BioCCollection COLLECTION = BioCCollection.newBuilder()
+      .setDate(DATE)
+      .setKey(KEY)
+      .setSource(SOURCE)
+      .addDocument(BioCDocument.newBuilder()
+          .setID("1")
+          .addPassage(EXPECTED_PASSAGE_0)
+          .addPassage(EXPECTED_PASSAGE_1)
+          .build())
+      .build();
 
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    BioCCollectionReader reader = BioCFactory.newFactory(STRATEGY)
-        .createBioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
-    BioCCollection collection = reader.readCollection();
-    reader.close();
-
     List<BioCPassage> passages = new ArrayList<BioCPassage>();
-    BioCPassageIterator itr = new BioCPassageIterator(collection);
+    BioCPassageIterator itr = new BioCPassageIterator(COLLECTION);
     while (itr.hasNext()) {
       BioCPassage passage = itr.next();
 //      System.out.println(passage);
       passages.add(passage);
     }
     
-    assertEquals(passages.size(), 1);
-    
-    BioCPassage passage = passages.get(0);
-    assertEquals(passage.getOffset(), 0);
-    assertEquals(passage.getInfon("type"), "abstract");
+    assertEquals(passages.size(), 2);
+    assertThat(
+        passages,
+        hasItems(
+            EXPECTED_PASSAGE_0,
+            EXPECTED_PASSAGE_1));
   }
 
   @Test
   public void test_empty() {
     BioCCollection collection = BioCCollection.newBuilder()
-        .setDate("today")
-        .setKey("key")
-        .setSource("nowhere")
+        .setDate(DATE)
+        .setKey(KEY)
+        .setSource(SOURCE)
         .build();
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
+  }
+  
+  private static BioCPassage createPassage(int offset, String text) {
+    return BioCPassage.newBuilder()
+        .setOffset(offset)
+        .setText(text)
+        .build();
   }
 }

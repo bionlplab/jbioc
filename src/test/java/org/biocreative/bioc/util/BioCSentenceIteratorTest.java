@@ -1,91 +1,101 @@
 package org.biocreative.bioc.util;
 
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.biocreative.bioc.util.BioCSentenceIterator;
 import org.biocreative.bioc.BioCCollection;
+import org.biocreative.bioc.BioCDocument;
+import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.BioCSentence;
-import org.biocreative.bioc.io.BioCCollectionReader;
-import org.biocreative.bioc.io.BioCFactory;
-import org.biocreative.bioc.io.BioCXMLStrategy;
-import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 
 /**
  * Test BioCCollectionReader and BioCCollectionWriter
  */
 public class BioCSentenceIteratorTest {
 
-  private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final BioCXMLStrategy STRATEGY = new JdkStrategy();
+  private static final String DATE = "date";
+  private static final String KEY = "key";
+  private static final String SOURCE = "source";
 
-  private static final String EXPECTED_SEN_0 = "Active Raf-1 phosphorylates and activates "
-      + "the mitogen-activated protein (MAP) kinase/extracellular signal-regulated kinase "
-      + "kinase 1 (MEK1), which in turn phosphorylates and activates the MAP "
-      + "kinases/extracellular signal regulated kinases, ERK1 and ERK2.";
+  private static final BioCSentence EXPECTED_SEN_0 = createSentence(
+      0,
+      "Active Raf-1 phosphorylates and activates "
+          + "the mitogen-activated protein (MAP) kinase/extracellular signal-regulated kinase "
+          + "kinase 1 (MEK1), which in turn phosphorylates and activates the MAP "
+          + "kinases/extracellular signal regulated kinases, ERK1 and ERK2.");
+  private static final BioCSentence EXPECTED_SEN_1 = createSentence(
+      1,
+      "Active Raf-1 phosphorylates MEK1.");
+  private static final BioCSentence EXPECTED_SEN_2 = createSentence(
+      2,
+      "Active Raf-1 activates MEK1.");
+  private static final BioCSentence EXPECTED_SEN_3 = createSentence(
+      3,
+      "MEK1 in turn phosphorylates ERK1.");
 
-  private static final String EXPECTED_SEN_1 = "Active Raf-1 phosphorylates MEK1.";
-
-  private static final String EXPECTED_SEN_2 = "Active Raf-1 activates MEK1.";
-
-  private static final String EXPECTED_SEN_3 = "MEK1 in turn phosphorylates ERK1.";
-
-  private static final String EXPECTED_SEN_4 = "MEK1 in turn phosphorylates ERK2.";
-
-  private static final String EXPECTED_SEN_5 = "MEK1 in turn activates ERK1.";
-
-  private static final String EXPECTED_SEN_6 = "MEK1 in turn activates ERK2.";
+  private static final BioCCollection COLLECTION = BioCCollection.newBuilder()
+      .setDate(DATE)
+      .setKey(KEY)
+      .setSource(SOURCE)
+      .addDocument(BioCDocument.newBuilder()
+          .setID("1")
+          .addPassage(BioCPassage.newBuilder()
+              .setOffset(0)
+              .addSentence(EXPECTED_SEN_0)
+              .build())
+          .addPassage(BioCPassage.newBuilder()
+              .setOffset(1)
+              .addSentence(EXPECTED_SEN_1)
+              .addSentence(EXPECTED_SEN_2)
+              .addSentence(EXPECTED_SEN_3)
+              .build())
+          .build())
+      .build();
 
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    BioCCollectionReader reader = BioCFactory.newFactory(STRATEGY)
-        .createBioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
-    BioCCollection collection = reader.readCollection();
-    reader.close();
-
-    List<String> sentences = new ArrayList<String>();
-    BioCSentenceIterator itr = new BioCSentenceIterator(collection);
+    List<BioCSentence> sentences = new ArrayList<BioCSentence>();
+    BioCSentenceIterator itr = new BioCSentenceIterator(COLLECTION);
     while (itr.hasNext()) {
       BioCSentence sentence = itr.next();
-      sentences.add(sentence.getText().get());
-      System.out.println(sentence.getText().get());
+      sentences.add(sentence);
     }
 
-    assertEquals(sentences.size(), 7);
+    assertEquals(sentences.size(), 4);
     assertThat(
         sentences,
         hasItems(
             EXPECTED_SEN_0,
             EXPECTED_SEN_1,
             EXPECTED_SEN_2,
-            EXPECTED_SEN_3,
-            EXPECTED_SEN_4,
-            EXPECTED_SEN_5,
-            EXPECTED_SEN_6));
+            EXPECTED_SEN_3));
   }
 
   @Test
   public void test_empty() {
     BioCCollection collection = BioCCollection.newBuilder()
-        .setDate("today")
-        .setKey("key")
-        .setSource("nowhere")
+        .setDate(DATE)
+        .setKey(KEY)
+        .setSource(SOURCE)
         .build();
     BioCSentenceIterator itr = new BioCSentenceIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  private static BioCSentence createSentence(int offset, String text) {
+    return BioCSentence.newBuilder()
+        .setOffset(offset)
+        .setText(text)
+        .build();
   }
 }
