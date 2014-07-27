@@ -1,6 +1,6 @@
-package org.biocreative.bioc.util;
+package org.biocreative.bioc.testing;
 
-import static org.biocreative.bioc.io.BioCAssert.assertAndPrintDtdValid;
+import static org.biocreative.bioc.testing.BioCAssert.assertAndPrintDtdValid;
 
 import java.io.File;
 import java.io.FileNotFoundException;

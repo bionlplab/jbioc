@@ -1,6 +1,6 @@
 package org.biocreative.bioc.io;
 
-import static org.biocreative.bioc.io.BioCAssert.assertDtdValid;
+import static org.biocreative.bioc.testing.BioCAssert.assertDtdValid;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
