@@ -53,8 +53,6 @@ public class BioCDocumentReaderTest {
                 .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollectionInfo();
     assertEquals(collection.getDocmentCount(), 0);
-    
-
     assertEquals(collection.getSource(), "PubMed");
     assertEquals(collection.getKey(), "PMID-8557975-simplified-sentences.key");
 
@@ -62,7 +60,7 @@ public class BioCDocumentReaderTest {
 
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
-      System.out.println(doc);
+//      System.out.println(doc);
       collectionBuilder.addDocument(doc);
     }
     collection = collectionBuilder.build();
@@ -120,7 +118,7 @@ public class BioCDocumentReaderTest {
     
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
-      System.out.println(doc);
+//      System.out.println(doc);
     }
     
     // twice

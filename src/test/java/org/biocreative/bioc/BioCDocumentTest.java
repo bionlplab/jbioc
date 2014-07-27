@@ -49,10 +49,7 @@ public class BioCDocumentTest {
 
   @Test
   public void test_allFields() {
-    
     BioCDocument base = baseBuilder.build();
-    
-    System.out.println(base);
     
     assertEquals(base.getID(), ID);
     assertEquals(base.getInfon(KEY), VALUE);

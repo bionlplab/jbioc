@@ -37,17 +37,17 @@ public class BioCDtdValidator {
   }
 
   @VisibleForTesting
-  protected String getDtdFilename() {
+  String getDtdFilename() {
     return dtdFilename;
   }
 
   @VisibleForTesting
-  protected boolean getHelp() {
+  boolean getHelp() {
     return help;
   }
 
   @VisibleForTesting
-  protected List<String> getArguments() {
+  List<String> getArguments() {
     return arguments;
   }
 

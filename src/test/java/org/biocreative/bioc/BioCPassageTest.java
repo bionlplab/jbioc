@@ -54,10 +54,7 @@ public class BioCPassageTest {
 
   @Test
   public void test_allFields() {
-    
     BioCPassage base = baseBuilder.build();
-    
-    System.out.println(base);
     
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText().get(), TEXT);

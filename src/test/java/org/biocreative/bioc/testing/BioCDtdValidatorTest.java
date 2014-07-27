@@ -1,4 +1,4 @@
-package org.biocreative.bioc.util;
+package org.biocreative.bioc.testing;
 
 import static org.junit.Assert.*;
 

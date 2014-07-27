@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -34,6 +35,7 @@ public class BioCCollectionWriterTest {
   }
 
   @Test
+  @Ignore
   public void test_success_woodstox()
       throws Exception {
     test_success(new WoodstoxStrategy());

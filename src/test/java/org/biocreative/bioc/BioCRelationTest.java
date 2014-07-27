@@ -67,7 +67,6 @@ public class BioCRelationTest {
 
   @Test
   public void test_allFields() {
-
     BioCRelation base = baseBuilder.build();
 
     assertEquals(base.getID(), ID);

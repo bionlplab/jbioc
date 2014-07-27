@@ -54,10 +54,7 @@ public class BioCSentenceTest {
 
   @Test
   public void test_allFields() {
-    
     BioCSentence base = baseBuilder.build();
-    
-    System.out.println(base);
     
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText().get(), TEXT);

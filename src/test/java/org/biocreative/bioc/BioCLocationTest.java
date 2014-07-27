@@ -31,10 +31,7 @@ public class BioCLocationTest {
 
   @Test
   public void test_allFields() {
-
     BioCLocation base = baseBuilder.build();
-
-    System.out.println(base);
 
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getLength(), LENGTH);

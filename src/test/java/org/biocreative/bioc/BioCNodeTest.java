@@ -49,8 +49,6 @@ public class BioCNodeTest {
   public void test_allFields() {
     BioCNode base = baseBuilder.build();
 
-    System.out.println(base);
-
     assertEquals(base.getRefid(), REFID);
     assertEquals(base.getRole(), ROLE);
   }

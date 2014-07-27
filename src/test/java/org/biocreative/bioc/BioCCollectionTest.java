@@ -57,10 +57,7 @@ public class BioCCollectionTest {
 
   @Test
   public void test_allFields() {
-    
     BioCCollection base = baseBuilder.build();
-    
-    System.out.println(base);
     
     assertEquals(base.getSource(), SOURCE);
     assertEquals(base.getInfon(KEY), VALUE);
