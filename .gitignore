@@ -6,5 +6,4 @@ doc/*
 *~
 \#*
 .\#*
-lib/bioc.jar
-/target/
+target
