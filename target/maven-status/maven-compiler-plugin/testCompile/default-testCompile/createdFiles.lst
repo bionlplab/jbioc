@@ -1,0 +1,17 @@
+org/biocreative/bioc/util/BioCPassageIteratorTest.class
+org/biocreative/bioc/BioCCollectionTest.class
+org/biocreative/bioc/testing/BioCDtdValidatorTest.class
+org/biocreative/bioc/util/BioCSentenceIteratorTest.class
+org/biocreative/bioc/BioCSentenceTest.class
+org/biocreative/bioc/BioCNodeTest.class
+org/biocreative/bioc/io/BioCDocumentReaderTest.class
+org/biocreative/bioc/io/BioCCollectionWriterTest.class
+org/biocreative/bioc/io/BioCDtdTest.class
+org/biocreative/bioc/BioCAnnotationTest.class
+org/biocreative/bioc/BioCLocationTest.class
+org/biocreative/bioc/io/BioCFactoryTest.class
+org/biocreative/bioc/io/BioCCollectionReaderTest.class
+org/biocreative/bioc/BioCDocumentTest.class
+org/biocreative/bioc/BioCPassageTest.class
+org/biocreative/bioc/BioCRelationTest.class
+org/biocreative/bioc/io/BioCDocumentWriterTest.class
