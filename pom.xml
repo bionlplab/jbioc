@@ -49,6 +49,22 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>synergian-repo</id>
+      <url>https://raw.github.com/synergian/wagon-git/releases</url>
+    </pluginRepository>
+  </pluginRepositories>
+  <repositories>
+    <repository>
+      <id>bitbucket.repo</id>
+      <name>BioC</name>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <url>https://api.bitbucket.org/1.0/repositories/yfpeng/bioc/raw/master</url>
+    </repository>
+  </repositories>
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
     <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
@@ -75,6 +91,13 @@
         </configuration>
       </plugin>
     </plugins>
+    <extensions>
+      <extension>
+        <groupId>ar.com.synergian</groupId>
+        <artifactId>wagon-git</artifactId>
+        <version>0.2.3</version>
+      </extension>
+    </extensions>
   </build>
   <dependencies>
     <dependency>
@@ -133,4 +156,11 @@
 	  <version>2.0.29</version>
     </dependency>
   </dependencies>
+  <distributionManagement>
+    <repository>
+      <id>bitbucket.repo</id>
+      <name>BioC</name>
+      <url>git:releases://git@bitbucket.org:yfpeng/bioc.git</url>
+    </repository>
+  </distributionManagement>
 </project>
