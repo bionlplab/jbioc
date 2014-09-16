@@ -90,6 +90,32 @@
           <target>1.6</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.9.1</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
     <extensions>
       <extension>
@@ -136,9 +162,9 @@
       <version>1.0-RC1</version>
     </dependency>
     <dependency>
-      <groupId>stax-utils</groupId>
+      <groupId>net.java.dev.stax-utils</groupId>
       <artifactId>stax-utils</artifactId>
-      <version>snapshot-20040917</version>
+      <version>20040917</version>
     </dependency>
     <dependency>
       <groupId>xml-apis</groupId>
@@ -146,14 +172,14 @@
       <version>1.4.01</version>
     </dependency>
     <dependency>
-	  <groupId>org.codehaus.woodstox</groupId>
-	  <artifactId>woodstox-core-asl</artifactId>
-	  <version>4.4.0</version>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>woodstox-core-asl</artifactId>
+      <version>4.4.0</version>
     </dependency>
     <dependency>
-	  <groupId>args4j</groupId>
-	  <artifactId>args4j</artifactId>
-	  <version>2.0.29</version>
+      <groupId>args4j</groupId>
+      <artifactId>args4j</artifactId>
+      <version>2.0.29</version>
     </dependency>
   </dependencies>
   <distributionManagement>

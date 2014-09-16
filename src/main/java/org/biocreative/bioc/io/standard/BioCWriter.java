@@ -27,11 +27,11 @@ import org.biocreative.bioc.BioCSentence;
 class BioCWriter implements Closeable {
 
   XMLEventWriter writer;
-  XMLEventFactory eventFactory = XMLEventFactory.newFactory();
+  XMLEventFactory eventFactory = XMLEventFactory.newInstance();
 
   protected BioCWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
-    XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newFactory();
+    XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
     this.writer = new IndentingXMLEventWriter(
         xmlOutputFactory.createXMLEventWriter(writer));
   }

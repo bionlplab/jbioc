@@ -25,13 +25,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="var" path="M2_REPO/xmlunit/xmlunit/1.5/xmlunit-1.5.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/woodstox-core-asl/4.4.0/woodstox-core-asl-4.4.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar"/>
-	<classpathentry kind="var" path="M2_REPO/net/java/dev/stax-utils/stax-utils/20040917/stax-utils-20040917.jar"/>
-	<classpathentry kind="var" path="M2_REPO/edu/ucdenver/ccp/biolemmatizer-core/1.2/biolemmatizer-core-1.2.jar"/>
-	<classpathentry kind="var" path="M2_REPO/edu/northwestern/at/morphadorner/2009-04-30/morphadorner-2009-04-30.jar"/>
-	<classpathentry kind="var" path="M2_REPO/args4j/args4j/2.0.12/args4j-2.0.12.jar"/>
-	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar" sourcepath="M2_REPO/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.3.2/commons-lang3-3.3.2.jar"/>
 	<classpathentry kind="var" path="M2_REPO/com/google/guava/guava/17.0/guava-17.0.jar" sourcepath="M2_REPO/com/google/guava/guava/17.0/guava-17.0-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/home/ypeng/.m2/repository/com/google/guava/guava/17.0/guava-17.0-javadoc.jar!/"/>
@@ -46,6 +40,23 @@
 	<classpathentry kind="var" path="M2_REPO/org/truth0/truth/0.13/truth-0.13.jar" sourcepath="M2_REPO/org/truth0/truth/0.13/truth-0.13-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:file:/home/ypeng/.m2/repository/org/truth0/truth/0.13/truth-0.13-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="M2_REPO/org/xmlmatchers/xml-matchers/1.0-RC1/xml-matchers-1.0-RC1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/sf/saxon/Saxon-HE/9.4/Saxon-HE-9.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/jdom/jdom/1.1/jdom-1.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xom/xom/1.2.5/xom-1.2.5.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0.jar" sourcepath="M2_REPO/xerces/xercesImpl/2.8.0/xercesImpl-2.8.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xalan/xalan/2.7.0/xalan-2.7.0.jar" sourcepath="M2_REPO/xalan/xalan/2.7.0/xalan-2.7.0-sources.jar"/>
+	<classpathentry kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/xml-resolver/xml-resolver/1.2/xml-resolver-1.2.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/java/dev/stax-utils/stax-utils/20040917/stax-utils-20040917.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/woodstox-core-asl/4.4.0/woodstox-core-asl-4.4.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/codehaus/woodstox/stax2-api/3.1.4/stax2-api-3.1.4.jar"/>
+	<classpathentry kind="var" path="M2_REPO/args4j/args4j/2.0.29/args4j-2.0.29.jar" sourcepath="M2_REPO/args4j/args4j/2.0.29/args4j-2.0.29-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/home/ypeng/.m2/repository/args4j/args4j/2.0.29/args4j-2.0.29-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
