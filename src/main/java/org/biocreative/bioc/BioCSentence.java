@@ -53,12 +53,19 @@ public class BioCSentence {
     return Optional.fromNullable(text);
   }
 
+  /**
+   * Returns the information in the sentence.
+   */
   public Map<String, String> getInfons() {
     return infons;
   }
 
-  public String getInfon(String key) {
-    return infons.get(key);
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
+  public Optional<String> getInfon(String key) {
+    return Optional.fromNullable(infons.get(key));
   }
 
   /**
@@ -68,10 +75,17 @@ public class BioCSentence {
     return annotations;
   }
 
+  /**
+   * Returns the annotation at the specified position in this sentence.
+   */
   public BioCAnnotation getAnnotation(int index) {
     return annotations.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the annotations in this sentence in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
@@ -84,18 +98,31 @@ public class BioCSentence {
     return relations;
   }
 
+  /**
+   * Returns the relation at the specified position in this sentence.
+   */
   public BioCRelation getRelation(int index) {
     return relations.get(index);
   }
 
+  /**
+   * Returns the number of relations in this sentence.
+   */
   public int getRelationCount() {
     return relations.size();
   }
 
+  /**
+   * Returns the number of annotations in this sentence.
+   */
   public int getAnnotationCount() {
     return annotations.size();
   }
 
+  /**
+   * Returns a unmodifiable iterator over the relations in this sentence in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
@@ -111,6 +138,7 @@ public class BioCSentence {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -215,6 +243,7 @@ public class BioCSentence {
     }
 
     public Builder addAnnotation(BioCAnnotation annotation) {
+      Validate.notNull(annotation, "annotation cannot be null");
       this.annotations.add(annotation);
       return this;
     }
@@ -235,12 +264,8 @@ public class BioCSentence {
     }
 
     public Builder addRelation(BioCRelation relation) {
+      Validate.notNull(relation, "relation cannot be null");
       this.relations.add(relation);
-      return this;
-    }
-
-    public Builder clearOffset() {
-      offset = -1;
       return this;
     }
 

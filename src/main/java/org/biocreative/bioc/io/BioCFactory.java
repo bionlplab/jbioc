@@ -19,14 +19,13 @@ public class BioCFactory {
   private BioCFactory(BioCXMLStrategy stragegy) {
     this.strategy = stragegy;
   }
-  
+
   public BioCXMLStrategy getStrategy() {
     return strategy;
   }
 
   /**
-   * @deprecated use {@link newFactory(BioCXMLStrategy strategy)}} instead
-   * @param stragegy
+   * @deprecated use {@link #newFactory(BioCXMLStrategy)} instead
    */
   @Deprecated
   public static BioCFactory newFactory(String flags) {

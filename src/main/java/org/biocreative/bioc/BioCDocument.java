@@ -17,7 +17,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
 
 /**
- * Each {@code BioCDocument} in the {@link BioCCollection}.
+ * One document in the {@link BioCCollection}.
  * 
  * An id, typically from the original corpus, identifies the particular
  * document. It includes {@link BioCPassage}s in the document and possibly
@@ -162,6 +162,7 @@ public class BioCDocument {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;

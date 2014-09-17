@@ -65,6 +65,10 @@ public class BioCPassage {
     return infons;
   }
 
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
   public String getInfon(String key) {
     return infons.get(key);
   }
@@ -76,10 +80,17 @@ public class BioCPassage {
     return annotations;
   }
 
+  /**
+   * Returns the annotation at the specified position in this passage.
+   */
   public BioCAnnotation getAnnotation(int index) {
     return annotations.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the annotations in this passage in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
@@ -92,14 +103,24 @@ public class BioCPassage {
     return relations;
   }
 
+  /**
+   * Returns the relation at the specified position in this passage.
+   */
   public BioCRelation getRelation(int index) {
     return relations.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the relations in this passage in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
-  
+
+  /**
+   * Returns the number of relations in this passage.
+   */
   public int getRelationCount() {
     return relations.size();
   }
@@ -110,19 +131,32 @@ public class BioCPassage {
   public ImmutableList<BioCSentence> getSentences() {
     return sentences;
   }
-  
+
+  /**
+   * Returns the number of sentences in this passage.
+   */
   public int getSentenceCount() {
     return sentences.size();
   }
 
+  /**
+   * Returns the sentence at the specified position in this passage.
+   */
   public BioCSentence getSentence(int index) {
     return sentences.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the sentences in this passage in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCSentence> sentenceIterator() {
     return sentences.iterator();
   }
-  
+
+  /**
+   * Returns the number of annotations in this passage.
+   */
   public int getAnnotationCount() {
     return annotations.size();
   }
@@ -139,6 +173,7 @@ public class BioCPassage {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -168,14 +203,14 @@ public class BioCPassage {
         .append("relations", relations)
         .toString();
   }
-  
+
   /**
    * Constructs a new builder. Use this to derive a new passage.
    */
   public static Builder newBuilder() {
     return new Builder();
   }
-  
+
   /**
    * Constructs a builder initialized with the current passage. Use this to
    * derive a new passage from the current one.
@@ -225,7 +260,7 @@ public class BioCPassage {
       infons.clear();
       return this;
     }
-    
+
     public Builder putInfon(String key, String value) {
       infons.put(key, value);
       return this;
@@ -271,7 +306,7 @@ public class BioCPassage {
       this.relations.add(relation);
       return this;
     }
-    
+
     public Builder setSentences(List<BioCSentence> sentences) {
       this.sentences = new ArrayList<BioCSentence>(sentences);
       return this;

@@ -36,22 +36,22 @@ public class BioCCollection {
   }
 
   /**
-   * The original source of the documents.
+   * Returns the original source of the documents.
    */
   public String getSource() {
     return source;
   }
 
   /**
-   * Date the documents obtained from the source.
+   * Returns date the documents obtained from the source.
    */
   public String getDate() {
     return date;
   }
 
   /**
-   * Name of a file describing the contents and conventions used in this XML
-   * file.
+   * Returns name of a file describing the contents and conventions used in
+   * this XML file.
    */
   public String getKey() {
     return key;
@@ -114,6 +114,7 @@ public class BioCCollection {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;

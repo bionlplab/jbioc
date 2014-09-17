@@ -1,6 +1,7 @@
 package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -54,10 +55,10 @@ public class BioCSentenceTest {
   @Test
   public void test_allFields() {
     BioCSentence base = baseBuilder.build();
-    
-    assertEquals(base.getOffset(), OFFSET);
-    assertEquals(base.getText().get(), TEXT);
-    assertEquals(base.getInfon(KEY), VALUE);
+
+    assertEquals(OFFSET, base.getOffset());
+    assertEquals(TEXT, base.getText().get());
+    assertEquals(VALUE, base.getInfon(KEY));
     assertTrue(base.getRelations().isEmpty());
     assertTrue(base.getAnnotations().isEmpty());
   }
@@ -67,11 +68,77 @@ public class BioCSentenceTest {
     thrown.expect(IllegalArgumentException.class);
     baseBuilder.setOffset(-1);
   }
-  
+
   @Test
   public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCSentence.newBuilder().build();
   }
 
+  @Test
+  public void testBuilder_nullRelation() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addRelation(null);
+  }
+
+  @Test
+  public void testBuilder_nullAnnotation() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addAnnotation(null);
+  }
+
+  @Test
+  public void testBuilder_nullText() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.setText(null);
+  }
+
+  @Test
+  public void testToBuilder() {
+    BioCSentence expected = baseBuilder.build();
+    BioCSentence actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCSentence base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(null, VALUE);
+  }
+
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(KEY, null);
+  }
+
+  @Test
+  public void testBuilder_clearText() {
+    BioCSentence sen = baseBuilder.clearText().build();
+    assertFalse(sen.getText().isPresent());
+  }
+
+  @Test
+  public void testBuilder_clearLocations() {
+    BioCSentence sen = baseBuilder.clearAnnotations().build();
+    assertTrue(sen.getAnnotations().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_removeInfon() {
+    BioCSentence sen = baseBuilder.removeInfon(KEY).build();
+    assertTrue(sen.getInfons().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_clearInfons() {
+    BioCSentence sen = baseBuilder.clearInfons().build();
+    assertTrue(sen.getInfons().isEmpty());
+  }
 }
