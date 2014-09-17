@@ -21,7 +21,7 @@ public class BioCLocationTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-  
+
   @Before
   public void setUp() {
     baseBuilder = BioCLocation.newBuilder()
@@ -67,5 +67,12 @@ public class BioCLocationTest {
   public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCLocation.newBuilder().build();
+  }
+
+  @Test
+  public void testToBuilder() {
+    BioCLocation expected = baseBuilder.build();
+    BioCLocation actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
   }
 }

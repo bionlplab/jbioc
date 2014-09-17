@@ -43,6 +43,7 @@ public class BioCLocation {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -101,16 +102,6 @@ public class BioCLocation {
     public Builder setOffset(int offset) {
       Validate.isTrue(offset >= 0, "offset has to be >= 0");
       this.offset = offset;
-      return this;
-    }
-
-    public Builder clearOffset() {
-      offset = -1;
-      return this;
-    }
-
-    public Builder clearLength() {
-      length = -1;
       return this;
     }
 
