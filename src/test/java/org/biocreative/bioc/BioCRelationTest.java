@@ -1,6 +1,8 @@
 package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -68,22 +70,79 @@ public class BioCRelationTest {
   public void test_allFields() {
     BioCRelation base = baseBuilder.build();
 
-    assertEquals(base.getID(), ID);
-    assertEquals(base.getInfon(KEY), VALUE);
-    assertEquals(base.getNodeCount(), 2);
-    assertEquals(base.getNode(0), NODE_1);
-    assertEquals(base.getNode(1), NODE_2);
+    assertEquals(ID, base.getID());
+    assertEquals(VALUE, base.getInfon(KEY).get());
+    assertEquals(2, base.getNodeCount());
+    assertEquals(NODE_1, base.getNode(0));
+    assertEquals(NODE_2, base.getNode(1));
   }
 
   @Test
   public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
+    thrown.expect(NullPointerException.class);
     BioCRelation.newBuilder().build();
   }
-  
+
   @Test
   public void testBuilder_nullID() {
     thrown.expect(NullPointerException.class);
-    BioCRelation.newBuilder().setID(null).build();
+    baseBuilder.setID(null);
+  }
+
+  @Test
+  public void testBuilder_nullNode() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addNode(null);
+  }
+
+  @Test
+  public void testToBuilder() {
+    BioCRelation expected = baseBuilder.build();
+    BioCRelation actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCRelation base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(null, VALUE);
+  }
+
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(KEY, null);
+  }
+
+  @Test
+  public void testBuilder_clearNodes() {
+    thrown.expect(IllegalArgumentException.class);
+    baseBuilder.clearNodes().build();
+  }
+
+  @Test
+  public void testBuilder_removeInfon() {
+    BioCRelation rel = baseBuilder.removeInfon(KEY).build();
+    assertTrue(rel.getInfons().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_clearInfons() {
+    BioCRelation rel = baseBuilder.clearInfons().build();
+    assertTrue(rel.getInfons().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_addLocation() {
+    BioCRelation rel = baseBuilder.addNode(
+        NODE_3.getRefid(),
+        NODE_3.getRole()).build();
+    assertEquals(NODE_3, rel.getNode(2));
   }
 }

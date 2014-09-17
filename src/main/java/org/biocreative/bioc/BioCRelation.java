@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
@@ -47,8 +48,8 @@ public class BioCRelation {
    * Returns the value to which the specified key is mapped, or null if this
    * {@code infons} contains no mapping for the key.
    */
-  public String getInfon(String key) {
-    return infons.get(key);
+  public Optional<String> getInfon(String key) {
+    return Optional.fromNullable(infons.get(key));
   }
 
   /**
@@ -90,6 +91,7 @@ public class BioCRelation {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -164,11 +166,6 @@ public class BioCRelation {
       return this;
     }
 
-    public Builder clearID() {
-      id = null;
-      return this;
-    }
-
     public Builder putInfon(String key, String value) {
       infons.put(key, value);
       return this;
@@ -180,6 +177,7 @@ public class BioCRelation {
     }
 
     public Builder addNode(BioCNode node) {
+      Validate.notNull(node, "node cannot be null");
       nodes.add(node);
       return this;
     }
@@ -207,8 +205,8 @@ public class BioCRelation {
     }
 
     private void checkArguments() {
-      Validate.isTrue(id != null, "id has to be set");
-      Validate.isTrue(!nodes.isEmpty(), "there must be some nodes");
+      Validate.notNull(id, "id has to be set");
+      Validate.notEmpty(nodes, "there must be some nodes");
     }
   }
 }
