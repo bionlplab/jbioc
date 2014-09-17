@@ -47,7 +47,6 @@ public class BioCNodeTest {
   @Test
   public void test_allFields() {
     BioCNode base = baseBuilder.build();
-
     assertEquals(base.getRefid(), REFID);
     assertEquals(base.getRole(), ROLE);
   }
@@ -57,16 +56,23 @@ public class BioCNodeTest {
     thrown.expect(IllegalArgumentException.class);
     BioCNode.newBuilder().build();
   }
-  
+
   @Test
   public void testBuilder_nullRefid() {
     thrown.expect(NullPointerException.class);
-    BioCNode.newBuilder().setRefid(null);
+    baseBuilder.setRefid(null);
   }
-  
+
   @Test
   public void testBuilder_nullRole() {
     thrown.expect(NullPointerException.class);
-    BioCNode.newBuilder().setRole(null);
+    baseBuilder.setRole(null);
+  }
+
+  @Test
+  public void testToBuilder() {
+    BioCNode expected = baseBuilder.build();
+    BioCNode actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
   }
 }

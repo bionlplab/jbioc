@@ -2,6 +2,7 @@ package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -42,7 +43,7 @@ public class BioCAnnotationTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-  
+
   @Before
   public void setUp() {
     baseBuilder = BioCAnnotation
@@ -73,7 +74,6 @@ public class BioCAnnotationTest {
   @Test
   public void test_allFields() {
     BioCAnnotation base = baseBuilder.build();
-
     assertEquals(ID, base.getID());
     assertEquals(TEXT, base.getText().get());
     assertEquals(VALUE, base.getInfon(KEY).get());
@@ -84,7 +84,7 @@ public class BioCAnnotationTest {
 
   @Test
   public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
+    thrown.expect(NullPointerException.class);
     BioCAnnotation.newBuilder().build();
   }
 
@@ -99,13 +99,13 @@ public class BioCAnnotationTest {
     thrown.expect(NullPointerException.class);
     baseBuilder.addLocation(null);
   }
-  
+
   @Test
   public void testBuilder_nullText() {
     thrown.expect(NullPointerException.class);
     baseBuilder.setText(null);
   }
-  
+
   @Test
   public void testToBuilder() {
     BioCAnnotation expected = baseBuilder.build();
@@ -118,16 +118,48 @@ public class BioCAnnotationTest {
     BioCAnnotation base = baseBuilder.build();
     assertFalse(base.getInfon(null).isPresent());
   }
-  
+
   @Test
   public void testBuilder_putInfonNullKey() {
     thrown.expect(NullPointerException.class);
     baseBuilder.putInfon(null, VALUE);
   }
-  
+
   @Test
   public void testBuilder_putInfonNullValue() {
     thrown.expect(NullPointerException.class);
     baseBuilder.putInfon(KEY, null);
+  }
+
+  @Test
+  public void testBuilder_clearText() {
+    BioCAnnotation ann = baseBuilder.clearText().build();
+    assertFalse(ann.getText().isPresent());
+  }
+
+  @Test
+  public void testBuilder_clearLocations() {
+    thrown.expect(IllegalArgumentException.class);
+    baseBuilder.clearLocations().build();
+  }
+
+  @Test
+  public void testBuilder_removeInfon() {
+    BioCAnnotation ann = baseBuilder.removeInfon(KEY).build();
+    assertTrue(ann.getInfons().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_clearInfons() {
+    BioCAnnotation ann = baseBuilder.clearInfons().build();
+    assertTrue(ann.getInfons().isEmpty());
+  }
+
+  @Test
+  public void testBuilder_addLocation() {
+    BioCAnnotation ann = baseBuilder.addLocation(
+        LOC_3.getOffset(),
+        LOC_3.getLength()).build();
+    assertEquals(LOC_3, ann.getLocation(2));
   }
 }

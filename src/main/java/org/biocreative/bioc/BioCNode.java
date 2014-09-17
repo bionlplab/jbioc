@@ -72,8 +72,8 @@ public class BioCNode {
   }
 
   /**
-   * Constructs a builder initialized with the current node. Use this to
-   * derive a new node from the current one.
+   * Constructs a builder initialized with the current node. Use this to derive
+   * a new node from the current one.
    */
   public Builder toBuilder() {
     return newBuilder()
@@ -98,16 +98,6 @@ public class BioCNode {
     public Builder setRole(String role) {
       Validate.notNull(role, "role cannot be null");
       this.role = role;
-      return this;
-    }
-
-    public Builder clearRefid() {
-      this.refid = null;
-      return this;
-    }
-
-    public Builder clearRole() {
-      this.role = null;
       return this;
     }
 

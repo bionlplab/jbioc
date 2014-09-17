@@ -99,6 +99,7 @@ public class BioCAnnotation {
         .toHashCode();
   }
 
+  @Override
   public boolean equals(Object obj) {
     if (obj == this) {
       return true;
@@ -216,11 +217,6 @@ public class BioCAnnotation {
       return this;
     }
 
-    public Builder clearID() {
-      id = null;
-      return this;
-    }
-
     public BioCAnnotation build() {
       checkArguments();
 
@@ -233,10 +229,8 @@ public class BioCAnnotation {
     }
 
     private void checkArguments() {
-      Validate.isTrue(id != null, "id has to be set");
-      Validate.isTrue(
-          !locations.isEmpty(),
-          "there must be at least one location");
+      Validate.notNull(id, "id has to be set");
+      Validate.notEmpty(locations, "there must be at least one location");
     }
   }
 }
