@@ -28,9 +28,7 @@ public class BioCDtdValidator {
   private List<String> arguments = new ArrayList<String>();
 
   /**
-   * BioCValidation DTD_file BioC_file ...
-   * 
-   * @throws FileNotFoundException
+   * BioCValidation [options...] arguments...
    */
   public static void main(String[] args) {
     new BioCDtdValidator().doMain(args);

@@ -38,10 +38,9 @@ public class BioCLocationTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCLocation base = baseBuilder.build();
     BioCLocation baseCopy = baseBuilder.build();
-
     BioCLocation diffOffset = baseBuilder.setOffset(OFFSET_2).build();
     BioCLocation diffLength = baseBuilder.setLength(LENGTH_2).build();
 
@@ -53,19 +52,19 @@ public class BioCLocationTest {
   }
 
   @Test
-  public void test_negLength() {
+  public void testBuilder_negLength() {
     thrown.expect(IllegalArgumentException.class);
     BioCLocation.newBuilder().setLength(-1).build();
   }
 
   @Test
-  public void test_negOffset() {
+  public void testBuilder_negOffset() {
     thrown.expect(IllegalArgumentException.class);
     BioCLocation.newBuilder().setOffset(-1).build();
   }
 
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCLocation.newBuilder().build();
   }

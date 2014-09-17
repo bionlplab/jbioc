@@ -49,10 +49,9 @@ public class BioCRelationTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCRelation base = baseBuilder.build();
     BioCRelation baseCopy = baseBuilder.build();
-
     BioCRelation diffId = baseBuilder.setID(ID_2).build();
     BioCRelation diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
     BioCRelation diffNode = baseBuilder.addNode(NODE_3).build();
@@ -77,13 +76,13 @@ public class BioCRelationTest {
   }
 
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCRelation.newBuilder().build();
   }
   
   @Test
-  public void test_nullID() {
+  public void testBuilder_nullID() {
     thrown.expect(NullPointerException.class);
     BioCRelation.newBuilder().setID(null).build();
   }

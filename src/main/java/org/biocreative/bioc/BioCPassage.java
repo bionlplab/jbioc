@@ -18,7 +18,7 @@ import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * One passage in a {@link BioCDocument}.
- * 
+ * <p>
  * This might be the {@code text} in the passage and possibly
  * {@link BioCAnnotation}s over that text. It could be the {@link BioCSentence}
  * s in the passage. In either case it might include {@link BioCRelation}s over
@@ -26,56 +26,41 @@ import com.google.common.collect.UnmodifiableIterator;
  */
 public class BioCPassage {
 
-  /**
-   * The offset of the passage in the parent document. The significance of the
-   * exact value may depend on the source corpus. They should be sequential and
-   * identify the passage's position in the document. Since pubmed is extracted
-   * from an XML file, the title has an offset of zero, while the abstract is
-   * assumed to begin after the title and one space.
-   */
   private int offset;
-
-  /**
-   * The original text of the passage.
-   */
   private String text;
-
-  /**
-   * Information of text in the passage.
-   * 
-   * For PubMed references, it might be "title" or "abstract". For full text
-   * papers, it might be Introduction, Methods, Results, or Conclusions. Or
-   * they might be paragraphs.
-   */
   private ImmutableMap<String, String> infons;
-
-  /**
-   * The sentences of the passage.
-   */
   private ImmutableList<BioCSentence> sentences;
-
-  /**
-   * Annotations on the text of the passage.
-   */
   private ImmutableList<BioCAnnotation> annotations;
-
-  /**
-   * Relations between the annotations and possibly other relations on the text
-   * of the passage.
-   */
   private ImmutableList<BioCRelation> relations;
 
   private BioCPassage() {
   }
 
+  /**
+   * The offset of the passage in the parent document. The significance of the
+   * exact value may depend on the source corpus. They should be sequential and
+   * identify the passage's position in the document. Since Pubmed is extracted
+   * from an XML file, the title has an offset of zero, while the abstract is
+   * assumed to begin after the title and one space.
+   */
   public int getOffset() {
     return offset;
   }
 
+  /**
+   * The original text of the passage.
+   */
   public Optional<String> getText() {
     return Optional.fromNullable(text);
   }
 
+  /**
+   * Information of text in the passage.
+   * <p>
+   * For PubMed references, it might be "title" or "abstract". For full text
+   * papers, it might be Introduction, Methods, Results, or Conclusions. Or
+   * they might be paragraphs.
+   */
   public ImmutableMap<String, String> getInfons() {
     return infons;
   }
@@ -84,6 +69,9 @@ public class BioCPassage {
     return infons.get(key);
   }
 
+  /**
+   * Annotations on the text of the passage.
+   */
   public ImmutableList<BioCAnnotation> getAnnotations() {
     return annotations;
   }
@@ -96,6 +84,10 @@ public class BioCPassage {
     return annotations.iterator();
   }
 
+  /**
+   * Relations between the annotations and possibly other relations on the text
+   * of the passage.
+   */
   public ImmutableList<BioCRelation> getRelations() {
     return relations;
   }
@@ -112,6 +104,9 @@ public class BioCPassage {
     return relations.size();
   }
 
+  /**
+   * The sentences of the passage.
+   */
   public ImmutableList<BioCSentence> getSentences() {
     return sentences;
   }
@@ -174,18 +169,25 @@ public class BioCPassage {
         .toString();
   }
   
+  /**
+   * Constructs a new builder. Use this to derive a new passage.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
   
-  public Builder getBuilder() {
+  /**
+   * Constructs a builder initialized with the current passage. Use this to
+   * derive a new passage from the current one.
+   */
+  public Builder toBuilder() {
     Builder builder = newBuilder()
         .setOffset(offset)
         .setAnnotations(annotations)
         .setInfons(infons)
         .setRelations(relations)
         .setSentences(sentences);
-    if (getText() != null) {
+    if (getText().isPresent()) {
       builder.setText(text);
     }
     return builder;

@@ -6,23 +6,29 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+/**
+ * The annotations and/or other relations in the relation.
+ */
 public class BioCNode {
 
-  /**
-   * Id of an annotated object or another relation. Typically there will be one
-   * label for each ref_id.
-   */
   private String refid;
-
   private String role;
 
   private BioCNode() {
   }
 
+  /**
+   * Returns the id of an annotated object or another relation. Typically there
+   * will be one label for each node.
+   */
   public String getRefid() {
     return refid;
   }
 
+  /**
+   * Returns the role of how the referenced annotation or other relation
+   * participates in the current relation.
+   */
   public String getRole() {
     return role;
   }
@@ -58,11 +64,18 @@ public class BioCNode {
         toString();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new node.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
 
-  public Builder getBuilder() {
+  /**
+   * Constructs a builder initialized with the current node. Use this to
+   * derive a new node from the current one.
+   */
+  public Builder toBuilder() {
     return newBuilder()
         .setRefid(refid)
         .setRole(role);
@@ -87,7 +100,7 @@ public class BioCNode {
       this.role = role;
       return this;
     }
-    
+
     public Builder clearRefid() {
       this.refid = null;
       return this;

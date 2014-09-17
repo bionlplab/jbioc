@@ -5,8 +5,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import javax.management.relation.Relation;
-
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -24,49 +22,69 @@ import com.google.common.collect.UnmodifiableIterator;
  */
 public class BioCAnnotation {
 
-  /**
-   * Id used to identify this annotation in a {@link Relation}.
-   */
   private String id;
   private ImmutableMap<String, String> infons;
   private ImmutableList<BioCLocation> locations;
-
-  /**
-   * The annotated text.
-   */
   private String text;
 
   private BioCAnnotation() {
   }
 
+  /**
+   * Returns the id used to identify this annotation in a {@link BioCRelation}.
+   */
   public String getID() {
     return id;
   }
 
+  /**
+   * Returns the information in this annotation.
+   */
   public ImmutableMap<String, String> getInfons() {
     return infons;
   }
 
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
   public Optional<String> getInfon(String key) {
     return Optional.fromNullable(infons.get(key));
   }
 
+  /**
+   * Returns locations of the annotated text. Multiple locations indicate a
+   * multispan annotation.
+   */
   public ImmutableList<BioCLocation> getLocations() {
     return locations;
   }
-  
+
+  /**
+   * Returns the location at the specified position in this annotation.
+   */
   public BioCLocation getLocation(int i) {
     return locations.get(i);
   }
-  
+
+  /**
+   * Returns the number of locations in this annotation.
+   */
   public int getLocationCount() {
     return locations.size();
   }
-  
+
+  /**
+   * Returns a unmodifiable iterator over the locations in this annotation in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCLocation> locationIterator() {
     return locations.iterator();
   }
 
+  /**
+   * The original text of the annotation
+   */
   public Optional<String> getText() {
     return Optional.fromNullable(text);
   }
@@ -106,15 +124,22 @@ public class BioCAnnotation {
         .append("locations", locations)
         .toString();
   }
-  
-  public Builder getBuilder() {
+
+  /**
+   * Constructs a builder initialized with the current annotation. Use this to
+   * derive a new annotation from the current one.
+   */
+  public Builder toBuilder() {
     return newBuilder()
         .setID(id)
         .setText(text)
         .setInfons(infons)
         .setLocations(locations);
   }
-  
+
+  /**
+   * Constructs a new builder. Use this to derive a new annotation.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
@@ -163,6 +188,7 @@ public class BioCAnnotation {
     }
 
     public Builder addLocation(BioCLocation location) {
+      Validate.notNull(location, "location cannot be null");
       locations.add(location);
       return this;
     }
@@ -178,18 +204,18 @@ public class BioCAnnotation {
           .setLength(length)
           .build());
     }
-    
+
     public Builder setText(String text) {
       Validate.notNull(text, "text cannot be null");
       this.text = text;
       return this;
     }
-    
+
     public Builder clearText() {
       text = null;
       return this;
     }
-    
+
     public Builder clearID() {
       id = null;
       return this;
@@ -208,7 +234,9 @@ public class BioCAnnotation {
 
     private void checkArguments() {
       Validate.isTrue(id != null, "id has to be set");
-      Validate.isTrue(!locations.isEmpty(), "there must be at least one location");
+      Validate.isTrue(
+          !locations.isEmpty(),
+          "there must be at least one location");
     }
   }
 }

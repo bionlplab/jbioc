@@ -1,6 +1,7 @@
 package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -35,12 +36,11 @@ public class BioCCollectionTest {
         .setDate(DATE)
         .putInfon(KEY, VALUE);
   }
-  
+
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCCollection base = baseBuilder.build();
     BioCCollection baseCopy = baseBuilder.build();
-
     BioCCollection diffSource = baseBuilder.setSource(SOURCE_2).build();
     BioCCollection diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
     BioCCollection diffDate = baseBuilder.setDate(DATE_2).build();
@@ -58,29 +58,58 @@ public class BioCCollectionTest {
   @Test
   public void test_allFields() {
     BioCCollection base = baseBuilder.build();
-    
     assertEquals(base.getSource(), SOURCE);
-    assertEquals(base.getInfon(KEY), VALUE);
+    assertEquals(base.getInfon(KEY).get(), VALUE);
     assertEquals(base.getKey(), KEY);
     assertTrue(base.getDocuments().isEmpty());
   }
 
   @Test
-  public void test_nullSource() {
+  public void testBuilder_nullSource() {
     thrown.expect(NullPointerException.class);
-    BioCCollection.newBuilder().setSource(null);
+    baseBuilder.setSource(null);
+  }
+
+  @Test
+  public void testBuilder_nullDate() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.setDate(null);
+  }
+
+  @Test
+  public void testBuilder_nullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.setKey(null);
+  }
+
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCCollection base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(null, VALUE);
+  }
+
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(KEY, null);
   }
   
   @Test
-  public void test_nullDate() {
+  public void testBuilder_nullDocument() {
     thrown.expect(NullPointerException.class);
-    BioCCollection.newBuilder().setDate(null);
+    baseBuilder.addDocument(null);
   }
   
   @Test
-  public void test_nullKey() {
-    thrown.expect(NullPointerException.class);
-    BioCCollection.newBuilder().setKey(null);
+  public void testToBuilder() {
+    BioCCollection expected = baseBuilder.build();
+    BioCCollection actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
   }
-  
 }

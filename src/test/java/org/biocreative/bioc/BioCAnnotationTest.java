@@ -3,6 +3,7 @@ package org.biocreative.bioc;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -37,16 +38,21 @@ public class BioCAnnotationTest {
       .setLength(3)
       .build();
 
-  private static BioCAnnotation.Builder baseBuilder = BioCAnnotation
-      .newBuilder()
-      .setID(ID)
-      .addLocation(LOC_1)
-      .addLocation(LOC_2)
-      .setText(TEXT)
-      .putInfon(KEY, VALUE);
+  private BioCAnnotation.Builder baseBuilder;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
+  
+  @Before
+  public void setUp() {
+    baseBuilder = BioCAnnotation
+        .newBuilder()
+        .setID(ID)
+        .addLocation(LOC_1)
+        .addLocation(LOC_2)
+        .setText(TEXT)
+        .putInfon(KEY, VALUE);
+  }
 
   @Test
   public void testEquals() {
@@ -85,16 +91,26 @@ public class BioCAnnotationTest {
   @Test
   public void testBuilder_nullID() {
     thrown.expect(NullPointerException.class);
-    BioCAnnotation.newBuilder().setID(null).build();
+    baseBuilder.setID(null);
   }
 
   @Test
-  public void testBuilder_nullNode() {
+  public void testBuilder_nullLocation() {
     thrown.expect(NullPointerException.class);
-    BioCAnnotation.newBuilder()
-        .setID(ID)
-        .addLocation(null)
-        .build();
+    baseBuilder.addLocation(null);
+  }
+  
+  @Test
+  public void testBuilder_nullText() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.setText(null);
+  }
+  
+  @Test
+  public void testToBuilder() {
+    BioCAnnotation expected = baseBuilder.build();
+    BioCAnnotation actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
   }
 
   @Test
@@ -106,18 +122,12 @@ public class BioCAnnotationTest {
   @Test
   public void testBuilder_putInfonNullKey() {
     thrown.expect(NullPointerException.class);
-    BioCAnnotation.newBuilder()
-        .setID(ID)
-        .putInfon(null, VALUE)
-        .build();
+    baseBuilder.putInfon(null, VALUE);
   }
   
   @Test
   public void testBuilder_putInfonNullValue() {
     thrown.expect(NullPointerException.class);
-    BioCAnnotation.newBuilder()
-        .setID(ID)
-        .putInfon(KEY, null)
-        .build();
+    baseBuilder.putInfon(KEY, null);
   }
 }

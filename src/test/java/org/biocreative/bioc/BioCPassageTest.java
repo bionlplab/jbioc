@@ -36,10 +36,9 @@ public class BioCPassageTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCPassage base = baseBuilder.build();
     BioCPassage baseCopy = baseBuilder.build();
-
     BioCPassage diffOffset = baseBuilder.setOffset(OFFSET_2).build();
     BioCPassage diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
     BioCPassage diffText = baseBuilder.setText(TEXT_2).build();
@@ -65,7 +64,7 @@ public class BioCPassageTest {
   }
 
   @Test
-  public void test_negOffset() {
+  public void testBuilder_negOffset() {
     thrown.expect(IllegalArgumentException.class);
     baseBuilder.setOffset(-1);
   }

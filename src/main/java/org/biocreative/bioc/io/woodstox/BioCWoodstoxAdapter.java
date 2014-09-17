@@ -103,7 +103,7 @@ class BioCWoodstoxAdapter implements BioCCollectionReader, BioCDocumentWriter,
     }
     collection = readCollectionInfo();
 
-    BioCCollection.Builder collectionBuilder = collection.getBuilder();
+    BioCCollection.Builder collectionBuilder = collection.toBuilder();
     BioCDocument doc = null;
     while ((doc = readDocument()) != null) {
       collectionBuilder.addDocument(doc);

@@ -11,83 +11,94 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * Collection of documents.
- * 
+ * <p>
  * Collection of documents for a project. They may be an entire corpus or some
  * portion of a corpus. Fields are provided to describe the collection.
- * 
+ * <p>
  * Documents may appear empty if doing document at a time IO.
  */
 public class BioCCollection {
 
-  /**
-   * Describe the original source of the documents.
-   */
   private String source;
-
-  /**
-   * Date the documents obtained from the source.
-   */
   private String date;
-
-  /**
-   * Name of a file describing the contents and conventions used in this XML
-   * file.
-   */
   private String key;
   private ImmutableMap<String, String> infons;
-
-  /**
-   * All the documents in the collection. This will be empty if document at a
-   * time IO is used to read the XML file. Any contents will be ignored if
-   * written with document at a time IO.
-   */
   private ImmutableList<BioCDocument> documents;
 
   private BioCCollection() {
   }
 
+  /**
+   * The original source of the documents.
+   */
   public String getSource() {
     return source;
   }
 
-  public void setSource(String source) {
-    this.source = source;
-  }
-
+  /**
+   * Date the documents obtained from the source.
+   */
   public String getDate() {
     return date;
   }
 
+  /**
+   * Name of a file describing the contents and conventions used in this XML
+   * file.
+   */
   public String getKey() {
     return key;
   }
 
+  /**
+   * Returns the information in the collection.
+   */
   public ImmutableMap<String, String> getInfons() {
     return infons;
   }
 
-  public String getInfon(String key) {
-    return infons.get(key);
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
+  public Optional<String> getInfon(String key) {
+    return Optional.fromNullable(infons.get(key));
   }
 
+  /**
+   * Returns all the documents in the collection. This will be empty if
+   * document at a time IO is used to read the XML file. Any contents will be
+   * ignored if written with document at a time IO.
+   */
   public ImmutableList<BioCDocument> getDocuments() {
     return documents;
   }
 
+  /**
+   * Returns the document at the specified position in this collection.
+   */
   public int getDocmentCount() {
     return documents.size();
   }
 
+  /**
+   * Returns the document at the specified position in this collection.
+   */
   public BioCDocument getDocument(int index) {
     return documents.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the document in this collection in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCDocument> documentIterator() {
     return documents.iterator();
   }
@@ -131,18 +142,24 @@ public class BioCCollection {
         .toString();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new collection.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
 
-  public Builder getBuilder() {
-    Builder builder = newBuilder()
+  /**
+   * Constructs a builder initialized with the current collection. Use this to
+   * derive a new collection from the current one.
+   */
+  public Builder toBuilder() {
+    return newBuilder()
         .setSource(source)
         .setDate(date)
         .setInfons(infons)
         .setKey(key)
         .setDocuments(documents);
-    return builder;
   }
 
   public static class Builder {
@@ -169,7 +186,7 @@ public class BioCCollection {
       this.date = date;
       return this;
     }
-    
+
     public Builder setKey(String key) {
       Validate.notNull(key, "key cannot be null");
       this.key = key;
@@ -202,6 +219,7 @@ public class BioCCollection {
     }
 
     public Builder addDocument(BioCDocument document) {
+      Validate.notNull(document, "document cannot be null");
       this.documents.add(document);
       return this;
     }
@@ -220,7 +238,7 @@ public class BioCCollection {
       date = null;
       return this;
     }
-    
+
     public Builder clearKey() {
       key = null;
       return this;

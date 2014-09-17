@@ -21,50 +21,62 @@ import com.google.common.collect.UnmodifiableIterator;
  */
 public class BioCRelation {
 
-  /**
-   * Used to refer to this relation in other relationships.
-   */
   private String id;
-
-  /**
-   * Information of relation. Implemented examples include abbreviation long
-   * forms and short forms and protein events.
-   */
   private ImmutableMap<String, String> infons;
-
-  /**
-   * Describes how the referenced annotated object or other relation
-   * participates in the current relationship.
-   */
   private ImmutableList<BioCNode> nodes;
 
   private BioCRelation() {
   }
 
+  /**
+   * Returns the id used to refer to this relation in other relationships.
+   */
   public String getID() {
     return id;
   }
 
+  /**
+   * Returns the information of relation. Implemented examples include
+   * abbreviation long forms and short forms and protein events.
+   */
   public ImmutableMap<String, String> getInfons() {
     return infons;
   }
 
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
   public String getInfon(String key) {
     return infons.get(key);
   }
 
+  /**
+   * Returns nodes that describe how the referenced annotated object or other
+   * relation participates in the current relationship.
+   */
   public ImmutableList<BioCNode> getNodes() {
     return nodes;
   }
 
+  /**
+   * Returns the node at the specified position in this relation.
+   */
   public BioCNode getNode(int index) {
     return nodes.get(index);
   }
 
+  /**
+   * Returns the number of nodes in this relation.
+   */
   public int getNodeCount() {
     return nodes.size();
   }
 
+  /**
+   * Returns a unmodifiable iterator over the nodes in this relation in proper
+   * sequence.
+   */
   public UnmodifiableIterator<BioCNode> nodeIterator() {
     return nodes.iterator();
   }
@@ -102,11 +114,18 @@ public class BioCRelation {
         .toString();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new relation.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
 
-  public Builder getBuilder() {
+  /**
+   * Constructs a builder initialized with the current relation. Use this to
+   * derive a new relation from the current one.
+   */
+  public Builder toBuilder() {
     return newBuilder()
         .setID(id)
         .setInfons(infons)

@@ -36,10 +36,9 @@ public class BioCSentenceTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCSentence base = baseBuilder.build();
     BioCSentence baseCopy = baseBuilder.build();
-
     BioCSentence diffOffset = baseBuilder.setOffset(OFFSET_2).build();
     BioCSentence diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
     BioCSentence diffText = baseBuilder.setText(TEXT_2).build();
@@ -64,13 +63,13 @@ public class BioCSentenceTest {
   }
 
   @Test
-  public void test_negOffset() {
+  public void testBuilder_negOffset() {
     thrown.expect(IllegalArgumentException.class);
     baseBuilder.setOffset(-1);
   }
   
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCSentence.newBuilder().build();
   }

@@ -7,29 +7,30 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * The connection to the original text can be made through the {@code offset},
- * {@code length}, and possibly the {@code text} fields.
+ * The connection to the original text can be made through the {@code offset}
+ * and {@code length} fields.
  */
 public class BioCLocation {
 
-  /**
-   * Type of annotation. Options include "token", "noun phrase", "gene", and
-   * "disease". The valid values should be described in the {@code key} file.
-   */
   private int offset;
-  /**
-   * The length of the annotated text. While unlikely, this could be zero to
-   * describe an annotation that belongs between two characters.
-   */
   private int length;
 
   private BioCLocation() {
   }
 
+  /**
+   * Returns the length of the annotated text. While unlikely, this could be
+   * zero to describe an annotation that belongs between two characters.
+   */
   public int getLength() {
     return length;
   }
 
+  /**
+   * Returns the type of annotation. Options include "token", "noun phrase",
+   * "gene", and "disease". The valid values should be described in the
+   * {@code key} file.
+   */
   public int getOffset() {
     return offset;
   }
@@ -64,11 +65,18 @@ public class BioCLocation {
         toString();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new location.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
 
-  public Builder getBuilder() {
+  /**
+   * Constructs a builder initialized with the current location. Use this to
+   * derive a new location from the current one.
+   */
+  public Builder toBuilder() {
     return newBuilder()
         .setLength(length)
         .setOffset(offset);
@@ -95,12 +103,12 @@ public class BioCLocation {
       this.offset = offset;
       return this;
     }
-    
+
     public Builder clearOffset() {
       offset = -1;
       return this;
     }
-    
+
     public Builder clearLength() {
       length = -1;
       return this;

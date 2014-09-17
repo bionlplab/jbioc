@@ -30,11 +30,10 @@ public class BioCNodeTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
 
     BioCNode base = baseBuilder.build();
     BioCNode baseCopy = baseBuilder.build();
-
     BioCNode diffRefid = baseBuilder.setRefid(REFID_2).build();
     BioCNode diffRole = baseBuilder.setRole(ROLE_2).build();
 
@@ -54,19 +53,19 @@ public class BioCNodeTest {
   }
 
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCNode.newBuilder().build();
   }
   
   @Test
-  public void test_nullRefid() {
+  public void testBuilder_nullRefid() {
     thrown.expect(NullPointerException.class);
     BioCNode.newBuilder().setRefid(null);
   }
   
   @Test
-  public void test_nullRole() {
+  public void testBuilder_nullRole() {
     thrown.expect(NullPointerException.class);
     BioCNode.newBuilder().setRole(null);
   }

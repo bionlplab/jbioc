@@ -28,37 +28,27 @@ import com.google.common.collect.UnmodifiableIterator;
  */
 public class BioCSentence {
 
-  /**
-   * A {@link BioCDocument} offset to where the sentence begins in the
-   * {@link BioCPassage}. This value is the sum of the passage offset and the
-   * local offset within the passage.
-   */
   private int offset;
-
-  /**
-   * The original text of the sentence.
-   */
   private String text;
   private ImmutableMap<String, String> infons;
-
-  /**
-   * {@link BioCAnnotation}s on the original text
-   */
   private ImmutableList<BioCAnnotation> annotations;
-
-  /**
-   * Relations between the annotations and possibly other relations on the text
-   * of the sentence.
-   */
   private ImmutableList<BioCRelation> relations;
 
   private BioCSentence() {
   }
 
+  /**
+   * A {@link BioCDocument} offset to where the sentence begins in the
+   * {@link BioCPassage}. This value is the sum of the passage offset and the
+   * local offset within the passage.
+   */
   public int getOffset() {
     return offset;
   }
 
+  /**
+   * The original text of the sentence.
+   */
   public Optional<String> getText() {
     return Optional.fromNullable(text);
   }
@@ -71,6 +61,9 @@ public class BioCSentence {
     return infons.get(key);
   }
 
+  /**
+   * {@link BioCAnnotation}s on the original text
+   */
   public ImmutableList<BioCAnnotation> getAnnotations() {
     return annotations;
   }
@@ -83,6 +76,10 @@ public class BioCSentence {
     return annotations.iterator();
   }
 
+  /**
+   * Relations between the annotations and possibly other relations on the text
+   * of the sentence.
+   */
   public ImmutableList<BioCRelation> getRelations() {
     return relations;
   }
@@ -90,11 +87,11 @@ public class BioCSentence {
   public BioCRelation getRelation(int index) {
     return relations.get(index);
   }
-  
+
   public int getRelationCount() {
     return relations.size();
   }
-  
+
   public int getAnnotationCount() {
     return annotations.size();
   }
@@ -142,17 +139,24 @@ public class BioCSentence {
         .toString();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new sentence.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
-  
-  public Builder getBuilder() {
+
+  /**
+   * Constructs a builder initialized with the current sentence. Use this to
+   * derive a new sentence from the current one.
+   */
+  public Builder toBuilder() {
     Builder builder = newBuilder()
         .setOffset(offset)
         .setAnnotations(annotations)
         .setInfons(infons)
         .setRelations(relations);
-    if (getText() != null) {
+    if (getText().isPresent()) {
       builder.setText(text);
     }
     return builder;
@@ -188,7 +192,7 @@ public class BioCSentence {
       infons.clear();
       return this;
     }
-    
+
     public Builder putInfon(String key, String value) {
       infons.put(key, value);
       return this;

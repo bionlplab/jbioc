@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
@@ -24,92 +25,129 @@ import com.google.common.collect.UnmodifiableIterator;
  */
 public class BioCDocument {
 
-  /**
-   * Id to identify the particular {@code Document}.
-   */
   private String id;
 
   private ImmutableMap<String, String> infons;
 
-  /**
-   * List of passages that comprise the document.
-   * 
-   * For PubMed references, they might be "title" and "abstract". For full text
-   * papers, they might be Introduction, Methods, Results, and Conclusions. Or
-   * they might be paragraphs.
-   */
   private ImmutableList<BioCPassage> passages;
 
-  /**
-   * Annotations on the text of the passage.
-   */
   private ImmutableList<BioCAnnotation> annotations;
-  
-  /**
-   * Relations between the annotations and possibly other relations on the text
-   * of the document.
-   */
+
   private ImmutableList<BioCRelation> relations;
 
   private BioCDocument() {
   }
 
+  /**
+   * Returns the id to identify the particular {@code Document}.
+   */
   public String getID() {
     return id;
   }
 
+  /**
+   * Returns the information in the document.
+   */
   public ImmutableMap<String, String> getInfons() {
     return infons;
   }
 
-  public String getInfon(String key) {
-    return infons.get(key);
+  /**
+   * Returns the value to which the specified key is mapped, or null if this
+   * {@code infons} contains no mapping for the key.
+   */
+  public Optional<String> getInfon(String key) {
+    return Optional.fromNullable(infons.get(key));
   }
 
+  /**
+   * Returns annotations of the passage.
+   */
   public ImmutableList<BioCAnnotation> getAnnotations() {
     return annotations;
   }
 
+  /**
+   * Returns the annotation at the specified position in this document.
+   */
   public BioCAnnotation getAnnotation(int index) {
     return annotations.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the annotation in this document in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
 
+  /**
+   * Returns relations between the annotations and possibly other relations on
+   * the text of the document.
+   */
   public ImmutableList<BioCRelation> getRelations() {
     return relations;
   }
 
+  /**
+   * Returns the relation at the specified position in this document.
+   */
   public BioCRelation getRelation(int index) {
     return relations.get(index);
   }
 
+  /**
+   * Returns a unmodifiable iterator over the relations in this document in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
-  
+
+  /**
+   * Returns the number of relations in this document.
+   */
   public int getRelationCount() {
     return relations.size();
   }
 
+  /**
+   * Returns the list of passages that comprise the document.
+   * <p>
+   * For PubMed references, they might be "title" and "abstract". For full text
+   * papers, they might be Introduction, Methods, Results, and Conclusions. Or
+   * they might be paragraphs.
+   */
   public ImmutableList<BioCPassage> getPassages() {
     return passages;
   }
-  
+
+  /**
+   * Returns the number of passages in this document.
+   */
   public int getPassageCount() {
     return passages.size();
   }
 
+  /**
+   * Returns the passage at the specified position in this document.
+   */
   public BioCPassage getPassage(int index) {
     return passages.get(index);
   }
 
+  /**
+   * Returns an unmodifiable iterator over the passages in this document in
+   * proper sequence.
+   */
   public UnmodifiableIterator<BioCPassage> passageIterator() {
     return passages.iterator();
   }
-  
+
+  /**
+   * Returns the number of annotations in this document.
+   */
   public int getAnnotationCount() {
     return annotations.size();
   }
@@ -140,20 +178,26 @@ public class BioCDocument {
         .isEquals();
   }
 
+  /**
+   * Constructs a new builder. Use this to derive a new document.
+   */
   public static Builder newBuilder() {
     return new Builder();
   }
-  
-  public Builder getBuilder() {
-    Builder builder = newBuilder()
+
+  /**
+   * Constructs a builder initialized with the current document. Use this to
+   * derive a new document from the current one.
+   */
+  public Builder toBuilder() {
+    return newBuilder()
         .setID(id)
         .setAnnotations(annotations)
         .setInfons(infons)
         .setRelations(relations)
         .setPassages(passages);
-    return builder;
   }
-  
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
@@ -179,7 +223,7 @@ public class BioCDocument {
       relations = new ArrayList<BioCRelation>();
       passages = new ArrayList<BioCPassage>();
     }
-    
+
     public Builder setID(String id) {
       Validate.notNull(id, "id cannot be null");
       this.id = id;
@@ -195,7 +239,7 @@ public class BioCDocument {
       infons.clear();
       return this;
     }
-    
+
     public Builder putInfon(String key, String value) {
       infons.put(key, value);
       return this;
@@ -212,6 +256,7 @@ public class BioCDocument {
     }
 
     public Builder addAnnotation(BioCAnnotation annotation) {
+      Validate.notNull(annotation, "annotation cannot be null");
       this.annotations.add(annotation);
       return this;
     }
@@ -232,16 +277,18 @@ public class BioCDocument {
     }
 
     public Builder addRelation(BioCRelation relation) {
+      Validate.notNull(relation, "relation cannot be null");
       this.relations.add(relation);
       return this;
     }
-    
+
     public Builder setPassages(List<BioCPassage> passages) {
       this.passages = new ArrayList<BioCPassage>(passages);
       return this;
     }
 
     public Builder addPassage(BioCPassage passage) {
+      Validate.notNull(passage, "passage cannot be null");
       this.passages.add(passage);
       return this;
     }
@@ -250,7 +297,7 @@ public class BioCDocument {
       passages.clear();
       return this;
     }
-    
+
     public Builder clearID() {
       id = null;
       return this;

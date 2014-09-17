@@ -1,6 +1,7 @@
 package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
@@ -20,7 +21,7 @@ public class BioCDocumentTest {
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private static BioCDocument.Builder baseBuilder;
+  private BioCDocument.Builder baseBuilder;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
@@ -33,10 +34,9 @@ public class BioCDocumentTest {
   }
 
   @Test
-  public void test_equals() {
+  public void testEquals() {
     BioCDocument base = baseBuilder.build();
     BioCDocument baseCopy = baseBuilder.build();
-
     BioCDocument diffId = baseBuilder.setID(ID_2).build();
     BioCDocument diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
 
@@ -50,22 +50,64 @@ public class BioCDocumentTest {
   @Test
   public void test_allFields() {
     BioCDocument base = baseBuilder.build();
-    
     assertEquals(base.getID(), ID);
-    assertEquals(base.getInfon(KEY), VALUE);
+    assertEquals(base.getInfon(KEY).get(), VALUE);
     assertTrue(base.getRelations().isEmpty());
     assertTrue(base.getPassages().isEmpty());
   }
 
   @Test
-  public void test_empty() {
+  public void testBuilder_empty() {
     thrown.expect(IllegalArgumentException.class);
     BioCDocument.newBuilder().build();
   }
 
   @Test
-  public void test_nullID() {
+  public void testBuilder_nullID() {
     thrown.expect(NullPointerException.class);
-    BioCDocument.newBuilder().setID(null).build();
+    baseBuilder.setID(null);
+  }
+  
+  @Test
+  public void testBuilder_nullPassage() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addPassage(null);
+  }
+  
+  @Test
+  public void testBuilder_nullRelation() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addRelation(null);
+  }
+  
+  @Test
+  public void testBuilder_nullAnnotation() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.addAnnotation(null);
+  }
+  
+  @Test
+  public void testToBuilder() {
+    BioCDocument expected = baseBuilder.build();
+    BioCDocument actual = expected.toBuilder().build();
+    assertEquals(expected, actual);
+  }
+
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCDocument base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+  
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(null, VALUE);
+  }
+  
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(KEY, null);
   }
 }
