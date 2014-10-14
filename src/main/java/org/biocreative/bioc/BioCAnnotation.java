@@ -2,19 +2,18 @@ package org.biocreative.bioc;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
 
 /**
  * Stand off annotation. The connection to the original text can be made
@@ -23,8 +22,8 @@ import com.google.common.collect.UnmodifiableIterator;
 public class BioCAnnotation {
 
   private String id;
-  private ImmutableMap<String, String> infons;
-  private ImmutableList<BioCLocation> locations;
+  private Map<String, String> infons;
+  private List<BioCLocation> locations;
   private String text;
 
   private BioCAnnotation() {
@@ -40,7 +39,7 @@ public class BioCAnnotation {
   /**
    * Returns the information in this annotation.
    */
-  public ImmutableMap<String, String> getInfons() {
+  public Map<String, String> getInfons() {
     return infons;
   }
 
@@ -49,14 +48,14 @@ public class BioCAnnotation {
    * {@code infons} contains no mapping for the key.
    */
   public Optional<String> getInfon(String key) {
-    return Optional.fromNullable(infons.get(key));
+    return Optional.ofNullable(infons.get(key));
   }
 
   /**
    * Returns locations of the annotated text. Multiple locations indicate a
    * multispan annotation.
    */
-  public ImmutableList<BioCLocation> getLocations() {
+  public List<BioCLocation> getLocations() {
     return locations;
   }
 
@@ -78,7 +77,7 @@ public class BioCAnnotation {
    * Returns a unmodifiable iterator over the locations in this annotation in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCLocation> locationIterator() {
+  public Iterator<BioCLocation> locationIterator() {
     return locations.iterator();
   }
 
@@ -86,17 +85,12 @@ public class BioCAnnotation {
    * The original text of the annotation
    */
   public Optional<String> getText() {
-    return Optional.fromNullable(text);
+    return Optional.ofNullable(text);
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(id)
-        .append(text)
-        .append(infons)
-        .append(locations)
-        .toHashCode();
+    return Objects.hash(id, text, infons, locations);
   }
 
   @Override
@@ -108,12 +102,10 @@ public class BioCAnnotation {
       return false;
     }
     BioCAnnotation rhs = (BioCAnnotation) obj;
-    return new EqualsBuilder()
-        .append(id, rhs.id)
-        .append(text, rhs.text)
-        .append(infons, rhs.infons)
-        .append(locations, rhs.locations)
-        .isEquals();
+    return Objects.equals(id, rhs.id)
+        && Objects.equals(text, rhs.text)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(locations, rhs.locations);
   }
 
   @Override

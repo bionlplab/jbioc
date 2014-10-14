@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -11,7 +12,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.UnmodifiableIterator;
@@ -57,7 +57,7 @@ public class BioCDocument {
    * {@code infons} contains no mapping for the key.
    */
   public Optional<String> getInfon(String key) {
-    return Optional.fromNullable(infons.get(key));
+    return Optional.ofNullable(infons.get(key));
   }
 
   /**

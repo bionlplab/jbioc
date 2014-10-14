@@ -114,24 +114,6 @@ public class BioCAnnotationTest {
   }
 
   @Test
-  public void testGetInfon_nullKey() {
-    BioCAnnotation base = baseBuilder.build();
-    assertFalse(base.getInfon(null).isPresent());
-  }
-
-  @Test
-  public void testBuilder_putInfonNullKey() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(null, VALUE);
-  }
-
-  @Test
-  public void testBuilder_putInfonNullValue() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(KEY, null);
-  }
-
-  @Test
   public void testBuilder_clearText() {
     BioCAnnotation ann = baseBuilder.clearText().build();
     assertFalse(ann.getText().isPresent());
@@ -161,5 +143,23 @@ public class BioCAnnotationTest {
         LOC_3.getOffset(),
         LOC_3.getLength()).build();
     assertEquals(LOC_3, ann.getLocation(2));
+  }
+  
+  @Test
+  public void testGetInfon_nullKey() {
+    BioCAnnotation base = baseBuilder.build();
+    assertFalse(base.getInfon(null).isPresent());
+  }
+
+  @Test
+  public void testBuilder_putInfonNullKey() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(null, VALUE);
+  }
+
+  @Test
+  public void testBuilder_putInfonNullValue() {
+    thrown.expect(NullPointerException.class);
+    baseBuilder.putInfon(KEY, null);
   }
 }
