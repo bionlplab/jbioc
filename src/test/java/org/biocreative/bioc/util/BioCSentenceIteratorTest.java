@@ -6,7 +6,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
@@ -16,6 +15,8 @@ import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.BioCSentence;
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 /**
  * Test BioCCollectionReader and BioCCollectionWriter
@@ -64,7 +65,7 @@ public class BioCSentenceIteratorTest {
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    List<BioCSentence> sentences = new ArrayList<BioCSentence>();
+    List<BioCSentence> sentences = Lists.newArrayList();
     BioCSentenceIterator itr = new BioCSentenceIterator(COLLECTION);
     while (itr.hasNext()) {
       BioCSentence sentence = itr.next();

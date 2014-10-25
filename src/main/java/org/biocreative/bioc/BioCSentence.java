@@ -1,20 +1,19 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * One sentence in a {@link BioCPassage}.
@@ -30,9 +29,9 @@ public class BioCSentence {
 
   private int offset;
   private String text;
-  private ImmutableMap<String, String> infons;
-  private ImmutableList<BioCAnnotation> annotations;
-  private ImmutableList<BioCRelation> relations;
+  private Map<String, String> infons;
+  private List<BioCAnnotation> annotations;
+  private List<BioCRelation> relations;
 
   private BioCSentence() {
   }
@@ -71,7 +70,7 @@ public class BioCSentence {
   /**
    * {@link BioCAnnotation}s on the original text
    */
-  public ImmutableList<BioCAnnotation> getAnnotations() {
+  public List<BioCAnnotation> getAnnotations() {
     return annotations;
   }
 
@@ -86,7 +85,7 @@ public class BioCSentence {
    * Returns a unmodifiable iterator over the annotations in this sentence in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
+  public Iterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
 
@@ -94,7 +93,7 @@ public class BioCSentence {
    * Relations between the annotations and possibly other relations on the text
    * of the sentence.
    */
-  public ImmutableList<BioCRelation> getRelations() {
+  public List<BioCRelation> getRelations() {
     return relations;
   }
 
@@ -123,19 +122,13 @@ public class BioCSentence {
    * Returns a unmodifiable iterator over the relations in this sentence in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCRelation> relationIterator() {
+  public Iterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(offset)
-        .append(text)
-        .append(infons)
-        .append(annotations)
-        .append(relations)
-        .toHashCode();
+    return Objects.hash(offset, text, infons, annotations, relations);
   }
 
   @Override
@@ -143,17 +136,15 @@ public class BioCSentence {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCSentence)) {
       return false;
     }
     BioCSentence rhs = (BioCSentence) obj;
-    return new EqualsBuilder()
-        .append(offset, rhs.offset)
-        .append(text, rhs.text)
-        .append(infons, rhs.infons)
-        .append(annotations, rhs.annotations)
-        .append(relations, rhs.relations)
-        .isEquals();
+    return Objects.equals(offset, rhs.offset)
+        && Objects.equals(text, rhs.text)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(annotations, rhs.annotations)
+        && Objects.equals(relations, rhs.relations);
   }
 
   @Override
@@ -200,9 +191,9 @@ public class BioCSentence {
 
     private Builder() {
       offset = -1;
-      infons = new Hashtable<String, String>();
-      annotations = new ArrayList<BioCAnnotation>();
-      relations = new ArrayList<BioCRelation>();
+      infons = Maps.newHashMap();
+      annotations = Lists.newArrayList();
+      relations = Lists.newArrayList();
     }
 
     public Builder setOffset(int offset) {
@@ -212,7 +203,7 @@ public class BioCSentence {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -238,7 +229,7 @@ public class BioCSentence {
     }
 
     public Builder setAnnotations(List<BioCAnnotation> annotations) {
-      this.annotations = new ArrayList<BioCAnnotation>(annotations);
+      this.annotations = Lists.newArrayList(annotations);
       return this;
     }
 
@@ -254,7 +245,7 @@ public class BioCSentence {
     }
 
     public Builder setRelations(List<BioCRelation> relations) {
-      this.relations = new ArrayList<BioCRelation>(relations);
+      this.relations = Lists.newArrayList(relations);
       return this;
     }
 

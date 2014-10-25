@@ -1,8 +1,8 @@
 package org.biocreative.bioc;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -37,10 +37,7 @@ public class BioCLocation {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(offset)
-        .append(length)
-        .toHashCode();
+    return Objects.hash(offset,length);
   }
 
   @Override
@@ -48,14 +45,12 @@ public class BioCLocation {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCLocation)) {
       return false;
     }
     BioCLocation rhs = (BioCLocation) obj;
-    return new EqualsBuilder()
-        .append(offset, rhs.offset)
-        .append(length, rhs.length)
-        .isEquals();
+    return Objects.equals(offset, rhs.offset)
+        && Objects.equals(length, rhs.length);
   }
 
   @Override

@@ -1,7 +1,5 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +12,8 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Stand off annotation. The connection to the original text can be made
@@ -98,7 +98,7 @@ public class BioCAnnotation {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCAnnotation)) {
       return false;
     }
     BioCAnnotation rhs = (BioCAnnotation) obj;
@@ -145,8 +145,8 @@ public class BioCAnnotation {
     private List<BioCLocation> locations;
 
     private Builder() {
-      infons = new Hashtable<String, String>();
-      locations = new ArrayList<BioCLocation>();
+      infons = Maps.newHashMap();
+      locations = Lists.newArrayList();
     }
 
     public Builder setID(String id) {
@@ -156,7 +156,7 @@ public class BioCAnnotation {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -187,7 +187,7 @@ public class BioCAnnotation {
     }
 
     public Builder setLocations(List<BioCLocation> locations) {
-      this.locations = new ArrayList<BioCLocation>(locations);
+      this.locations = Lists.newArrayList(locations);
       return this;
     }
 

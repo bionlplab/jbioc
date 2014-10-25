@@ -1,20 +1,19 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * One document in the {@link BioCCollection}.
@@ -27,13 +26,13 @@ public class BioCDocument {
 
   private String id;
 
-  private ImmutableMap<String, String> infons;
+  private Map<String, String> infons;
 
-  private ImmutableList<BioCPassage> passages;
+  private List<BioCPassage> passages;
 
-  private ImmutableList<BioCAnnotation> annotations;
+  private List<BioCAnnotation> annotations;
 
-  private ImmutableList<BioCRelation> relations;
+  private List<BioCRelation> relations;
 
   private BioCDocument() {
   }
@@ -48,7 +47,7 @@ public class BioCDocument {
   /**
    * Returns the information in the document.
    */
-  public ImmutableMap<String, String> getInfons() {
+  public Map<String, String> getInfons() {
     return infons;
   }
 
@@ -63,7 +62,7 @@ public class BioCDocument {
   /**
    * Returns annotations of the passage.
    */
-  public ImmutableList<BioCAnnotation> getAnnotations() {
+  public List<BioCAnnotation> getAnnotations() {
     return annotations;
   }
 
@@ -78,7 +77,7 @@ public class BioCDocument {
    * Returns a unmodifiable iterator over the annotation in this document in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
+  public Iterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
 
@@ -86,7 +85,7 @@ public class BioCDocument {
    * Returns relations between the annotations and possibly other relations on
    * the text of the document.
    */
-  public ImmutableList<BioCRelation> getRelations() {
+  public List<BioCRelation> getRelations() {
     return relations;
   }
 
@@ -101,7 +100,7 @@ public class BioCDocument {
    * Returns a unmodifiable iterator over the relations in this document in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCRelation> relationIterator() {
+  public Iterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
 
@@ -119,7 +118,7 @@ public class BioCDocument {
    * papers, they might be Introduction, Methods, Results, and Conclusions. Or
    * they might be paragraphs.
    */
-  public ImmutableList<BioCPassage> getPassages() {
+  public List<BioCPassage> getPassages() {
     return passages;
   }
 
@@ -141,7 +140,7 @@ public class BioCDocument {
    * Returns an unmodifiable iterator over the passages in this document in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCPassage> passageIterator() {
+  public Iterator<BioCPassage> passageIterator() {
     return passages.iterator();
   }
 
@@ -154,12 +153,7 @@ public class BioCDocument {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(id)
-        .append(infons)
-        .append(passages)
-        .append(relations)
-        .toHashCode();
+    return Objects.hash(id, infons, passages, relations);
   }
 
   @Override
@@ -167,16 +161,14 @@ public class BioCDocument {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCDocument)) {
       return false;
     }
     BioCDocument rhs = (BioCDocument) obj;
-    return new EqualsBuilder()
-        .append(id, rhs.id)
-        .append(infons, rhs.infons)
-        .append(passages, rhs.passages)
-        .append(relations, rhs.relations)
-        .isEquals();
+    return Objects.equals(id, rhs.id)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(passages, rhs.passages)
+        && Objects.equals(relations, rhs.relations);
   }
 
   /**
@@ -219,10 +211,10 @@ public class BioCDocument {
     private List<BioCPassage> passages;
 
     private Builder() {
-      infons = new Hashtable<String, String>();
-      annotations = new ArrayList<BioCAnnotation>();
-      relations = new ArrayList<BioCRelation>();
-      passages = new ArrayList<BioCPassage>();
+      infons = Maps.newHashMap();
+      annotations = Lists.newArrayList();
+      relations = Lists.newArrayList();
+      passages = Lists.newArrayList();
     }
 
     public Builder setID(String id) {
@@ -232,7 +224,7 @@ public class BioCDocument {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -252,7 +244,7 @@ public class BioCDocument {
     }
 
     public Builder setAnnotations(List<BioCAnnotation> annotations) {
-      this.annotations = new ArrayList<BioCAnnotation>(annotations);
+      this.annotations = Lists.newArrayList(annotations);
       return this;
     }
 
@@ -268,7 +260,7 @@ public class BioCDocument {
     }
 
     public Builder setRelations(List<BioCRelation> relations) {
-      this.relations = new ArrayList<BioCRelation>(relations);
+      this.relations = Lists.newArrayList(relations);
       return this;
     }
 
@@ -284,7 +276,7 @@ public class BioCDocument {
     }
 
     public Builder setPassages(List<BioCPassage> passages) {
-      this.passages = new ArrayList<BioCPassage>(passages);
+      this.passages = Lists.newArrayList(passages);
       return this;
     }
 

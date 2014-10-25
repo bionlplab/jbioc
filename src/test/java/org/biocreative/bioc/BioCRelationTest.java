@@ -109,18 +109,6 @@ public class BioCRelationTest {
   }
 
   @Test
-  public void testBuilder_putInfonNullKey() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(null, VALUE);
-  }
-
-  @Test
-  public void testBuilder_putInfonNullValue() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(KEY, null);
-  }
-
-  @Test
   public void testBuilder_clearNodes() {
     thrown.expect(IllegalArgumentException.class);
     baseBuilder.clearNodes().build();

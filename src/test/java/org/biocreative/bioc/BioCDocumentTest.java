@@ -99,15 +99,4 @@ public class BioCDocumentTest {
     assertFalse(base.getInfon(null).isPresent());
   }
   
-  @Test
-  public void testBuilder_putInfonNullKey() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(null, VALUE);
-  }
-  
-  @Test
-  public void testBuilder_putInfonNullValue() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(KEY, null);
-  }
 }

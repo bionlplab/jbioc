@@ -22,7 +22,7 @@ public class BioCSentenceTest {
   private static final String TEXT_2 = "DEF";
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
-
+  
   private BioCSentence.Builder baseBuilder;
 
   @Rule
@@ -104,18 +104,6 @@ public class BioCSentenceTest {
   public void testGetInfon_nullKey() {
     BioCSentence base = baseBuilder.build();
     assertFalse(base.getInfon(null).isPresent());
-  }
-
-  @Test
-  public void testBuilder_putInfonNullKey() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(null, VALUE);
-  }
-
-  @Test
-  public void testBuilder_putInfonNullValue() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.putInfon(KEY, null);
   }
 
   @Test

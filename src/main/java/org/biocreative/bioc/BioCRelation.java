@@ -1,20 +1,19 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Relationship between multiple {@link BioCAnnotation}s and possibly other
@@ -23,8 +22,8 @@ import com.google.common.collect.UnmodifiableIterator;
 public class BioCRelation {
 
   private String id;
-  private ImmutableMap<String, String> infons;
-  private ImmutableList<BioCNode> nodes;
+  private Map<String, String> infons;
+  private List<BioCNode> nodes;
 
   private BioCRelation() {
   }
@@ -40,7 +39,7 @@ public class BioCRelation {
    * Returns the information of relation. Implemented examples include
    * abbreviation long forms and short forms and protein events.
    */
-  public ImmutableMap<String, String> getInfons() {
+  public Map<String, String> getInfons() {
     return infons;
   }
 
@@ -56,7 +55,7 @@ public class BioCRelation {
    * Returns nodes that describe how the referenced annotated object or other
    * relation participates in the current relationship.
    */
-  public ImmutableList<BioCNode> getNodes() {
+  public List<BioCNode> getNodes() {
     return nodes;
   }
 
@@ -78,17 +77,13 @@ public class BioCRelation {
    * Returns a unmodifiable iterator over the nodes in this relation in proper
    * sequence.
    */
-  public UnmodifiableIterator<BioCNode> nodeIterator() {
+  public Iterator<BioCNode> nodeIterator() {
     return nodes.iterator();
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(id)
-        .append(infons)
-        .append(nodes)
-        .toHashCode();
+    return Objects.hash(id, infons, nodes);
   }
 
   @Override
@@ -96,15 +91,13 @@ public class BioCRelation {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCRelation)) {
       return false;
     }
     BioCRelation rhs = (BioCRelation) obj;
-    return new EqualsBuilder()
-        .append(id, rhs.id)
-        .append(infons, rhs.infons)
-        .append(nodes, rhs.nodes)
-        .isEquals();
+    return Objects.equals(id, rhs.id)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(nodes, rhs.nodes);
   }
 
   @Override
@@ -141,8 +134,8 @@ public class BioCRelation {
     private List<BioCNode> nodes;
 
     private Builder() {
-      infons = new Hashtable<String, String>();
-      nodes = new ArrayList<BioCNode>();
+      infons = Maps.newHashMap();
+      nodes = Lists.newArrayList();
     }
 
     public Builder setID(String id) {
@@ -152,7 +145,7 @@ public class BioCRelation {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -183,7 +176,7 @@ public class BioCRelation {
     }
 
     public Builder setNodes(List<BioCNode> nodes) {
-      this.nodes = new ArrayList<BioCNode>(nodes);
+      this.nodes = Lists.newArrayList(nodes);
       return this;
     }
 

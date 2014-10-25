@@ -1,20 +1,19 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * Collection of documents.
@@ -29,8 +28,8 @@ public class BioCCollection {
   private String source;
   private String date;
   private String key;
-  private ImmutableMap<String, String> infons;
-  private ImmutableList<BioCDocument> documents;
+  private Map<String, String> infons;
+  private List<BioCDocument> documents;
 
   private BioCCollection() {
   }
@@ -60,7 +59,7 @@ public class BioCCollection {
   /**
    * Returns the information in the collection.
    */
-  public ImmutableMap<String, String> getInfons() {
+  public Map<String, String> getInfons() {
     return infons;
   }
 
@@ -77,7 +76,7 @@ public class BioCCollection {
    * document at a time IO is used to read the XML file. Any contents will be
    * ignored if written with document at a time IO.
    */
-  public ImmutableList<BioCDocument> getDocuments() {
+  public List<BioCDocument> getDocuments() {
     return documents;
   }
 
@@ -99,19 +98,13 @@ public class BioCCollection {
    * Returns a unmodifiable iterator over the document in this collection in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCDocument> documentIterator() {
+  public Iterator<BioCDocument> documentIterator() {
     return documents.iterator();
   }
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(source)
-        .append(date)
-        .append(key)
-        .append(infons)
-        .append(documents)
-        .toHashCode();
+    return Objects.hash(source, date, key, infons, documents);
   }
 
   @Override
@@ -119,17 +112,15 @@ public class BioCCollection {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCCollection)) {
       return false;
     }
     BioCCollection rhs = (BioCCollection) obj;
-    return new EqualsBuilder()
-        .append(source, rhs.source)
-        .append(infons, rhs.infons)
-        .append(key, rhs.key)
-        .append(date, rhs.date)
-        .append(documents, rhs.documents)
-        .isEquals();
+    return Objects.equals(source, rhs.source)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(key, rhs.key)
+        && Objects.equals(date, rhs.date)
+        && Objects.equals(documents, rhs.documents);
   }
 
   @Override
@@ -172,8 +163,8 @@ public class BioCCollection {
     private List<BioCDocument> documents;
 
     private Builder() {
-      infons = new Hashtable<String, String>();
-      documents = new ArrayList<BioCDocument>();
+      infons = Maps.newHashMap();
+      documents = Lists.newArrayList();
     }
 
     public Builder setSource(String source) {
@@ -195,7 +186,7 @@ public class BioCCollection {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -215,7 +206,7 @@ public class BioCCollection {
     }
 
     public Builder setDocuments(List<BioCDocument> documents) {
-      this.documents = new ArrayList<BioCDocument>(documents);
+      this.documents = Lists.newArrayList(documents);
       return this;
     }
 

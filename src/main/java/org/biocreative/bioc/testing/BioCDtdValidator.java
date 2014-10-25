@@ -5,7 +5,6 @@ import static org.biocreative.bioc.testing.BioCAssert.assertAndPrintDtdValid;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.kohsuke.args4j.Argument;
@@ -15,6 +14,7 @@ import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.ParserProperties;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Lists;
 
 public class BioCDtdValidator {
 
@@ -25,7 +25,7 @@ public class BioCDtdValidator {
   private String dtdFilename;
 
   @Argument
-  private List<String> arguments = new ArrayList<String>();
+  private List<String> arguments = Lists.newArrayList();
 
   /**
    * BioCValidation [options...] arguments...

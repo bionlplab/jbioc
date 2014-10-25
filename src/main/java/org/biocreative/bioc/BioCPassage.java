@@ -1,20 +1,19 @@
 package org.biocreative.bioc;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.UnmodifiableIterator;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * One passage in a {@link BioCDocument}.
@@ -28,10 +27,10 @@ public class BioCPassage {
 
   private int offset;
   private String text;
-  private ImmutableMap<String, String> infons;
-  private ImmutableList<BioCSentence> sentences;
-  private ImmutableList<BioCAnnotation> annotations;
-  private ImmutableList<BioCRelation> relations;
+  private Map<String, String> infons;
+  private List<BioCSentence> sentences;
+  private List<BioCAnnotation> annotations;
+  private List<BioCRelation> relations;
 
   private BioCPassage() {
   }
@@ -61,7 +60,7 @@ public class BioCPassage {
    * papers, it might be Introduction, Methods, Results, or Conclusions. Or
    * they might be paragraphs.
    */
-  public ImmutableMap<String, String> getInfons() {
+  public Map<String, String> getInfons() {
     return infons;
   }
 
@@ -76,7 +75,7 @@ public class BioCPassage {
   /**
    * Annotations on the text of the passage.
    */
-  public ImmutableList<BioCAnnotation> getAnnotations() {
+  public List<BioCAnnotation> getAnnotations() {
     return annotations;
   }
 
@@ -91,7 +90,7 @@ public class BioCPassage {
    * Returns a unmodifiable iterator over the annotations in this passage in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCAnnotation> annotationIterator() {
+  public Iterator<BioCAnnotation> annotationIterator() {
     return annotations.iterator();
   }
 
@@ -99,7 +98,7 @@ public class BioCPassage {
    * Relations between the annotations and possibly other relations on the text
    * of the passage.
    */
-  public ImmutableList<BioCRelation> getRelations() {
+  public List<BioCRelation> getRelations() {
     return relations;
   }
 
@@ -114,7 +113,7 @@ public class BioCPassage {
    * Returns a unmodifiable iterator over the relations in this passage in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCRelation> relationIterator() {
+  public Iterator<BioCRelation> relationIterator() {
     return relations.iterator();
   }
 
@@ -128,7 +127,7 @@ public class BioCPassage {
   /**
    * The sentences of the passage.
    */
-  public ImmutableList<BioCSentence> getSentences() {
+  public List<BioCSentence> getSentences() {
     return sentences;
   }
 
@@ -150,7 +149,7 @@ public class BioCPassage {
    * Returns a unmodifiable iterator over the sentences in this passage in
    * proper sequence.
    */
-  public UnmodifiableIterator<BioCSentence> sentenceIterator() {
+  public Iterator<BioCSentence> sentenceIterator() {
     return sentences.iterator();
   }
 
@@ -163,14 +162,7 @@ public class BioCPassage {
 
   @Override
   public int hashCode() {
-    return new HashCodeBuilder()
-        .append(offset)
-        .append(text)
-        .append(infons)
-        .append(sentences)
-        .append(annotations)
-        .append(relations)
-        .toHashCode();
+    return Objects.hash(offset,text,infons,sentences,annotations,relations);
   }
 
   @Override
@@ -178,18 +170,16 @@ public class BioCPassage {
     if (obj == this) {
       return true;
     }
-    if (obj == null || obj.getClass() != getClass()) {
+    if (!(obj instanceof BioCPassage)) {
       return false;
     }
     BioCPassage rhs = (BioCPassage) obj;
-    return new EqualsBuilder()
-        .append(offset, rhs.offset)
-        .append(text, rhs.text)
-        .append(infons, rhs.infons)
-        .append(sentences, rhs.sentences)
-        .append(annotations, rhs.annotations)
-        .append(relations, rhs.relations)
-        .isEquals();
+    return Objects.equals(offset, rhs.offset)
+        && Objects.equals(text, rhs.text)
+        && Objects.equals(infons, rhs.infons)
+        && Objects.equals(sentences, rhs.sentences)
+        && Objects.equals(annotations, rhs.annotations)
+        && Objects.equals(relations, rhs.relations);
   }
 
   @Override
@@ -239,10 +229,10 @@ public class BioCPassage {
 
     private Builder() {
       offset = -1;
-      infons = new Hashtable<String, String>();
-      annotations = new ArrayList<BioCAnnotation>();
-      relations = new ArrayList<BioCRelation>();
-      sentences = new ArrayList<BioCSentence>();
+      infons = Maps.newHashMap();
+      annotations = Lists.newArrayList();
+      relations = Lists.newArrayList();
+      sentences = Lists.newArrayList();
     }
 
     public Builder setOffset(int offset) {
@@ -252,7 +242,7 @@ public class BioCPassage {
     }
 
     public Builder setInfons(Map<String, String> infons) {
-      this.infons = new Hashtable<String, String>(infons);
+      this.infons = Maps.newHashMap(infons);
       return this;
     }
 
@@ -278,7 +268,7 @@ public class BioCPassage {
     }
 
     public Builder setAnnotations(List<BioCAnnotation> annotations) {
-      this.annotations = new ArrayList<BioCAnnotation>(annotations);
+      this.annotations = Lists.newArrayList(annotations);
       return this;
     }
 
@@ -293,7 +283,7 @@ public class BioCPassage {
     }
 
     public Builder setRelations(List<BioCRelation> relations) {
-      this.relations = new ArrayList<BioCRelation>(relations);
+      this.relations = Lists.newArrayList(relations);
       return this;
     }
 
@@ -308,7 +298,7 @@ public class BioCPassage {
     }
 
     public Builder setSentences(List<BioCSentence> sentences) {
-      this.sentences = new ArrayList<BioCSentence>(sentences);
+      this.sentences = Lists.newArrayList(sentences);
       return this;
     }
 
