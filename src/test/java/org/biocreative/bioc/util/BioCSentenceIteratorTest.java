@@ -29,9 +29,9 @@ public class BioCSentenceIteratorTest {
 
   private static final BioCSentence EXPECTED_SEN_0 = createSentence(
       0,
-      "Active Raf-1 phosphorylates and activates "
-          + "the mitogen-activated protein (MAP) kinase/extracellular signal-regulated kinase "
-          + "kinase 1 (MEK1), which in turn phosphorylates and activates the MAP "
+      "Active Raf-1 phosphorylates and activates the mitogen-activated protein "
+          + "(MAP) kinase/extracellular signal-regulated kinase kinase 1 (MEK1), "
+          + "which in turn phosphorylates and activates the MAP "
           + "kinases/extracellular signal regulated kinases, ERK1 and ERK2.");
   private static final BioCSentence EXPECTED_SEN_1 = createSentence(
       1,

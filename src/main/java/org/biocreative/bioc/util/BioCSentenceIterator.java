@@ -1,5 +1,6 @@
 package org.biocreative.bioc.util;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.biocreative.bioc.BioCCollection;
@@ -7,45 +8,55 @@ import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.BioCSentence;
 
+import com.google.common.collect.Iterators;
+
 /**
  * This class provides a simple way to iterate over BioC sentences.
  */
 public class BioCSentenceIterator implements Iterator<BioCSentence> {
 
-  private Iterator<BioCDocument> documentItr;
-  private BioCDocument           currentDocument;
-  private Iterator<BioCPassage>  passageItr;
-  private BioCPassage            currentPassage;
+  private BioCPassageIterator passageItr;
+  private BioCPassage currentPassage;
   private Iterator<BioCSentence> sentenceItr;
 
-  public BioCSentenceIterator(BioCCollection collection) {
-    documentItr = collection.getDocuments().iterator();
-    init();
+  public BioCSentenceIterator() {
+    this(new BioCPassageIterator());
   }
 
-  private void init() {
-    if (documentItr.hasNext()) {
-      currentDocument = documentItr.next();
-      passageItr = currentDocument.getPassages().iterator();
-      if (passageItr.hasNext()) {
-        currentPassage = passageItr.next();
-        sentenceItr = currentPassage.getSentences().iterator();
-      } else {
-        init();
-      }
+  public BioCSentenceIterator(BioCPassageIterator passageItr) {
+    this.passageItr = passageItr;
+    if (passageItr.hasNext()) {
+      currentPassage = passageItr.next();
+      sentenceItr = currentPassage.getSentences().iterator();
     } else {
-      currentDocument = null;
-      passageItr = null;
       currentPassage = null;
-      sentenceItr = null;
+      sentenceItr = Collections.emptyIterator();
     }
+  }
+
+  public BioCSentenceIterator(BioCCollection collection) {
+    this(new BioCPassageIterator(collection));
+  }
+
+  public BioCSentenceIterator(BioCDocument document) {
+    this(new BioCPassageIterator(document));
+  }
+
+  public BioCSentenceIterator(BioCPassage passage) {
+    this(new BioCPassageIterator(passage));
+  }
+
+  public BioCSentenceIterator(BioCSentence sentence) {
+    passageItr = new BioCPassageIterator();
+    currentPassage = null;
+    sentenceItr = Iterators.singletonIterator(sentence);
   }
 
   /**
    * Returns the passage that contains current sentence.
    */
   public BioCDocument getDocument() {
-    return currentDocument;
+    return passageItr.getDocument();
   }
 
   /**
@@ -57,17 +68,11 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
 
   @Override
   public boolean hasNext() {
-    if (sentenceItr == null) {
-      return false;
-    } else if (sentenceItr.hasNext()) {
+    if (sentenceItr.hasNext()) {
       return true;
     } else if (passageItr.hasNext()) {
       currentPassage = passageItr.next();
       sentenceItr = currentPassage.getSentences().iterator();
-      return hasNext();
-    } else if (documentItr.hasNext()) {
-      currentDocument = documentItr.next();
-      passageItr = currentDocument.getPassages().iterator();
       return hasNext();
     } else {
       return false;
@@ -77,11 +82,6 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
   @Override
   public BioCSentence next() {
     return sentenceItr.next();
-  }
-
-  @Override
-  public void remove() {
-    throw new UnsupportedOperationException();
   }
 
 }
