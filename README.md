@@ -1,4 +1,4 @@
-### Java implementation of BioC
+# Java implementation of BioC
 
 Data structures and code to read / write BioC XML.
 
