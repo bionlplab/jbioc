@@ -22,27 +22,32 @@ public class BioCSentenceTest {
   private static final String TEXT_2 = "DEF";
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
-  
-  private BioCSentence.Builder baseBuilder;
+
+  private BioCSentence base;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    baseBuilder = BioCSentence.newBuilder()
-        .setOffset(OFFSET)
-        .setText(TEXT)
-        .putInfon(KEY, VALUE);
+    base = new BioCSentence();
+    base.setOffset(OFFSET);
+    base.setText(TEXT);
+    base.putInfon(KEY, VALUE);
   }
 
   @Test
-  public void testEquals() {
-    BioCSentence base = baseBuilder.build();
-    BioCSentence baseCopy = baseBuilder.build();
-    BioCSentence diffOffset = baseBuilder.setOffset(OFFSET_2).build();
-    BioCSentence diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
-    BioCSentence diffText = baseBuilder.setText(TEXT_2).build();
+  public void test_equals() {
+    BioCSentence baseCopy = new BioCSentence(base);
+
+    BioCSentence diffOffset = new BioCSentence(base);
+    diffOffset.setOffset(OFFSET_2);
+
+    BioCSentence diffInfon = new BioCSentence(base);
+    diffInfon.putInfon(KEY_2, VALUE_2);
+
+    BioCSentence diffText = new BioCSentence(base);
+    diffText.setText(TEXT_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -54,8 +59,6 @@ public class BioCSentenceTest {
 
   @Test
   public void test_allFields() {
-    BioCSentence base = baseBuilder.build();
-
     assertEquals(OFFSET, base.getOffset());
     assertEquals(TEXT, base.getText().get());
     assertEquals(VALUE, base.getInfon(KEY).get());
@@ -64,69 +67,49 @@ public class BioCSentenceTest {
   }
 
   @Test
-  public void testBuilder_negOffset() {
+  public void test_negOffset() {
+    base.setOffset(-1);
     thrown.expect(IllegalArgumentException.class);
-    baseBuilder.setOffset(-1);
+    base.getOffset();
   }
 
   @Test
-  public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
-    BioCSentence.newBuilder().build();
-  }
-
-  @Test
-  public void testBuilder_nullRelation() {
+  public void test_nullRelation() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.addRelation(null);
+    base.addRelation(null);
   }
 
   @Test
-  public void testBuilder_nullAnnotation() {
+  public void test_nullAnnotation() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.addAnnotation(null);
+    base.addAnnotation(null);
+  }
+
+  public void test_nullText() {
+    base.setText(null);
+    assertFalse(base.getText().isPresent());
   }
 
   @Test
-  public void testBuilder_nullText() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.setText(null);
-  }
-
-  @Test
-  public void testToBuilder() {
-    BioCSentence expected = baseBuilder.build();
-    BioCSentence actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
-  }
-
-  @Test
-  public void testGetInfon_nullKey() {
-    BioCSentence base = baseBuilder.build();
+  public void test_getInfon_nullKey() {
     assertFalse(base.getInfon(null).isPresent());
   }
 
   @Test
-  public void testBuilder_clearText() {
-    BioCSentence sen = baseBuilder.clearText().build();
-    assertFalse(sen.getText().isPresent());
+  public void test_clearLocations() {
+    base.clearAnnotations();
+    assertTrue(base.getAnnotations().isEmpty());
   }
 
   @Test
-  public void testBuilder_clearLocations() {
-    BioCSentence sen = baseBuilder.clearAnnotations().build();
-    assertTrue(sen.getAnnotations().isEmpty());
+  public void test_removeInfon() {
+    base.removeInfon(KEY);
+    assertFalse(base.getInfon(KEY).isPresent());
   }
 
   @Test
-  public void testBuilder_removeInfon() {
-    BioCSentence sen = baseBuilder.removeInfon(KEY).build();
-    assertTrue(sen.getInfons().isEmpty());
-  }
-
-  @Test
-  public void testBuilder_clearInfons() {
-    BioCSentence sen = baseBuilder.clearInfons().build();
-    assertTrue(sen.getInfons().isEmpty());
+  public void test_clearInfons() {
+    base.clearInfons();
+    assertTrue(base.getInfons().isEmpty());
   }
 }

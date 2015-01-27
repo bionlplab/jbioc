@@ -94,9 +94,9 @@ public class BioCSentenceIteratorTest {
   }
 
   private static BioCSentence createSentence(int offset, String text) {
-    return BioCSentence.newBuilder()
-        .setOffset(offset)
-        .setText(text)
-        .build();
+    BioCSentence sentence = new BioCSentence();
+    sentence.setOffset(offset);
+    sentence.setText(text);
+    return sentence;
   }
 }

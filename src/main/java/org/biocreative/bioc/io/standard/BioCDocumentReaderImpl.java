@@ -76,7 +76,7 @@ class BioCDocumentReaderImpl implements BioCDocumentReader {
       @Override
       public BioCDocument next() {
         BioCDocument thisDocument = reader.documentBuilder.build();
-        reader.sentenceBuilder = null;
+        reader.sentence = null;
         reader.passageBuilder = null;
         reader.documentBuilder = null;
         try {
