@@ -16,10 +16,6 @@ public class BioCLocation {
   private Integer offset;
   private Integer length;
 
-  public BioCLocation() {
-    this(-1, -1);
-  }
-
   /**
    * Constructs a newly <code>BioCLocation</code> object that has offset and
    * length.

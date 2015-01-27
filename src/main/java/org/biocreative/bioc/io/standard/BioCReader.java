@@ -281,8 +281,8 @@ class BioCReader implements Closeable {
 
   private BioCRelation readRelation(StartElement relationEvent)
       throws XMLStreamException {
-    BioCRelation.Builder relBuilder = BioCRelation.newBuilder();
-    relBuilder.setID(getAttribute(relationEvent, "id"));
+    BioCRelation rel = new BioCRelation();
+    rel.setID(getAttribute(relationEvent, "id"));
 
     String localName = null;
 
@@ -292,20 +292,20 @@ class BioCReader implements Closeable {
         StartElement startElement = event.asStartElement();
         localName = startElement.getName().getLocalPart();
         if (localName.equals("infon")) {
-          relBuilder.putInfon(
+          rel.putInfon(
               getAttribute(startElement, "key"),
               getText());
         } else if (localName.equals("node")) {
           BioCNode node = new BioCNode(getAttribute(startElement, "refid"),
               getAttribute(startElement, "role"));
-          relBuilder.addNode(node);
+          rel.addNode(node);
         }
       }
       else if (event.isEndElement()) {
         EndElement endElement = event.asEndElement();
         localName = endElement.getName().getLocalPart();
         if (localName.equals("relation")) {
-          return relBuilder.build();
+          return rel;
         }
       }
     }

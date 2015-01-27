@@ -32,10 +32,10 @@ public class BioCAnnotation {
 
   public BioCAnnotation(BioCAnnotation annotation) {
     this();
-    this.id = annotation.id;
-    this.text = annotation.text;
-    this.infons.putAll(annotation.infons);
-    this.locations.addAll(annotation.locations);
+    setID(annotation.id);
+    setText(annotation.text);
+    setInfons(annotation.infons);
+    setLocations(annotation.locations);
   }
 
   public void addLocation(BioCLocation location) {
@@ -148,11 +148,13 @@ public class BioCAnnotation {
   }
 
   public void setInfons(Map<String, String> infons) {
-    this.infons = Maps.newHashMap(infons);
+    clearInfons();
+    this.infons.putAll(infons);
   }
 
   public void setLocations(List<BioCLocation> locations) {
-    this.locations = Lists.newArrayList(locations);
+    clearLocations();
+    this.locations.addAll(locations);
   }
 
   public void setText(String text) {

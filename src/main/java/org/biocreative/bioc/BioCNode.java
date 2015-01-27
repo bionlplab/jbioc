@@ -15,10 +15,6 @@ public class BioCNode {
   private String refid;
   private String role;
 
-  public BioCNode() {
-    this(null, null);
-  }
-
   /**
    * Constructs a newly <code>BioCNode</code> object that has id and role.
    */
