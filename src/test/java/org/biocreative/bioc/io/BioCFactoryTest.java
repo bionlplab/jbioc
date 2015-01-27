@@ -1,10 +1,9 @@
 package org.biocreative.bioc.io;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.junit.Assert.assertThat;
 
 import org.biocreative.bioc.io.standard.JdkStrategy;
-import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,7 +13,6 @@ public class BioCFactoryTest {
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  private static final BioCXMLStrategy WOODSTOX = new WoodstoxStrategy();
   private static final BioCXMLStrategy STANDARD = new JdkStrategy();
 
   @SuppressWarnings("deprecation")
@@ -26,14 +24,8 @@ public class BioCFactoryTest {
 
   @Test
   public void test_sucess() {
-    BioCFactory factory = BioCFactory.newFactory(WOODSTOX);
-    assertThat(factory.getStrategy(), instanceOf(WoodstoxStrategy.class));
-
-    factory = BioCFactory.newFactory(STANDARD);
+    BioCFactory factory = BioCFactory.newFactory(STANDARD);
     assertThat(factory.getStrategy(), instanceOf(JdkStrategy.class));
-
-    factory = BioCFactory.newFactory(new WoodstoxStrategy());
-    assertThat(factory.getStrategy(), instanceOf(WoodstoxStrategy.class));
 
     factory = BioCFactory.newFactory(new JdkStrategy());
     assertThat(factory.getStrategy(), instanceOf(JdkStrategy.class));

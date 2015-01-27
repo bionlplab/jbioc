@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,7 +16,6 @@ import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.io.BioCCollectionReader;
 import org.biocreative.bioc.io.BioCFactory;
 import org.biocreative.bioc.io.standard.JdkStrategy;
-import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
 public class BioCDocumentWriterTest {
 
@@ -35,13 +33,6 @@ public class BioCDocumentWriterTest {
     test_success(new JdkStrategy());
   }
 
-  @Test
-  @Ignore
-  public void test_success_woodstox()
-      throws Exception {
-    test_success(new WoodstoxStrategy());
-  }
-  
   private void test_success(BioCXMLStrategy strategy)
       throws Exception {
     // read
