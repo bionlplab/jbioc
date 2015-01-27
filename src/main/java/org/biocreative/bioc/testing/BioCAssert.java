@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.transform.XmlConverters.the;
 import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
+import static org.xmlmatchers.XmlMatchers.isSimilarTo;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -19,10 +20,20 @@ import org.custommonkey.xmlunit.XMLUnit;
 import org.custommonkey.xmlunit.exceptions.ConfigurationException;
 import org.xml.sax.SAXException;
 
+/**
+ * Assertion for validating a BioC file or comparing two BioC for "equivalence"
+ * and "similarity." Two documents are considered to be "equivalent" if they
+ * contain the same elements in the same order. Two documents are considered to
+ * be "similar" if the the content of the nodes in the documents are the same,
+ * but minor differences exist.
+ */
 public class BioCAssert {
 
   private static final int BUF_SIZE = 1024;
-  
+
+  /**
+   * Asserts that a BioC file is valid based on the given dtd file.
+   */
   public static void assertDtdValid(Reader reader, String dtdFilename) {
     try {
       Validator v = new Validator(reader, dtdFilename);
@@ -33,7 +44,11 @@ public class BioCAssert {
       e.printStackTrace();
     }
   }
-  
+
+  /**
+   * Asserts that a BioC file is valid based on the given dtd file. If the BioC
+   * file is invalid, prints the error message.
+   */
   public static void assertAndPrintDtdValid(Reader reader, String dtdFilename) {
     try {
       Validator v = new Validator(reader, dtdFilename);
@@ -47,7 +62,12 @@ public class BioCAssert {
     }
   }
 
-  public static void assertXmlEquals(Reader controlReader, Reader actualReader)
+  /**
+   * Asserts that two BioC files are equal. Two documents are considered to be
+   * "equivalent" if they contain the same elements in the same order.
+   */
+  public static void assertEquivalentTo(Reader controlReader,
+      Reader actualReader)
       throws IOException {
     char[] cbuf = new char[BUF_SIZE];
     int size;
@@ -62,16 +82,36 @@ public class BioCAssert {
       actualXml.append(cbuf, 0, size);
     }
 
-    assertXmlEquals(controlXml.toString(), actualXml.toString());
+    assertEquivalentTo(controlXml.toString(), actualXml.toString());
   }
 
-  public static void assertXmlEquals(String controlXml, String actualXml)
+  /**
+   * Asserts that two BioC files are equal. Two documents are considered to be
+   * "equivalent" if they contain the same elements in the same order.
+   */
+  public static void assertEquivalentTo(String controlXml, String actualXml)
       throws IOException {
     assertThat(
         the(controlXml.toString()),
         isEquivalentTo(the(actualXml.toString())));
   }
 
+  /**
+   * Asserts that two BioC files are equal. Two documents are considered to be
+   * "similar" if the the content of the nodes in the documents are the same,
+   * but minor differences exist e.g. sequencing of sibling elements.
+   */
+  public static void assertSimilarTo(String controlXml, String actualXml)
+      throws IOException {
+    assertThat(
+        the(controlXml.toString()),
+        isSimilarTo(the(actualXml.toString())));
+  }
+
+  /**
+   * Asserts that two BioC files are equal. If two BioC files are not equal,
+   * prints the different parts.
+   */
   public static void assertAndPrintEquals(Reader controlReader,
       Reader testReader)
       throws Exception {

@@ -7,6 +7,9 @@ import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
 import org.biocreative.bioc.BioCSentence;
 
+/**
+ * This class provides a simple way to iterate over BioC sentences.
+ */
 public class BioCSentenceIterator implements Iterator<BioCSentence> {
 
   private Iterator<BioCDocument> documentItr;
@@ -38,10 +41,16 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     }
   }
 
+  /**
+   * Returns the passage that contains current sentence.
+   */
   public BioCDocument getDocument() {
     return currentDocument;
   }
 
+  /**
+   * Returns the passage that contains current sentence.
+   */
   public BioCPassage getPassage() {
     return currentPassage;
   }

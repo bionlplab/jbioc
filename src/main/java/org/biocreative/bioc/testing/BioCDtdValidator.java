@@ -16,6 +16,9 @@ import org.kohsuke.args4j.ParserProperties;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
+/**
+ * A class to validate the BioC file via the command line.
+ */
 public class BioCDtdValidator {
 
   @Option(name = "-h", help=true, usage = "print this help")

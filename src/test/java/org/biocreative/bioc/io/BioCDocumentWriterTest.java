@@ -1,6 +1,6 @@
 package org.biocreative.bioc.io;
 
-import static org.biocreative.bioc.testing.BioCAssert.assertXmlEquals;
+import static org.biocreative.bioc.testing.BioCAssert.assertXmlEquivalentTo;
 
 import java.io.File;
 import java.io.FileReader;
@@ -68,7 +68,7 @@ public class BioCDocumentWriterTest {
     writer.close();
 
     // test
-    assertXmlEquals(
+    assertEquivalentTo(
         new InputStreamReader(Thread.currentThread()
             .getContextClassLoader()
             .getResourceAsStream(XML_FILENAME)),

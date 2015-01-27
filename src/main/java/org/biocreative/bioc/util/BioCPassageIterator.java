@@ -6,6 +6,9 @@ import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
 
+/**
+ * This class provides a simple way to iterate over BioC passages.
+ */
 public class BioCPassageIterator implements Iterator<BioCPassage> {
 
   private Iterator<BioCDocument> documentItr;
@@ -23,6 +26,9 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
     }
   }
 
+  /**
+   * Returns the document that contains current passage.
+   */
   public BioCDocument getDocument() {
     return currentDocument;
   }

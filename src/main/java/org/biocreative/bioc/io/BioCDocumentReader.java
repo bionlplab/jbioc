@@ -7,6 +7,11 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 
+/**
+ * The interface allows forward, read-only access to BioC file. It is designed
+ * to sequentially read the BioC file into document every time the method
+ * readDocument is called.
+ */
 public interface BioCDocumentReader extends Closeable, Iterable<BioCDocument> {
 
   /**
@@ -20,11 +25,9 @@ public interface BioCDocumentReader extends Closeable, Iterable<BioCDocument> {
    */
   public BioCCollection readCollectionInfo()
       throws XMLStreamException;
-  
+
+  /**
+   * Returns the absolute URI of the BioC DTD file.
+   */
   public String getDTD();
-  
-//  /**
-//   * Reset the stream to the most recent mark.
-//   */
-//  public void reset();
 }

@@ -9,9 +9,18 @@ import org.apache.commons.lang3.Validate;
 import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
+/**
+ * An object that creates new BioC readers and writers on demand.
+ */
 public class BioCFactory {
 
+  /**
+   * @deprecated use {@link #newFactory(BioCXMLStrategy)} instead
+   */
   public static final String WOODSTOX = "WOODSTOX";
+  /**
+   * @deprecated use {@link #newFactory(BioCXMLStrategy)} instead
+   */
   public static final String STANDARD = "STANDARD";
 
   private BioCXMLStrategy strategy;
@@ -43,25 +52,40 @@ public class BioCFactory {
     }
   }
 
+  /**
+   * Creates a factory instance using the given strategy.
+   */
   public static BioCFactory newFactory(BioCXMLStrategy strategy) {
     return new BioCFactory(strategy);
   }
 
+  /**
+   * Creates a BioCCollectionWriter instance using the given writer.
+   */
   public BioCCollectionWriter createBioCCollectionWriter(Writer out)
       throws XMLStreamException {
     return strategy.createBioCCollectionWriter(out);
   }
 
+  /**
+   * Creates a BioCDocumentWriter instance using the given writer.
+   */
   public BioCDocumentWriter createBioCDocumentWriter(Writer out)
       throws XMLStreamException {
     return strategy.createBioCDocumentWriter(out);
   }
 
+  /**
+   * Creates a BioCCollectionReader instance using the given reader.
+   */
   public BioCCollectionReader createBioCCollectionReader(Reader in)
       throws XMLStreamException {
     return strategy.createBioCCollectionReader(in);
   }
 
+  /**
+   * Creates a BioCDocumentReader instance using the given reader.
+   */
   public BioCDocumentReader createBioCDocumentReader(Reader in)
       throws XMLStreamException {
     return strategy.createBioCDocumentReader(in);
