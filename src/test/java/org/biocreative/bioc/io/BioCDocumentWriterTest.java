@@ -7,15 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
+import org.biocreative.bioc.BioCCollection;
+import org.biocreative.bioc.BioCDocument;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.biocreative.bioc.BioCCollection;
-import org.biocreative.bioc.BioCDocument;
-import org.biocreative.bioc.io.BioCCollectionReader;
-import org.biocreative.bioc.io.BioCFactory;
-import org.biocreative.bioc.io.standard.JdkStrategy;
 
 public class BioCDocumentWriterTest {
 
@@ -26,36 +23,29 @@ public class BioCDocumentWriterTest {
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-  
-  @Test
-  public void test_success_jdk()
-      throws Exception {
-    test_success(new JdkStrategy());
-  }
 
-  private void test_success(BioCXMLStrategy strategy)
+  @Test
+  public void test_success()
       throws Exception {
     // read
-    BioCCollectionReader reader = BioCFactory.newFactory(strategy)
-        .createBioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    BioCCollectionReader reader = new BioCCollectionReader(
+        new InputStreamReader(Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollection();
     String dtd = reader.getDTD();
     reader.close();
 
     // write
     File tmpFile = testFolder.newFile();
-    BioCDocumentWriter writer = BioCFactory.newFactory(strategy)
-        .createBioCDocumentWriter(new FileWriter(tmpFile));
+    BioCDocumentWriter writer = new BioCDocumentWriter(new FileWriter(tmpFile));
     writer.setDTD(dtd);
     writer.writeBeginCollectionInfo(collection);
-    
-    for(BioCDocument document: collection.getDocuments()) {
+
+    for (BioCDocument document : collection.getDocuments()) {
       writer.writeDocument(document);
     }
-    
+
     writer.close();
 
     // test

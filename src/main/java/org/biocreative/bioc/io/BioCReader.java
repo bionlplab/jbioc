@@ -1,4 +1,4 @@
-package org.biocreative.bioc.io.standard;
+package org.biocreative.bioc.io;
 
 import java.io.Closeable;
 import java.io.IOException;

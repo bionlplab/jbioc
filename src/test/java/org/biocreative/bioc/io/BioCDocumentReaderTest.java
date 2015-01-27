@@ -11,7 +11,6 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
-import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -20,27 +19,21 @@ import org.junit.rules.TemporaryFolder;
 public class BioCDocumentReaderTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final String JDK_DTD = "<!DOCTYPE collection SYSTEM \"BioC.dtd\" []>";
-  
+  private static final String DTD = "<!DOCTYPE collection SYSTEM \"BioC.dtd\" []>";
+
   @Rule
   public TemporaryFolder testFolder = new TemporaryFolder();
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
-  
-  @Test
-  public void test_success_jdk()
-      throws Exception {
-    test_success(new JdkStrategy());
-  }
 
-  private void test_success(BioCXMLStrategy strategy)
+  @Test
+  public void test_success()
       throws Exception {
-    BioCDocumentReader reader = BioCFactory.newFactory(strategy)
-        .createBioCDocumentReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    BioCDocumentReader reader = new BioCDocumentReader(
+        new InputStreamReader(Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollectionInfo();
     assertEquals(collection.getDocmentCount(), 0);
     assertEquals(collection.getSource(), "PubMed");
@@ -50,7 +43,7 @@ public class BioCDocumentReaderTest {
 
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
-//      System.out.println(doc);
+      // System.out.println(doc);
       collection.addDocument(doc);
     }
 
@@ -66,60 +59,45 @@ public class BioCDocumentReaderTest {
   }
 
   @Test
-  public void test_emptyReader_jdk() throws Exception {
-    test_emptyReader(new JdkStrategy());
-  }
-
-  private void test_emptyReader(BioCXMLStrategy strategy)
+  public void test_emptyReader()
       throws Exception {
     thrown.expect(XMLStreamException.class);
-    BioCDocumentReader reader = BioCFactory.newFactory(strategy)
-        .createBioCDocumentReader(new StringReader(""));
+    BioCDocumentReader reader = new BioCDocumentReader(new StringReader(""));
     reader.readCollectionInfo();
-  }
-  
-  @Test
-  public void test_readTwice_jdk()
-      throws Exception {
-    test_readTwice(new JdkStrategy());
+    reader.close();
   }
 
-  private void test_readTwice(BioCXMLStrategy strategy)
+  @Test
+  public void test_readTwice()
       throws Exception {
-    BioCDocumentReader reader = BioCFactory.newFactory(strategy)
-        .createBioCDocumentReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    BioCDocumentReader reader = new BioCDocumentReader(
+        new InputStreamReader(Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollectionInfo();
     assertEquals(collection.getDocmentCount(), 0);
-    
+
     @SuppressWarnings("unused")
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
-//      System.out.println(doc);
+      // System.out.println(doc);
     }
-    
+
     // twice
     collection = reader.readCollectionInfo();
     assertEquals(collection.getDocmentCount(), 0);
     assertNull(reader.readDocument());
+    reader.close();
   }
 
   @Test
-  public void test_dtd_jdk()
+  public void test_dtd()
       throws Exception {
-    test_dtd(new JdkStrategy(), JDK_DTD);
-  }
-
-  private void test_dtd(BioCXMLStrategy strategy, String dtd)
-      throws Exception {
-    BioCDocumentReader reader = BioCFactory.newFactory(strategy)
-        .createBioCDocumentReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
-    assertEquals(dtd, reader.getDTD());
+    BioCDocumentReader reader = new BioCDocumentReader(
+        new InputStreamReader(Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(XML_FILENAME)));
+    assertEquals(DTD, reader.getDTD());
     reader.close();
   }
 }

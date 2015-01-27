@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 
 import org.biocreative.bioc.BioCCollection;
-import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -25,27 +24,21 @@ public class BioCCollectionWriterTest {
   public ExpectedException thrown = ExpectedException.none();
 
   @Test
-  public void test_success_jdk()
-      throws Exception {
-    test_success(new JdkStrategy());
-  }
-
-  private void test_success(BioCXMLStrategy strategy)
+  public void test_success()
       throws Exception {
     // read
-    BioCCollectionReader reader = BioCFactory.newFactory(strategy)
-        .createBioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    BioCCollectionReader reader = new BioCCollectionReader(
+        new InputStreamReader(Thread.currentThread()
+            .getContextClassLoader()
+            .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollection();
     String dtd = reader.getDTD();
     reader.close();
 
     // write
     File tmpFile = testFolder.newFile();
-    BioCCollectionWriter writer = BioCFactory.newFactory(strategy)
-        .createBioCCollectionWriter(new FileWriter(tmpFile));
+    BioCCollectionWriter writer = new BioCCollectionWriter(new FileWriter(
+        tmpFile));
     writer.setDTD(dtd);
     writer.writeCollection(collection);
     writer.close();
