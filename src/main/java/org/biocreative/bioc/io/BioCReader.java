@@ -44,7 +44,7 @@ class BioCReader implements Closeable {
 
   Level level;
 
-  public BioCReader(Reader reader, Level level)
+  protected BioCReader(Reader reader, Level level)
       throws FactoryConfigurationError, XMLStreamException {
     XMLInputFactory factory = XMLInputFactory.newInstance();
     factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);

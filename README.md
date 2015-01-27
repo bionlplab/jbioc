@@ -13,7 +13,6 @@ GOALS are to facilitate:
 *  data exchange 
 *  data and tool reuse
 
----------------------------------------------------------------------------
 >  PUBLIC DOMAIN NOTICE                                                        
 > 
 > This work is a "United States Government Work" under the terms of the
@@ -38,7 +37,6 @@ GOALS are to facilitate:
 > Bretonnel Cohen, Martin Krallinger, Florian Leitner, Zhiyong Lu, Yifan
 > Peng, Fabio Rinaldi, Manabu Torii, Alfonso Valencia, Karin Verspoor,
 > Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, DATABASE, 2013.
----------------------------------------------------------------------------
 
 ## DEVELOPERS
 
