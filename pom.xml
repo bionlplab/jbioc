@@ -16,8 +16,8 @@
     </license>
   </licenses>
   <scm>
-    <url>http://svn.code.sf.net/p/bionlp/code/repo</url>
-    <connection>http://svn.code.sf.net/p/bionlp/code/repo</connection>
+    <url>http://git.code.sf.net/p/bioc/code</url>
+    <connection>http://git.code.sf.net/p/bioc/code</connection>
   </scm>
   <developers>
     <developer>
