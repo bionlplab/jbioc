@@ -7,7 +7,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.apache.commons.lang3.Validate;
 import org.biocreative.bioc.io.standard.JdkStrategy;
-import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
 /**
  * An object that creates new BioC readers and writers on demand.
@@ -48,7 +47,7 @@ public class BioCFactory {
     if (flags.equals(STANDARD)) {
       return newFactory(new JdkStrategy());
     } else {
-      return newFactory(new WoodstoxStrategy());
+      return null;
     }
   }
 

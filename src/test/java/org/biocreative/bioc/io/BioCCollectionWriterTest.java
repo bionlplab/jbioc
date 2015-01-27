@@ -7,16 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-import org.junit.Ignore;
+import org.biocreative.bioc.BioCCollection;
+import org.biocreative.bioc.io.standard.JdkStrategy;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
-import org.biocreative.bioc.BioCCollection;
-import org.biocreative.bioc.io.BioCCollectionReader;
-import org.biocreative.bioc.io.BioCFactory;
-import org.biocreative.bioc.io.standard.JdkStrategy;
-import org.biocreative.bioc.io.woodstox.WoodstoxStrategy;
 
 public class BioCCollectionWriterTest {
 
@@ -32,13 +28,6 @@ public class BioCCollectionWriterTest {
   public void test_success_jdk()
       throws Exception {
     test_success(new JdkStrategy());
-  }
-
-  @Test
-  @Ignore
-  public void test_success_woodstox()
-      throws Exception {
-    test_success(new WoodstoxStrategy());
   }
 
   private void test_success(BioCXMLStrategy strategy)
