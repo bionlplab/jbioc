@@ -23,7 +23,7 @@ public class BioCNodeTest {
   public void test_equals() {
 
     BioCNode base = new BioCNode(REFID, ROLE);
-    BioCNode baseCopy = new BioCNode(REFID, ROLE);
+    BioCNode baseCopy = new BioCNode(base);
     BioCNode diffRefid = new BioCNode(REFID_2, ROLE);
     BioCNode diffRole = new BioCNode(REFID, ROLE_2);
 

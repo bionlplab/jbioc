@@ -14,7 +14,7 @@ import com.google.common.testing.EqualsTester;
 public class BioCAnnotationTest {
 
   private static final String TEXT = "ABC";
-  
+
   private static final String ID = "1";
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
@@ -27,29 +27,33 @@ public class BioCAnnotationTest {
   private static final BioCLocation LOC_2 = new BioCLocation(1, 2);
   private static final BioCLocation LOC_3 = new BioCLocation(2, 3);
 
-  private BioCAnnotation.Builder baseBuilder;
+  private BioCAnnotation base;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    baseBuilder = BioCAnnotation
-        .newBuilder()
-        .setID(ID)
-        .addLocation(LOC_1)
-        .addLocation(LOC_2)
-        .setText(TEXT)
-        .putInfon(KEY, VALUE);
+    base = new BioCAnnotation();
+    base.setID(ID);
+    base.addLocation(LOC_1);
+    base.addLocation(LOC_2);
+    base.setText(TEXT);
+    base.putInfon(KEY, VALUE);
   }
 
   @Test
-  public void testEquals() {
-    BioCAnnotation base = baseBuilder.build();
-    BioCAnnotation baseCopy = baseBuilder.build();
-    BioCAnnotation diffId = baseBuilder.setID(ID_2).build();
-    BioCAnnotation diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
-    BioCAnnotation diffLocation = baseBuilder.addLocation(LOC_3).build();
+  public void test_equals() {
+    BioCAnnotation baseCopy = new BioCAnnotation(base);
+
+    BioCAnnotation diffId = new BioCAnnotation(base);
+    diffId.setID(ID_2);
+
+    BioCAnnotation diffInfon = new BioCAnnotation(base);
+    diffInfon.putInfon(KEY_2, VALUE_2);
+
+    BioCAnnotation diffLocation = new BioCAnnotation(base);
+    diffLocation.addLocation(LOC_3);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -61,7 +65,6 @@ public class BioCAnnotationTest {
 
   @Test
   public void test_allFields() {
-    BioCAnnotation base = baseBuilder.build();
     assertEquals(ID, base.getID());
     assertEquals(TEXT, base.getText().get());
     assertEquals(VALUE, base.getInfon(KEY).get());
@@ -71,71 +74,50 @@ public class BioCAnnotationTest {
   }
 
   @Test
-  public void testBuilder_empty() {
+  public void test_nullID() {
+    base.setID(null);
     thrown.expect(NullPointerException.class);
-    BioCAnnotation.newBuilder().build();
+    base.getID();
   }
 
   @Test
-  public void testBuilder_nullID() {
+  public void test_nullLocation() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.setID(null);
+    base.addLocation(null);
   }
 
   @Test
-  public void testBuilder_nullLocation() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.addLocation(null);
+  public void test_nullText() {
+    base.setText(null);
+    assertFalse(base.getText().isPresent());
   }
 
   @Test
-  public void testBuilder_nullText() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.setText(null);
+  public void test_clearLocations() {
+    base.clearLocations();
+    assertTrue(base.getLocations().isEmpty());
   }
 
   @Test
-  public void testToBuilder() {
-    BioCAnnotation expected = baseBuilder.build();
-    BioCAnnotation actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
+  public void test_removeInfon() {
+    base.removeInfon(KEY);
+    assertFalse(base.getInfon(KEY).isPresent());
   }
 
   @Test
-  public void testBuilder_clearText() {
-    BioCAnnotation ann = baseBuilder.clearText().build();
-    assertFalse(ann.getText().isPresent());
+  public void test_clearInfons() {
+    base.clearInfons();
+    assertTrue(base.getInfons().isEmpty());
   }
 
   @Test
-  public void testBuilder_clearLocations() {
-    thrown.expect(IllegalArgumentException.class);
-    baseBuilder.clearLocations().build();
+  public void test_addLocation() {
+    base.addLocation(LOC_3.getOffset(), LOC_3.getLength());
+    assertEquals(LOC_3, base.getLocation(2));
   }
 
-  @Test
-  public void testBuilder_removeInfon() {
-    BioCAnnotation ann = baseBuilder.removeInfon(KEY).build();
-    assertTrue(ann.getInfons().isEmpty());
-  }
-
-  @Test
-  public void testBuilder_clearInfons() {
-    BioCAnnotation ann = baseBuilder.clearInfons().build();
-    assertTrue(ann.getInfons().isEmpty());
-  }
-
-  @Test
-  public void testBuilder_addLocation() {
-    BioCAnnotation ann = baseBuilder.addLocation(
-        LOC_3.getOffset(),
-        LOC_3.getLength()).build();
-    assertEquals(LOC_3, ann.getLocation(2));
-  }
-  
   @Test
   public void testGetInfon_nullKey() {
-    BioCAnnotation base = baseBuilder.build();
     assertFalse(base.getInfon(null).isPresent());
   }
 

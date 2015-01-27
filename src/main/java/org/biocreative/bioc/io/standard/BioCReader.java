@@ -245,8 +245,8 @@ class BioCReader implements Closeable {
 
   private BioCAnnotation readAnnotation(StartElement annotationEvent)
       throws XMLStreamException {
-    BioCAnnotation.Builder annBuilder = BioCAnnotation.newBuilder();
-    annBuilder.setID(getAttribute(annotationEvent, "id"));
+    BioCAnnotation ann = new BioCAnnotation();
+    ann.setID(getAttribute(annotationEvent, "id"));
 
     String localName = null;
 
@@ -256,13 +256,13 @@ class BioCReader implements Closeable {
         StartElement startElement = event.asStartElement();
         localName = startElement.getName().getLocalPart();
         if (localName.equals("text")) {
-          annBuilder.setText(getText());
+          ann.setText(getText());
         } else if (localName.equals("infon")) {
-          annBuilder.putInfon(
+          ann.putInfon(
               startElement.getAttributeByName(new QName("key")).getValue(),
               getText());
         } else if (localName.equals("location")) {
-          annBuilder.addLocation(new BioCLocation(
+          ann.addLocation(new BioCLocation(
               Integer.parseInt(getAttribute(startElement, "offset")),
               Integer.parseInt(getAttribute(startElement, "length"))));
         }
@@ -271,7 +271,7 @@ class BioCReader implements Closeable {
         EndElement endElement = event.asEndElement();
         localName = endElement.getName().getLocalPart();
         if (localName.equals("annotation")) {
-          return annBuilder.build();
+          return ann;
         }
       }
     }

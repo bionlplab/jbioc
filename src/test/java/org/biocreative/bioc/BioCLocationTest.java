@@ -29,7 +29,7 @@ public class BioCLocationTest {
   @Test
   public void test_equals() {
     BioCLocation base = new BioCLocation(OFFSET, LENGTH);
-    BioCLocation baseCopy = new BioCLocation(OFFSET, LENGTH);
+    BioCLocation baseCopy = new BioCLocation(base);
     BioCLocation diffOffset = new BioCLocation(OFFSET_2, LENGTH);
     BioCLocation diffLength = new BioCLocation(OFFSET, LENGTH_2);
 

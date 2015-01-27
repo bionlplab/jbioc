@@ -28,6 +28,10 @@ public class BioCLocation {
     this.offset = offset;
     this.length = length;
   }
+  
+  public BioCLocation(BioCLocation location) {
+    this(location.offset, location.length);
+  }
 
   @Override
   public boolean equals(Object obj) {

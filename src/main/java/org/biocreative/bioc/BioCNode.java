@@ -26,6 +26,10 @@ public class BioCNode {
     this.refid = refid;
     this.role = role;
   }
+  
+  public BioCNode(BioCNode node) {
+    this(node.refid, node.role);
+  }
 
   @Override
   public boolean equals(Object obj) {
