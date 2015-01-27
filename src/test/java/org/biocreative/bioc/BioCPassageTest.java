@@ -16,32 +16,37 @@ public class BioCPassageTest {
   private static final String TEXT = "ABC";
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
-  
+
   private static final int OFFSET_2 = 2;
   private static final String TEXT_2 = "DEF";
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private BioCPassage.Builder baseBuilder;
+  private BioCPassage base;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    baseBuilder = BioCPassage.newBuilder()
-        .setOffset(OFFSET)
-        .setText(TEXT)
-        .putInfon(KEY, VALUE);
+    base = new BioCPassage();
+    base.setOffset(OFFSET);
+    base.setText(TEXT);
+    base.putInfon(KEY, VALUE);
   }
 
   @Test
-  public void testEquals() {
-    BioCPassage base = baseBuilder.build();
-    BioCPassage baseCopy = baseBuilder.build();
-    BioCPassage diffOffset = baseBuilder.setOffset(OFFSET_2).build();
-    BioCPassage diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
-    BioCPassage diffText = baseBuilder.setText(TEXT_2).build();
+  public void test_equals() {
+    BioCPassage baseCopy = new BioCPassage(base);
+
+    BioCPassage diffOffset = new BioCPassage(base);
+    diffOffset.setOffset(OFFSET_2);
+
+    BioCPassage diffInfon = new BioCPassage(base);
+    diffInfon.putInfon(KEY_2, VALUE_2);
+
+    BioCPassage diffText = new BioCPassage(base);
+    diffText.setText(TEXT_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -53,8 +58,6 @@ public class BioCPassageTest {
 
   @Test
   public void test_allFields() {
-    BioCPassage base = baseBuilder.build();
-    
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText().get(), TEXT);
     assertEquals(base.getInfon(KEY), VALUE);
@@ -65,7 +68,8 @@ public class BioCPassageTest {
 
   @Test
   public void testBuilder_negOffset() {
+    base.setOffset(-1);
     thrown.expect(IllegalArgumentException.class);
-    baseBuilder.setOffset(-1);
+    base.getOffset();
   }
 }

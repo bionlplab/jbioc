@@ -43,23 +43,23 @@ public class BioCSentenceIteratorTest {
       3,
       "MEK1 in turn phosphorylates ERK1.");
 
-  private static final BioCCollection COLLECTION = BioCCollection.newBuilder()
+  private static final BioCCollection COLLECTION = BioCCollection
+      .newBuilder()
       .setDate(DATE)
       .setKey(KEY)
       .setSource(SOURCE)
-      .addDocument(BioCDocument.newBuilder()
-          .setID("1")
-          .addPassage(BioCPassage.newBuilder()
-              .setOffset(0)
-              .addSentence(EXPECTED_SEN_0)
+      .addDocument(
+          BioCDocument
+              .newBuilder()
+              .setID("1")
+              .addPassage(createPassage(0, EXPECTED_SEN_0))
+              .addPassage(
+                  createPassage(
+                      1,
+                      EXPECTED_SEN_1,
+                      EXPECTED_SEN_2,
+                      EXPECTED_SEN_3))
               .build())
-          .addPassage(BioCPassage.newBuilder()
-              .setOffset(1)
-              .addSentence(EXPECTED_SEN_1)
-              .addSentence(EXPECTED_SEN_2)
-              .addSentence(EXPECTED_SEN_3)
-              .build())
-          .build())
       .build();
 
   @Test
@@ -91,6 +91,16 @@ public class BioCSentenceIteratorTest {
         .build();
     BioCSentenceIterator itr = new BioCSentenceIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  private static BioCPassage createPassage(int offset,
+      BioCSentence... sentences) {
+    BioCPassage passage = new BioCPassage();
+    passage.setOffset(offset);
+    for (BioCSentence sentence : sentences) {
+      passage.addSentence(sentence);
+    }
+    return passage;
   }
 
   private static BioCSentence createSentence(int offset, String text) {

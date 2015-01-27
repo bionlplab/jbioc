@@ -21,11 +21,11 @@ import com.google.common.collect.Lists;
  * Test BioCCollectionReader and BioCCollectionWriter
  */
 public class BioCPassageIteratorTest {
-  
+
   private static final String DATE = "date";
   private static final String KEY = "key";
   private static final String SOURCE = "source";
-  
+
   private static final BioCPassage EXPECTED_PASSAGE_0 = createPassage(
       0,
       "Active Raf-1 phosphorylates and activates "
@@ -35,8 +35,8 @@ public class BioCPassageIteratorTest {
   private static final BioCPassage EXPECTED_PASSAGE_1 = createPassage(
       1,
       "Active Raf-1 phosphorylates MEK1."
-      + "Active Raf-1 activates MEK1."
-      + "MEK1 in turn phosphorylates ERK1.");
+          + "Active Raf-1 activates MEK1."
+          + "MEK1 in turn phosphorylates ERK1.");
 
   private static final BioCCollection COLLECTION = BioCCollection.newBuilder()
       .setDate(DATE)
@@ -56,10 +56,10 @@ public class BioCPassageIteratorTest {
     BioCPassageIterator itr = new BioCPassageIterator(COLLECTION);
     while (itr.hasNext()) {
       BioCPassage passage = itr.next();
-//      System.out.println(passage);
+      // System.out.println(passage);
       passages.add(passage);
     }
-    
+
     assertEquals(passages.size(), 2);
     assertThat(
         passages,
@@ -78,11 +78,11 @@ public class BioCPassageIteratorTest {
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
   }
-  
+
   private static BioCPassage createPassage(int offset, String text) {
-    return BioCPassage.newBuilder()
-        .setOffset(offset)
-        .setText(text)
-        .build();
+    BioCPassage passage = new BioCPassage();
+    passage.setOffset(offset);
+    passage.setText(text);
+    return passage;
   }
 }
