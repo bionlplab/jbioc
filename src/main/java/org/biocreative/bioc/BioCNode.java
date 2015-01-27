@@ -16,11 +16,28 @@ public class BioCNode {
   private String role;
 
   public BioCNode() {
+    this(null, null);
   }
 
+  /**
+   * Constructs a newly <code>BioCNode</code> object that has id and role.
+   */
   public BioCNode(String refid, String role) {
     this.refid = refid;
     this.role = role;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj == this) {
+      return true;
+    }
+    if (!(obj instanceof BioCNode)) {
+      return false;
+    }
+    BioCNode rhs = (BioCNode) obj;
+    return Objects.equals(role, rhs.role)
+        && Objects.equals(refid, rhs.refid);
   }
 
   /**
@@ -46,17 +63,19 @@ public class BioCNode {
     return Objects.hash(refid, role);
   }
 
-  @Override
-  public boolean equals(Object obj) {
-    if (obj == this) {
-      return true;
-    }
-    if (!(obj instanceof BioCNode)) {
-      return false;
-    }
-    BioCNode rhs = (BioCNode) obj;
-    return Objects.equals(role, rhs.role)
-        && Objects.equals(refid, rhs.refid);
+  /**
+   * Sets the id of an annotated object or another relation.
+   */
+  public void setRefid(String refid) {
+    this.refid = refid;
+  }
+
+  /**
+   * Set the role of how the referenced annotation or other relation
+   * participates in the current relation.
+   */
+  public void setRole(String role) {
+    this.role = role;
   }
 
   @Override
@@ -65,14 +84,6 @@ public class BioCNode {
         append("refid", refid).
         append("role", role).
         toString();
-  }
-
-  public void setRefid(String refid) {
-    this.refid = refid;
-  }
-
-  public void setRole(String role) {
-    this.role = role;
   }
 
 }

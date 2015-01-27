@@ -192,10 +192,7 @@ public class BioCAnnotation {
     }
 
     public Builder addLocation(int offset, int length) {
-      return addLocation(BioCLocation.newBuilder()
-          .setOffset(offset)
-          .setLength(length)
-          .build());
+      return addLocation(new BioCLocation(offset, length));
     }
 
     public Builder setText(String text) {

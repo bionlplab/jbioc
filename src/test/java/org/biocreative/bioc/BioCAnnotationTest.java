@@ -13,31 +13,19 @@ import com.google.common.testing.EqualsTester;
 
 public class BioCAnnotationTest {
 
-  private static final String ID = "1";
   private static final String TEXT = "ABC";
-
+  
+  private static final String ID = "1";
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
 
   private static final String ID_2 = "2";
-
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private static final BioCLocation LOC_1 = BioCLocation.newBuilder()
-      .setOffset(0)
-      .setLength(1)
-      .build();
-
-  private static final BioCLocation LOC_2 = BioCLocation.newBuilder()
-      .setOffset(1)
-      .setLength(2)
-      .build();
-
-  private static final BioCLocation LOC_3 = BioCLocation.newBuilder()
-      .setOffset(2)
-      .setLength(3)
-      .build();
+  private static final BioCLocation LOC_1 = new BioCLocation(0, 1);
+  private static final BioCLocation LOC_2 = new BioCLocation(1, 2);
+  private static final BioCLocation LOC_3 = new BioCLocation(2, 3);
 
   private BioCAnnotation.Builder baseBuilder;
 

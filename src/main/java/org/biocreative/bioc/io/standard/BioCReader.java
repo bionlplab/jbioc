@@ -262,13 +262,9 @@ class BioCReader implements Closeable {
               startElement.getAttributeByName(new QName("key")).getValue(),
               getText());
         } else if (localName.equals("location")) {
-          annBuilder.addLocation(BioCLocation
-              .newBuilder()
-              .setOffset(
-                  Integer.parseInt(getAttribute(startElement, "offset")))
-              .setLength(
-                  Integer.parseInt(getAttribute(startElement, "length")))
-              .build());
+          annBuilder.addLocation(new BioCLocation(
+              Integer.parseInt(getAttribute(startElement, "offset")),
+              Integer.parseInt(getAttribute(startElement, "length"))));
         }
       }
       else if (event.isEndElement()) {

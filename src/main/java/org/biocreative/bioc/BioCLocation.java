@@ -1,8 +1,9 @@
 package org.biocreative.bioc;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -12,32 +13,20 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 public class BioCLocation {
 
-  private int offset;
-  private int length;
+  private Integer offset;
+  private Integer length;
 
-  private BioCLocation() {
+  public BioCLocation() {
+    this(-1, -1);
   }
 
   /**
-   * Returns the length of the annotated text. While unlikely, this could be
-   * zero to describe an annotation that belongs between two characters.
+   * Constructs a newly <code>BioCLocation</code> object that has offset and
+   * length.
    */
-  public int getLength() {
-    return length;
-  }
-
-  /**
-   * Returns the type of annotation. Options include "token", "noun phrase",
-   * "gene", and "disease". The valid values should be described in the
-   * {@code key} file.
-   */
-  public int getOffset() {
-    return offset;
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(offset,length);
+  public BioCLocation(int offset, int length) {
+    this.offset = offset;
+    this.length = length;
   }
 
   @Override
@@ -53,6 +42,43 @@ public class BioCLocation {
         && Objects.equals(length, rhs.length);
   }
 
+  /**
+   * Returns the length of the annotated text. While unlikely, this could be
+   * zero to describe an annotation that belongs between two characters.
+   */
+  public int getLength() {
+    checkArgument(length > 0, "length has to be > 0");
+    return length;
+  }
+
+  /**
+   * Returns the offset of annotation.
+   */
+  public int getOffset() {
+    checkArgument(offset >= 0, "offset has to be >= 0");
+    return offset;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(offset, length);
+  }
+
+  /**
+   * Sets the length of the annotated text.
+   */
+  public void setLength(int length) {
+    this.length = length;
+  }
+
+  /**
+   * Sets the offset of annotation.
+   */
+  public void setOffset(int offset) {
+    checkArgument(offset >= 0, "offset has to be >= 0");
+    this.offset = offset;
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE).
@@ -61,57 +87,4 @@ public class BioCLocation {
         toString();
   }
 
-  /**
-   * Constructs a new builder. Use this to derive a new location.
-   */
-  public static Builder newBuilder() {
-    return new Builder();
-  }
-
-  /**
-   * Constructs a builder initialized with the current location. Use this to
-   * derive a new location from the current one.
-   */
-  public Builder toBuilder() {
-    return newBuilder()
-        .setLength(length)
-        .setOffset(offset);
-  }
-
-  public static class Builder {
-
-    private int offset;
-    private int length;
-
-    private Builder() {
-      offset = -1;
-      length = -1;
-    }
-
-    public Builder setLength(int length) {
-      Validate.isTrue(length > 0, "length has to be > 0");
-      this.length = length;
-      return this;
-    }
-
-    public Builder setOffset(int offset) {
-      Validate.isTrue(offset >= 0, "offset has to be >= 0");
-      this.offset = offset;
-      return this;
-    }
-
-    public BioCLocation build() {
-      checkArguments();
-
-      BioCLocation result = new BioCLocation();
-      result.offset = offset;
-      result.length = length;
-      return result;
-    }
-
-    private void checkArguments() {
-      Validate.isTrue(offset != -1, "offset has to be set");
-      Validate.isTrue(length != -1, "length has to be set");
-    }
-  }
 }

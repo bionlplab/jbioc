@@ -2,7 +2,6 @@ package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,32 +16,22 @@ public class BioCLocationTest {
   private static final int LENGTH_2 = 2;
   private static final int OFFSET_2 = 3;
 
-  private BioCLocation.Builder baseBuilder;
-
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Before
-  public void setUp() {
-    baseBuilder = BioCLocation.newBuilder()
-        .setOffset(OFFSET)
-        .setLength(LENGTH);
-  }
-
   @Test
   public void test_allFields() {
-    BioCLocation base = baseBuilder.build();
-
+    BioCLocation base = new BioCLocation(OFFSET, LENGTH);
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getLength(), LENGTH);
   }
 
   @Test
-  public void testEquals() {
-    BioCLocation base = baseBuilder.build();
-    BioCLocation baseCopy = baseBuilder.build();
-    BioCLocation diffOffset = baseBuilder.setOffset(OFFSET_2).build();
-    BioCLocation diffLength = baseBuilder.setLength(LENGTH_2).build();
+  public void test_equals() {
+    BioCLocation base = new BioCLocation(OFFSET, LENGTH);
+    BioCLocation baseCopy = new BioCLocation(OFFSET, LENGTH);
+    BioCLocation diffOffset = new BioCLocation(OFFSET_2, LENGTH);
+    BioCLocation diffLength = new BioCLocation(OFFSET, LENGTH_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -52,27 +41,17 @@ public class BioCLocationTest {
   }
 
   @Test
-  public void testBuilder_negLength() {
+  public void test_negLength() {
+    BioCLocation base = new BioCLocation(OFFSET, -1);
     thrown.expect(IllegalArgumentException.class);
-    BioCLocation.newBuilder().setLength(-1).build();
+    base.getLength();
   }
 
   @Test
-  public void testBuilder_negOffset() {
+  public void test_negOffset() {
+    BioCLocation base = new BioCLocation(-1, LENGTH);
     thrown.expect(IllegalArgumentException.class);
-    BioCLocation.newBuilder().setOffset(-1).build();
+    base.getOffset();
   }
 
-  @Test
-  public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
-    BioCLocation.newBuilder().build();
-  }
-
-  @Test
-  public void testToBuilder() {
-    BioCLocation expected = baseBuilder.build();
-    BioCLocation actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
-  }
 }
