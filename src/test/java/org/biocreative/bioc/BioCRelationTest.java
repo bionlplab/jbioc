@@ -14,27 +14,16 @@ import com.google.common.testing.EqualsTester;
 public class BioCRelationTest {
 
   private static final String ID = "1";
-
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
 
   private static final String ID_2 = "2";
-
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private static final BioCNode NODE_1 = BioCNode.newBuilder()
-      .setRefid("1")
-      .setRole("x")
-      .build();
-  private static final BioCNode NODE_2 = BioCNode.newBuilder()
-      .setRefid("2")
-      .setRole("y")
-      .build();
-  private static final BioCNode NODE_3 = BioCNode.newBuilder()
-      .setRefid("3")
-      .setRole("z")
-      .build();
+  private static final BioCNode NODE_1 = new BioCNode("1", "x");
+  private static final BioCNode NODE_2 = new BioCNode("2", "y");
+  private static final BioCNode NODE_3 = new BioCNode("3", "z");
 
   private BioCRelation.Builder baseBuilder;
 

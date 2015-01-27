@@ -180,11 +180,8 @@ public class BioCRelation {
       return this;
     }
 
-    public Builder addNode(String refId, String role) {
-      return addNode(BioCNode.newBuilder()
-          .setRefid(refId)
-          .setRole(role)
-          .build());
+    public Builder addNode(String refid, String role) {
+      return addNode(new BioCNode(refid, role));
     }
 
     public BioCRelation build() {

@@ -300,11 +300,8 @@ class BioCReader implements Closeable {
               getAttribute(startElement, "key"),
               getText());
         } else if (localName.equals("node")) {
-          BioCNode node = BioCNode
-              .newBuilder()
-              .setRefid(getAttribute(startElement, "refid"))
-              .setRole(getAttribute(startElement, "role"))
-              .build();
+          BioCNode node = new BioCNode(getAttribute(startElement, "refid"),
+              getAttribute(startElement, "role"));
           relBuilder.addNode(node);
         }
       }

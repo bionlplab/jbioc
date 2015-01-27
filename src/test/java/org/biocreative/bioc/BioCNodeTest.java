@@ -2,7 +2,6 @@ package org.biocreative.bioc;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -17,25 +16,16 @@ public class BioCNodeTest {
   private static final String REFID_2 = "2";
   private static final String ROLE_2 = "role2";
 
-  private BioCNode.Builder baseBuilder;
-
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
-  @Before
-  public void setUp() {
-    baseBuilder = BioCNode.newBuilder()
-        .setRefid(REFID)
-        .setRole(ROLE);
-  }
-
   @Test
-  public void testEquals() {
+  public void test_equals() {
 
-    BioCNode base = baseBuilder.build();
-    BioCNode baseCopy = baseBuilder.build();
-    BioCNode diffRefid = baseBuilder.setRefid(REFID_2).build();
-    BioCNode diffRole = baseBuilder.setRole(ROLE_2).build();
+    BioCNode base = new BioCNode(REFID, ROLE);
+    BioCNode baseCopy = new BioCNode(REFID, ROLE);
+    BioCNode diffRefid = new BioCNode(REFID_2, ROLE);
+    BioCNode diffRole = new BioCNode(REFID, ROLE_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -46,33 +36,22 @@ public class BioCNodeTest {
 
   @Test
   public void test_allFields() {
-    BioCNode base = baseBuilder.build();
+    BioCNode base = new BioCNode(REFID, ROLE);
     assertEquals(base.getRefid(), REFID);
     assertEquals(base.getRole(), ROLE);
   }
 
   @Test
-  public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
-    BioCNode.newBuilder().build();
-  }
-
-  @Test
-  public void testBuilder_nullRefid() {
+  public void test_nullRefid() {
+    BioCNode base = new BioCNode(null, ROLE);
     thrown.expect(NullPointerException.class);
-    baseBuilder.setRefid(null);
+    base.getRefid();
   }
 
   @Test
-  public void testBuilder_nullRole() {
+  public void test_nullRole() {
+    BioCNode base = new BioCNode(REFID, null);
     thrown.expect(NullPointerException.class);
-    baseBuilder.setRole(null);
-  }
-
-  @Test
-  public void testToBuilder() {
-    BioCNode expected = baseBuilder.build();
-    BioCNode actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
+    base.getRole();
   }
 }

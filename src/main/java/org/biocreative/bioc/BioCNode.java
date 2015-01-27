@@ -1,8 +1,9 @@
 package org.biocreative.bioc;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Objects;
 
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,7 +15,12 @@ public class BioCNode {
   private String refid;
   private String role;
 
-  private BioCNode() {
+  public BioCNode() {
+  }
+
+  public BioCNode(String refid, String role) {
+    this.refid = refid;
+    this.role = role;
   }
 
   /**
@@ -22,6 +28,7 @@ public class BioCNode {
    * will be one label for each node.
    */
   public String getRefid() {
+    checkNotNull(refid, "refid has to be set");
     return refid;
   }
 
@@ -30,12 +37,13 @@ public class BioCNode {
    * participates in the current relation.
    */
   public String getRole() {
+    checkNotNull(role, "role has to be set");
     return role;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(refid,role);
+    return Objects.hash(refid, role);
   }
 
   @Override
@@ -59,55 +67,12 @@ public class BioCNode {
         toString();
   }
 
-  /**
-   * Constructs a new builder. Use this to derive a new node.
-   */
-  public static Builder newBuilder() {
-    return new Builder();
+  public void setRefid(String refid) {
+    this.refid = refid;
   }
 
-  /**
-   * Constructs a builder initialized with the current node. Use this to derive
-   * a new node from the current one.
-   */
-  public Builder toBuilder() {
-    return newBuilder()
-        .setRefid(refid)
-        .setRole(role);
+  public void setRole(String role) {
+    this.role = role;
   }
 
-  public static class Builder {
-
-    private String refid;
-    private String role;
-
-    private Builder() {
-    }
-
-    public Builder setRefid(String refid) {
-      Validate.notNull(refid, "refid cannot be null");
-      this.refid = refid;
-      return this;
-    }
-
-    public Builder setRole(String role) {
-      Validate.notNull(role, "role cannot be null");
-      this.role = role;
-      return this;
-    }
-
-    public BioCNode build() {
-      checkArguments();
-
-      BioCNode result = new BioCNode();
-      result.refid = refid;
-      result.role = role;
-      return result;
-    }
-
-    private void checkArguments() {
-      Validate.isTrue(refid != null, "refid has to be set");
-      Validate.isTrue(role != null, "role has to be set");
-    }
-  }
 }
