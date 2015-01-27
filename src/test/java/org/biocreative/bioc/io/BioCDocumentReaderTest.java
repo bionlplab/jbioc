@@ -46,14 +46,13 @@ public class BioCDocumentReaderTest {
     assertEquals(collection.getSource(), "PubMed");
     assertEquals(collection.getKey(), "PMID-8557975-simplified-sentences.key");
 
-    BioCCollection.Builder collectionBuilder = collection.toBuilder();
+    collection = new BioCCollection();
 
     BioCDocument doc = null;
     while ((doc = reader.readDocument()) != null) {
 //      System.out.println(doc);
-      collectionBuilder.addDocument(doc);
+      collection.addDocument(doc);
     }
-    collection = collectionBuilder.build();
 
     assertEquals(collection.getDocmentCount(), 1);
 

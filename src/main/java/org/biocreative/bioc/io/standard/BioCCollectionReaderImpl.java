@@ -30,7 +30,7 @@ class BioCCollectionReaderImpl implements
       throws FactoryConfigurationError, XMLStreamException {
     reader = new BioCReader(in, Level.COLLECTION_LEVEL);
     reader.read();
-    collection = reader.collectionBuilder.build();
+    collection = reader.collection;
   }
 
   BioCCollectionReaderImpl(File inputFile)

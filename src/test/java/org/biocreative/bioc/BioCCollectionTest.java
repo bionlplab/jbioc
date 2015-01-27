@@ -23,28 +23,35 @@ public class BioCCollectionTest {
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private BioCCollection.Builder baseBuilder;
+  private BioCCollection base;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    baseBuilder = BioCCollection.newBuilder()
-        .setKey(KEY)
-        .setSource(SOURCE)
-        .setDate(DATE)
-        .putInfon(KEY, VALUE);
+    base = new BioCCollection();
+    base.setKey(KEY);
+    base.setSource(SOURCE);
+    base.setDate(DATE);
+    base.putInfon(KEY, VALUE);
   }
 
   @Test
-  public void testEquals() {
-    BioCCollection base = baseBuilder.build();
-    BioCCollection baseCopy = baseBuilder.build();
-    BioCCollection diffSource = baseBuilder.setSource(SOURCE_2).build();
-    BioCCollection diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
-    BioCCollection diffDate = baseBuilder.setDate(DATE_2).build();
-    BioCCollection diffKey = baseBuilder.setKey(KEY_2).build();
+  public void test_equals() {
+    BioCCollection baseCopy = new BioCCollection(base);
+
+    BioCCollection diffSource = new BioCCollection(base);
+    diffSource.setSource(SOURCE_2);
+
+    BioCCollection diffInfon = new BioCCollection(base);
+    diffInfon.putInfon(KEY_2, VALUE_2);
+
+    BioCCollection diffDate = new BioCCollection(base);
+    diffDate.setDate(DATE_2);
+
+    BioCCollection diffKey = new BioCCollection(base);
+    diffKey.setKey(KEY_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -57,7 +64,6 @@ public class BioCCollectionTest {
 
   @Test
   public void test_allFields() {
-    BioCCollection base = baseBuilder.build();
     assertEquals(base.getSource(), SOURCE);
     assertEquals(base.getInfon(KEY).get(), VALUE);
     assertEquals(base.getKey(), KEY);
@@ -65,39 +71,34 @@ public class BioCCollectionTest {
   }
 
   @Test
-  public void testBuilder_nullSource() {
+  public void test_nullSource() {
+    base.setSource(null);
     thrown.expect(NullPointerException.class);
-    baseBuilder.setSource(null);
+    base.getSource();
   }
 
   @Test
-  public void testBuilder_nullDate() {
+  public void test_nullDate() {
+    base.setDate(null);
     thrown.expect(NullPointerException.class);
-    baseBuilder.setDate(null);
+    base.getDate();
   }
 
   @Test
-  public void testBuilder_nullKey() {
+  public void test_nullKey() {
+    base.setKey(null);
     thrown.expect(NullPointerException.class);
-    baseBuilder.setKey(null);
+    base.getKey();
   }
 
   @Test
-  public void testGetInfon_nullKey() {
-    BioCCollection base = baseBuilder.build();
+  public void test_getInfon_nullKey() {
     assertFalse(base.getInfon(null).isPresent());
   }
 
   @Test
-  public void testBuilder_nullDocument() {
+  public void test_nullDocument() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.addDocument(null);
-  }
-  
-  @Test
-  public void testToBuilder() {
-    BioCCollection expected = baseBuilder.build();
-    BioCCollection actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
+    base.addDocument(null);
   }
 }

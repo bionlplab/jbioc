@@ -117,7 +117,7 @@ public class BioCAnnotationTest {
   }
 
   @Test
-  public void testGetInfon_nullKey() {
+  public void test_getInfon_nullKey() {
     assertFalse(base.getInfon(null).isPresent());
   }
 

@@ -34,7 +34,7 @@ class BioCReader implements Closeable {
     COLLECTION_LEVEL, DOCUMENT_LEVEL, PASSAGE_LEVEL, SENTENCE_LEVEL
   }
 
-  BioCCollection.Builder collectionBuilder;
+  BioCCollection collection;
   BioCDocument document;
   BioCPassage passage;
   BioCSentence sentence;
@@ -84,7 +84,7 @@ class BioCReader implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("collection")) {
-            collectionBuilder = BioCCollection.newBuilder();
+            collection = new BioCCollection();
             state = 1;
           }
         }
@@ -98,13 +98,13 @@ class BioCReader implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("source")) {
-            collectionBuilder.setSource(getText());
+            collection.setSource(getText());
           } else if (localName.equals("date")) {
-            collectionBuilder.setDate(getText());
+            collection.setDate(getText());
           } else if (localName.equals("key")) {
-            collectionBuilder.setKey(getText());
+            collection.setKey(getText());
           } else if (localName.equals("infon")) {
-            collectionBuilder.putInfon(
+            collection.putInfon(
                 getAttribute(startElement, "key"),
                 getText());
           } else if (localName.equals("document")) {
@@ -156,7 +156,7 @@ class BioCReader implements Closeable {
             if (level == Level.DOCUMENT_LEVEL) {
               return document;
             } else if (document != null) {
-              collectionBuilder.addDocument(document);
+              collection.addDocument(document);
             }
           }
           break;
@@ -235,7 +235,7 @@ class BioCReader implements Closeable {
         }
       }
     }
-    return collectionBuilder.build();
+    return collection;
   }
 
   private String getText()

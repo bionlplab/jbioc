@@ -38,12 +38,11 @@ public class BioCPassageIteratorTest {
           + "Active Raf-1 activates MEK1."
           + "MEK1 in turn phosphorylates ERK1.");
 
-  private static final BioCCollection COLLECTION = BioCCollection.newBuilder()
-      .setDate(DATE)
-      .setKey(KEY)
-      .setSource(SOURCE)
-      .addDocument(createDocument("1", EXPECTED_PASSAGE_0, EXPECTED_PASSAGE_1))
-      .build();
+  private static final BioCCollection COLLECTION = createCollection(
+      DATE,
+      KEY,
+      SOURCE,
+      createDocument("1", EXPECTED_PASSAGE_0, EXPECTED_PASSAGE_1));
 
   @Test
   public void test_success()
@@ -66,13 +65,26 @@ public class BioCPassageIteratorTest {
 
   @Test
   public void test_empty() {
-    BioCCollection collection = BioCCollection.newBuilder()
-        .setDate(DATE)
-        .setKey(KEY)
-        .setSource(SOURCE)
-        .build();
+    BioCCollection collection = new BioCCollection();
+    collection.setDate(DATE);
+    collection.setKey(KEY);
+    collection.setSource(SOURCE);
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  private static BioCCollection createCollection(String date,
+      String key,
+      String source,
+      BioCDocument... documents) {
+    BioCCollection collection = new BioCCollection();
+    collection.setDate(date);
+    collection.setKey(key);
+    collection.setSource(source);
+    for (BioCDocument document : documents) {
+      collection.addDocument(document);
+    }
+    return collection;
   }
 
   private static BioCDocument createDocument(String id,

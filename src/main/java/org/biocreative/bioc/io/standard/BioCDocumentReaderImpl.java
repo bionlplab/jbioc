@@ -61,7 +61,7 @@ class BioCDocumentReaderImpl implements BioCDocumentReader {
   @Override
   public BioCCollection readCollectionInfo()
       throws XMLStreamException {
-    return reader.collectionBuilder.build();
+    return reader.collection;
   }
 
   @Override

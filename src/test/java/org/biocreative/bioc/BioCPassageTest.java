@@ -67,7 +67,7 @@ public class BioCPassageTest {
   }
 
   @Test
-  public void testBuilder_negOffset() {
+  public void test_negOffset() {
     base.setOffset(-1);
     thrown.expect(IllegalArgumentException.class);
     base.getOffset();
