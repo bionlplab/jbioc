@@ -1,6 +1,6 @@
 package org.biocreative.bioc.io;
 
-import static org.biocreative.bioc.testing.BioCAssert.assertXmlEquivalentTo;
+import static org.biocreative.bioc.testing.BioCAssert.assertEquivalentTo;
 
 import java.io.File;
 import java.io.FileReader;
