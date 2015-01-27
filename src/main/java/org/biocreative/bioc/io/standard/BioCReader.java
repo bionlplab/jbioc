@@ -35,7 +35,7 @@ class BioCReader implements Closeable {
   }
 
   BioCCollection.Builder collectionBuilder;
-  BioCDocument.Builder documentBuilder;
+  BioCDocument document;
   BioCPassage passage;
   BioCSentence sentence;
   XMLEventReader reader;
@@ -109,7 +109,7 @@ class BioCReader implements Closeable {
                 getText());
           } else if (localName.equals("document")) {
             // read document
-            documentBuilder = BioCDocument.newBuilder();
+            document = new BioCDocument();
             state = 2;
           } else {
             ;
@@ -121,7 +121,7 @@ class BioCReader implements Closeable {
           if (localName.equals("collection")) {
             sentence = null;
             passage = null;
-            documentBuilder = null;
+            document = null;
             state = 0;
           }
           break;
@@ -132,9 +132,9 @@ class BioCReader implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("id")) {
-            documentBuilder.setID(getText());
+            document.setID(getText());
           } else if (localName.equals("infon")) {
-            documentBuilder.putInfon(
+            document.putInfon(
                 getAttribute(startElement, "key"),
                 getText());
           } else if (localName.equals("passage")) {
@@ -143,7 +143,7 @@ class BioCReader implements Closeable {
             state = 3;
           } else if (localName.equals("relation")) {
             // read relation
-            documentBuilder.addRelation(readRelation(startElement));
+            document.addRelation(readRelation(startElement));
           } else {
             ;
           }
@@ -154,9 +154,9 @@ class BioCReader implements Closeable {
           if (localName.equals("document")) {
             state = 1;
             if (level == Level.DOCUMENT_LEVEL) {
-              return documentBuilder.build();
-            } else if (documentBuilder != null) {
-              collectionBuilder.addDocument(documentBuilder.build());
+              return document;
+            } else if (document != null) {
+              collectionBuilder.addDocument(document);
             }
           }
           break;
@@ -194,7 +194,7 @@ class BioCReader implements Closeable {
             if (level == Level.PASSAGE_LEVEL) {
               return passage;
             } else if (passage != null) {
-              documentBuilder.addPassage(passage);
+              document.addPassage(passage);
             }
           }
           break;

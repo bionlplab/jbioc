@@ -34,6 +34,7 @@ public class BioCPassage {
 
   public BioCPassage() {
     offset = -1;
+    text = null;
     infons = Maps.newHashMap();
     annotations = Lists.newArrayList();
     relations = Lists.newArrayList();

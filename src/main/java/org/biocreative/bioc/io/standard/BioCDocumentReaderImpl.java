@@ -49,8 +49,8 @@ class BioCDocumentReaderImpl implements BioCDocumentReader {
   public BioCDocument readDocument()
       throws XMLStreamException {
     
-    if (reader.documentBuilder != null) {
-      BioCDocument thisDocument = reader.documentBuilder.build();
+    if (reader.document != null) {
+      BioCDocument thisDocument = reader.document;
       reader.read();
       return thisDocument;
     } else {
@@ -70,15 +70,15 @@ class BioCDocumentReaderImpl implements BioCDocumentReader {
 
       @Override
       public boolean hasNext() {
-        return reader.documentBuilder != null;
+        return reader.document != null;
       }
 
       @Override
       public BioCDocument next() {
-        BioCDocument thisDocument = reader.documentBuilder.build();
+        BioCDocument thisDocument = reader.document;
         reader.sentence = null;
         reader.passage = null;
-        reader.documentBuilder = null;
+        reader.document = null;
         try {
           reader.read();
         } catch (XMLStreamException e) {

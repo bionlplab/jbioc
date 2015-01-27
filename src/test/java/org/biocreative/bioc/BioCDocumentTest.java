@@ -16,29 +16,32 @@ public class BioCDocumentTest {
   private static final String ID = "1";
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
-  
+
   private static final String ID_2 = "2";
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
 
-  private BioCDocument.Builder baseBuilder;
+  private BioCDocument base;
 
   @Rule
   public ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() {
-    baseBuilder = BioCDocument.newBuilder()
-        .setID(ID)
-        .putInfon(KEY, VALUE);
+    base = new BioCDocument();
+    base.setID(ID);
+    base.putInfon(KEY, VALUE);
   }
 
   @Test
-  public void testEquals() {
-    BioCDocument base = baseBuilder.build();
-    BioCDocument baseCopy = baseBuilder.build();
-    BioCDocument diffId = baseBuilder.setID(ID_2).build();
-    BioCDocument diffInfon = baseBuilder.putInfon(KEY_2, VALUE_2).build();
+  public void test_equals() {
+    BioCDocument baseCopy = new BioCDocument(base);
+    
+    BioCDocument diffId = new BioCDocument(base);
+    diffId.setID(ID_2);
+    
+    BioCDocument diffInfon = new BioCDocument(base);
+    diffInfon.putInfon(KEY_2, VALUE_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
@@ -49,7 +52,6 @@ public class BioCDocumentTest {
 
   @Test
   public void test_allFields() {
-    BioCDocument base = baseBuilder.build();
     assertEquals(base.getID(), ID);
     assertEquals(base.getInfon(KEY).get(), VALUE);
     assertTrue(base.getRelations().isEmpty());
@@ -57,46 +59,33 @@ public class BioCDocumentTest {
   }
 
   @Test
-  public void testBuilder_empty() {
-    thrown.expect(IllegalArgumentException.class);
-    BioCDocument.newBuilder().build();
+  public void test_nullID() {
+    base.setID(null);
+    thrown.expect(NullPointerException.class);
+    base.getID();
   }
 
   @Test
-  public void testBuilder_nullID() {
+  public void test_nullPassage() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.setID(null);
+    base.addPassage(null);
   }
-  
+
   @Test
-  public void testBuilder_nullPassage() {
+  public void test_nullRelation() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.addPassage(null);
+    base.addRelation(null);
   }
-  
+
   @Test
-  public void testBuilder_nullRelation() {
+  public void test_nullAnnotation() {
     thrown.expect(NullPointerException.class);
-    baseBuilder.addRelation(null);
-  }
-  
-  @Test
-  public void testBuilder_nullAnnotation() {
-    thrown.expect(NullPointerException.class);
-    baseBuilder.addAnnotation(null);
-  }
-  
-  @Test
-  public void testToBuilder() {
-    BioCDocument expected = baseBuilder.build();
-    BioCDocument actual = expected.toBuilder().build();
-    assertEquals(expected, actual);
+    base.addAnnotation(null);
   }
 
   @Test
   public void testGetInfon_nullKey() {
-    BioCDocument base = baseBuilder.build();
     assertFalse(base.getInfon(null).isPresent());
   }
-  
+
 }

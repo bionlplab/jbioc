@@ -35,6 +35,7 @@ public class BioCSentence {
 
   public BioCSentence() {
     offset = -1;
+    text = null;
     infons = Maps.newHashMap();
     annotations = Lists.newArrayList();
     relations = Lists.newArrayList();

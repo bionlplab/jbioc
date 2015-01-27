@@ -42,11 +42,7 @@ public class BioCPassageIteratorTest {
       .setDate(DATE)
       .setKey(KEY)
       .setSource(SOURCE)
-      .addDocument(BioCDocument.newBuilder()
-          .setID("1")
-          .addPassage(EXPECTED_PASSAGE_0)
-          .addPassage(EXPECTED_PASSAGE_1)
-          .build())
+      .addDocument(createDocument("1", EXPECTED_PASSAGE_0, EXPECTED_PASSAGE_1))
       .build();
 
   @Test
@@ -77,6 +73,16 @@ public class BioCPassageIteratorTest {
         .build();
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  private static BioCDocument createDocument(String id,
+      BioCPassage... passages) {
+    BioCDocument document = new BioCDocument();
+    document.setID(id);
+    for (BioCPassage passage : passages) {
+      document.addPassage(passage);
+    }
+    return document;
   }
 
   private static BioCPassage createPassage(int offset, String text) {

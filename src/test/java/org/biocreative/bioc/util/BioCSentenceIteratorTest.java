@@ -49,17 +49,9 @@ public class BioCSentenceIteratorTest {
       .setKey(KEY)
       .setSource(SOURCE)
       .addDocument(
-          BioCDocument
-              .newBuilder()
-              .setID("1")
-              .addPassage(createPassage(0, EXPECTED_SEN_0))
-              .addPassage(
-                  createPassage(
-                      1,
-                      EXPECTED_SEN_1,
-                      EXPECTED_SEN_2,
-                      EXPECTED_SEN_3))
-              .build())
+          createDocument("1",
+              createPassage(0, EXPECTED_SEN_0),
+              createPassage(1, EXPECTED_SEN_1, EXPECTED_SEN_2, EXPECTED_SEN_3)))
       .build();
 
   @Test
@@ -91,6 +83,16 @@ public class BioCSentenceIteratorTest {
         .build();
     BioCSentenceIterator itr = new BioCSentenceIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  private static BioCDocument createDocument(String id,
+      BioCPassage... passages) {
+    BioCDocument document = new BioCDocument();
+    document.setID(id);
+    for (BioCPassage passage : passages) {
+      document.addPassage(passage);
+    }
+    return document;
   }
 
   private static BioCPassage createPassage(int offset,
