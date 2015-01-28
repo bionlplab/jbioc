@@ -1,27 +1,33 @@
----------------------------------------------------------------------------
-|*|  PUBLIC DOMAIN NOTICE                                                        
-|*| 
-|*| This work is a "United States Government Work" under the terms of the
-|*| United States Copyright Act. It was written as part of the authors'
-|*| official duties as a United States Government employee and thus cannot
-|*| be copyrighted within the United States. The data is freely available
-|*| to the public for use. The National Library of Medicine and the U.S.
-|*| Government have not placed any restriction on its use or reproduction
-|*|                                                                             
-|*| Although all reasonable efforts have been taken to ensure the accuracy
-|*| and reliability of the data and its source code, the NLM and the
-|*| U.S. Government do not and cannot warrant the performance or results
-|*| that may be obtained by using it. The NLM and the U.S. Government
-|*| disclaim all warranties, express or implied, including warranties of
-|*| performance, merchantability or fitness for any particular purpose.
-|*|                                                                              
-|*| Please cite the authors in any work or product based on this material:
-|*| 
-|*| BioC: A Minimalist Approach to Interoperability for Biomedical Text
-|*| Processing
-|*| Donald C. Comeau, Rezarta Islamaj Dogan, Paolo Ciccarese, Kevin
-|*| Bretonnel Cohen, Martin Krallinger, Florian Leitner, Zhiyong Lu, Yifan
-|*| Peng, Fabio Rinaldi, Manabu Torii, Alfonso Valencia, Karin Verspoor,
-|*| Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, submitted,
-|*| DATABASE, 2013.
----------------------------------------------------------------------------
+Copyright (c) 2015, Yifan Peng
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice, this
+  list of conditions and the following disclaimer in the documentation and/or
+  other materials provided with the distribution.
+
+* Neither the name of the {organization} nor the names of its
+  contributors may be used to endorse or promote products derived from
+  this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+BioC: A Minimalist Approach to Interoperability for Biomedical Text Processing
+Donald C. Comeau, Rezarta Islamaj Dogan, Paolo Ciccarese, Kevin
+Bretonnel Cohen, Martin Krallinger, Florian Leitner, Zhiyong Lu, Yifan
+Peng, Fabio Rinaldi, Manabu Torii, Alfonso Valencia, Karin Verspoor,
+Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, DATABASE, 2013.

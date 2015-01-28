@@ -1,6 +1,6 @@
-# Java implementation of BioC
+# Another Java implementation of BioC
 
-Data structures and code to read / write BioC XML.
+Data structures and code to read/write BioC XML.
 
 ## BIOC
 
@@ -13,43 +13,21 @@ GOALS are to facilitate:
 *  data exchange 
 *  data and tool reuse
 
->  PUBLIC DOMAIN NOTICE                                                        
-> 
-> This work is a "United States Government Work" under the terms of the
-> United States Copyright Act. It was written as part of the authors'
-> official duties as a United States Government employee and thus cannot
-> be copyrighted within the United States. The data is freely available
-> to the public for use. The National Library of Medicine and the U.S.
-> Government have not placed any restriction on its use or reproduction
->                                                                             
-> Although all reasonable efforts have been taken to ensure the accuracy
-> and reliability of the data and its source code, the NLM and the
-> U.S. Government do not and cannot warrant the performance or results
-> that may be obtained by using it. The NLM and the U.S. Government
-> disclaim all warranties, express or implied, including warranties of
-> performance, merchantability or fitness for any particular purpose.
->                                                                              
-> Please cite the authors in any work or product based on this material:
-> 
-> BioC: A Minimalist Approach to Interoperability for Biomedical Text
-> Processing
-> Donald C. Comeau, Rezarta Islamaj Dogan, Paolo Ciccarese, Kevin
-> Bretonnel Cohen, Martin Krallinger, Florian Leitner, Zhiyong Lu, Yifan
-> Peng, Fabio Rinaldi, Manabu Torii, Alfonso Valencia, Karin Verspoor,
-> Thomas C. Wiegers, Cathy H. Wu, and W. John Wilbur, DATABASE, 2013.
-
 ## DEVELOPERS
 
 * Yifan Peng (yfpeng@udel.edu)
-* Don Comeau (comeau@ncbi.nlm.nih.gov)
-* Rezarta Islamaj Dogan (Rezarta.Islamaj@nih.gov)
+
+## Acknowledgment
+
+* Don Comeau
+* Rezarta Islamaj Dogan
 * Haibin Liu 
 * Thomas C. Wiegers
-* John Wilbur (wilbur@ncbi.nlm.nih.gov)
+* John Wilbur
 
 ## WEBPAGE
 
-A BioC webpage is available with all up-to-date instructions, code, and
+The official BioC webpage is available with all up-to-date instructions, code, and
 corpora in the BioC format, and other research on, based on and related to
 BioC. 
 

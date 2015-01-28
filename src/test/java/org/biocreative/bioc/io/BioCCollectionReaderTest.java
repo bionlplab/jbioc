@@ -11,6 +11,7 @@ import javax.xml.stream.XMLStreamException;
 import org.biocreative.bioc.BioCCollection;
 import org.biocreative.bioc.BioCDocument;
 import org.biocreative.bioc.BioCPassage;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -69,6 +70,7 @@ public class BioCCollectionReaderTest {
   }
 
   @Test
+  @Ignore
   public void test_dtd()
       throws Exception {
     BioCCollectionReader reader = new BioCCollectionReader(

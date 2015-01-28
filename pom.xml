@@ -4,45 +4,24 @@
   <groupId>org.biocreative.bioc</groupId>
   <artifactId>bioc-core</artifactId>
   <packaging>jar</packaging>
-  <version>2.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <name>bioc-core</name>
-  <url>http://bioc.sourceforge.net/</url>
   <description>The bioc main core project.</description>
   <licenses>
     <license>
-      <name>United States Government Work</name>
-      <url>http://www.copyright.gov/title17/</url>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
   <scm>
-    <url>http://git.code.sf.net/p/bioc/code</url>
-    <connection>http://git.code.sf.net/p/bioc/code</connection>
+    <url>https://github.com/yfpeng/bioc-core</url>
+    <connection>https://github.com/yfpeng/bioc-core</connection>
   </scm>
   <developers>
     <developer>
-      <name>Don Comeau</name>
-      <email>comeau@ncbi.nlm.nih.gov</email>
-    </developer>
-    <developer>
-      <name>Rezarta Islamaj Dogan</name>
-      <email>islamaj@ncbi.nlm.nih.gov</email>
-    </developer>
-    <developer>
-      <name>Haibin Liu</name>
-      <email>liuh11@ncbi.nlm.nih.gov</email>
-    </developer>
-    <developer>
       <name>Yifan Peng</name>
       <email>yfpeng@udel.edu</email>
-    </developer>
-    <developer>
-      <name>Thomas C. Wiegers</name>
-      <email>twiegers@mdibl.org</email>
-    </developer>
-    <developer>
-      <name>John Wilbur</name>
-      <email>wilbur@ncbi.nlm.nih.gov</email>
     </developer>
   </developers>
   <properties>
@@ -55,32 +34,7 @@
       <url>https://raw.github.com/synergian/wagon-git/releases</url>
     </pluginRepository>
   </pluginRepositories>
-  <repositories>
-    <repository>
-      <id>bitbucket.repo</id>
-      <name>BioC</name>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <url>https://api.bitbucket.org/1.0/repositories/yfpeng/bioc/raw/master</url>
-    </repository>
-  </repositories>
   <build>
-    <sourceDirectory>src/main/java</sourceDirectory>
-    <scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
-    <testSourceDirectory>src/test/java</testSourceDirectory>
-    <testOutputDirectory>target/test-classes</testOutputDirectory>
-    <outputDirectory>target/classes</outputDirectory>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-      </testResource>
-    </testResources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -88,6 +42,13 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/mvn-repo</altDeploymentRepository>
         </configuration>
       </plugin>
       <plugin>
@@ -100,6 +61,32 @@
             <goals>
               <goal>jar</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.10-SNAPSHOT</version>
+        <configuration>
+          <message>Maven artifacts for ${project.version}</message>
+          <noJekyll>true</noJekyll>
+          <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
+          <branch>refs/heads/mvn-repo</branch>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <repositoryName>bioc-core</repositoryName>
+          <repositoryOwner>yfpeng</repositoryOwner>
+          <server>github</server>
+        </configuration>
+        <executions>
+          <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>deploy</phase>
           </execution>
         </executions>
       </plugin>
@@ -157,9 +144,9 @@
       <version>RELEASE</version>
     </dependency>
     <dependency>
-      <groupId>org.xmlmatchers</groupId>
-      <artifactId>xml-matchers</artifactId>
-      <version>1.0-RC1</version>
+      <groupId>args4j</groupId>
+      <artifactId>args4j</artifactId>
+      <version>RELEASE</version>
     </dependency>
     <dependency>
       <groupId>net.java.dev.stax-utils</groupId>
@@ -167,26 +154,21 @@
       <version>20040917</version>
     </dependency>
     <dependency>
+      <groupId>org.xmlmatchers</groupId>
+      <artifactId>xml-matchers</artifactId>
+      <version>1.0-RC1</version>
+    </dependency>
+    <dependency>
       <groupId>xml-apis</groupId>
       <artifactId>xml-apis</artifactId>
       <version>1.4.01</version>
     </dependency>
-    <dependency>
-      <groupId>org.codehaus.woodstox</groupId>
-      <artifactId>woodstox-core-asl</artifactId>
-      <version>4.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>args4j</groupId>
-      <artifactId>args4j</artifactId>
-      <version>RELEASE</version>
-    </dependency>
   </dependencies>
   <distributionManagement>
     <repository>
-      <id>bitbucket.repo</id>
-      <name>BioC</name>
-      <url>git:releases://git@bitbucket.org:yfpeng/bioc.git</url>
+      <id>internal.repo</id>
+      <name>Temporary Staging Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
     </repository>
   </distributionManagement>
 </project>
