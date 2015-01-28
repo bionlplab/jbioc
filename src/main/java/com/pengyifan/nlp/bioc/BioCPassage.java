@@ -3,6 +3,7 @@ package com.pengyifan.nlp.bioc;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -29,15 +30,15 @@ public class BioCPassage {
   private String text;
   private Map<String, String> infons;
   private List<BioCSentence> sentences;
-  private List<BioCAnnotation> annotations;
-  private List<BioCRelation> relations;
+  private Map<String, BioCAnnotation> annotations;
+  private Map<String, BioCRelation> relations;
 
   public BioCPassage() {
     offset = -1;
     text = null;
     infons = Maps.newHashMap();
-    annotations = Lists.newArrayList();
-    relations = Lists.newArrayList();
+    annotations = Maps.newHashMap();
+    relations = Maps.newHashMap();
     sentences = Lists.newArrayList();
   }
 
@@ -48,34 +49,28 @@ public class BioCPassage {
   public BioCPassage(BioCPassage passage) {
     this();
     setOffset(passage.offset);
-    setAnnotations(passage.annotations);
     setInfons(passage.infons);
-    setRelations(passage.relations);
     setSentences(passage.sentences);
     setText(passage.text);
+    annotations.putAll(passage.annotations);
+    relations.putAll(passage.relations);
   }
 
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
-    this.annotations.add(annotation);
+    checkArgument(annotations.containsKey(annotation.getID()));
+    this.annotations.put(annotation.getID(), annotation);
   }
 
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
-    this.relations.add(relation);
+    checkArgument(relations.containsKey(relation.getID()));
+    this.relations.put(relation.getID(), relation);
   }
 
   public void addSentence(BioCSentence sentence) {
     checkNotNull(sentence, "sentence cannot be null");
     this.sentences.add(sentence);
-  }
-
-  /**
-   * Returns a unmodifiable iterator over the annotations in this passage in
-   * proper sequence.
-   */
-  public Iterator<BioCAnnotation> annotationIterator() {
-    return annotations.iterator();
   }
 
   public void clearAnnotations() {
@@ -114,22 +109,15 @@ public class BioCPassage {
   /**
    * Returns the annotation at the specified position in this passage.
    */
-  public BioCAnnotation getAnnotation(int index) {
-    return annotations.get(index);
-  }
-
-  /**
-   * Returns the number of annotations in this passage.
-   */
-  public int getAnnotationCount() {
-    return annotations.size();
+  public BioCAnnotation getAnnotation(String annotationID) {
+    return annotations.get(annotationID);
   }
 
   /**
    * Annotations on the text of the passage.
    */
-  public List<BioCAnnotation> getAnnotations() {
-    return annotations;
+  public Collection<BioCAnnotation> getAnnotations() {
+    return annotations.values();
   }
 
   /**
@@ -166,23 +154,16 @@ public class BioCPassage {
   /**
    * Returns the relation at the specified position in this passage.
    */
-  public BioCRelation getRelation(int index) {
-    return relations.get(index);
-  }
-
-  /**
-   * Returns the number of relations in this passage.
-   */
-  public int getRelationCount() {
-    return relations.size();
+  public BioCRelation getRelation(String relationID) {
+    return relations.get(relationID);
   }
 
   /**
    * Relations between the annotations and possibly other relations on the text
    * of the passage.
    */
-  public List<BioCRelation> getRelations() {
-    return relations;
+  public Collection<BioCRelation> getRelations() {
+    return relations.values();
   }
 
   /**
@@ -223,14 +204,6 @@ public class BioCPassage {
     infons.put(key, value);
   }
 
-  /**
-   * Returns a unmodifiable iterator over the relations in this passage in
-   * proper sequence.
-   */
-  public Iterator<BioCRelation> relationIterator() {
-    return relations.iterator();
-  }
-
   public void removeInfon(String key) {
     infons.remove(key);
   }
@@ -242,12 +215,7 @@ public class BioCPassage {
   public Iterator<BioCSentence> sentenceIterator() {
     return sentences.iterator();
   }
-
-  public void setAnnotations(List<BioCAnnotation> annotations) {
-    clearAnnotations();
-    this.annotations.addAll(annotations);
-  }
-
+  
   public void setInfons(Map<String, String> infons) {
     clearInfons();
     this.infons.putAll(infons);
@@ -255,10 +223,6 @@ public class BioCPassage {
 
   public void setOffset(int offset) {
     this.offset = offset;
-  }
-
-  public void setRelations(List<BioCRelation> relations) {
-    this.relations.addAll(relations);
   }
 
   public void setSentences(List<BioCSentence> sentences) {
