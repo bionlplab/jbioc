@@ -38,6 +38,9 @@ public class BioCAnnotation {
     setLocations(annotation.locations);
   }
 
+  /**
+   * Add the location at the specified position in this annotation.
+   */
   public void addLocation(BioCLocation location) {
     checkNotNull(location, "location cannot be null");
     locations.add(location);
@@ -157,6 +160,9 @@ public class BioCAnnotation {
     this.locations.addAll(locations);
   }
 
+  /**
+   * Sets the original text of the annotation
+   */
   public void setText(String text) {
     this.text = text;
   }
