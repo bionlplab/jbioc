@@ -16,25 +16,52 @@ import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.io.BioCReader.Level;
 
 /**
- * The class allows forward, read-only access to BioC file. It is designed to
- * read the entire BioC file into one collection.
+ * Reads the entire BioC file into one collection.
+ * 
+ * @since 1.0.0
+ * @see BioCDocumentReader
+ * @author Yifan Peng
  */
 public class BioCCollectionReader implements Closeable {
 
   private BioCCollection collection;
   private BioCReader reader;
 
-  public BioCCollectionReader(File inputFile)
+  /**
+   * Creates a new BioCCollectionReader, given the File to read from.
+   * 
+   * @param file the File to read from
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws FileNotFoundException if the file does not exist, is a directory
+   *           rather than a regular file, or for some other reason cannot be
+   *           opened for reading.
+   */
+  public BioCCollectionReader(File file)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
-    this(new FileReader(inputFile));
+    this(new FileReader(file));
   }
 
-  public BioCCollectionReader(InputStream inputStream)
+  /**
+   * Creates an BioCCollectionReader that uses the input stream in.
+   * 
+   * @param in an InputStream
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   */
+  public BioCCollectionReader(InputStream in)
       throws FactoryConfigurationError, XMLStreamException {
-    this(new InputStreamReader(inputStream));
+    this(new InputStreamReader(in));
   }
 
+  /**
+   * Creates an BioCCollectionReader that uses the reader in.
+   * 
+   * @param in a Reader
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   */
   public BioCCollectionReader(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
     reader = new BioCReader(in, Level.COLLECTION_LEVEL);
@@ -42,12 +69,28 @@ public class BioCCollectionReader implements Closeable {
     collection = reader.collection;
   }
 
-  public BioCCollectionReader(String inputFilename)
+  /**
+   * Creates a new BioCCollectionReader, given the name of the file to read
+   * from.
+   * 
+   * @param fileName the name of the file to read from
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws FileNotFoundException if the file does not exist, is a directory
+   *           rather than a regular file, or for some other reason cannot be
+   *           opened for reading.
+   */
+  public BioCCollectionReader(String fileName)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
-    this(new FileReader(inputFilename));
+    this(new FileReader(fileName));
   }
 
+  /**
+   * Closes the reader and releases any system resources associated with it.
+   * Once the reader has been closed, further readCollection() invocations will
+   * throw an IOException. Closing a previously closed reader has no effect.
+   */
   @Override
   public void close()
       throws IOException {
@@ -55,10 +98,10 @@ public class BioCCollectionReader implements Closeable {
   }
 
   /**
-   * Returns the collection of documents.
+   * Reads the collection of documents.
    * 
    * @return the BioC collection
-   * @throws XMLStreamException unexpected processing errors
+   * @throws XMLStreamException if an unexpected processing error occurs
    */
   public BioCCollection readCollection()
       throws XMLStreamException {

@@ -7,17 +7,24 @@
  * independent of language or research group.
  * <p>
  * All BioC XML files, or collections, begin with a {@link BioCCollection}. A
- * {@link BioCCollection} contains a number of {@link BioCDocument}s. Each
- * {@link BioCDocument} consistent of a series of {@link BioCPassage}s. Each
- * {@link BioCPassage} may contain either {@code text}, a series of
- * {@link BioCSentence}s, or possibly {@link BioCAnnotation}s and
- * {@link BioCRelation}s. A {@link BioCSentence} has either a series of
- * {@code BioCSentence}s, or possibly {@link BioCAnnotation} s and
- * {@link BioCRelation}s. An {@link BioCAnnotation} identifies a portion of the
+ * {@link com.pengyifan.bioc.BioCCollection} contains a number of
+ * {@link com.pengyifan.bioc.BioCDocument}s. Each
+ * {@link com.pengyifan.bioc.BioCDocument} consistent of a series of
+ * {@link com.pengyifan.bioc.BioCPassage}s. Each
+ * {@link com.pengyifan.bioc.BioCPassage} may contain either {@code text}, a
+ * series of {@link com.pengyifan.bioc.BioCSentence}s, or possibly
+ * {@link com.pengyifan.bioc.BioCAnnotation} s and
+ * {@link com.pengyifan.bioc.BioCRelation}s. A
+ * {@link com.pengyifan.bioc.BioCSentence} has either a series of
+ * {@code com.pengyifan.bioc.BioCSentence}s, or possibly
+ * {@link com.pengyifan.bioc.BioCAnnotation} s and
+ * {@link com.pengyifan.bioc.BioCRelation}s. An
+ * {@link com.pengyifan.bioc.BioCAnnotation} identifies a portion of the
  * {@code text} and an appropriate {@code type} for that {@code text}. A
- * {@link BioCRelation} contains {@code refId}s to other {@link BioCRelation} s
- * and {@link BioCAnnotation}s and a {@code type} and {@code label}s to
- * describe the relationship between them.
+ * {@link com.pengyifan.bioc.BioCRelation} contains {@code refId}s to other
+ * {@link com.pengyifan.bioc.BioCRelation} s and
+ * {@link com.pengyifan.bioc.BioCAnnotation}s and a {@code type} and
+ * {@code label}s to describe the relationship between them.
  */
 package com.pengyifan.bioc;
 

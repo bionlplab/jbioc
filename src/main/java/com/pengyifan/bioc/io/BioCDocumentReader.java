@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -19,79 +17,91 @@ import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.io.BioCReader.Level;
 
 /**
- * The class allows forward, read-only access to BioC file. It is designed to
- * sequentially read the BioC file into document every time the method
- * readDocument is called.
+ * Reads the BioC file sequentially into BioCDocument every time the method
+ * {@link #readDocument} is called.
+ * 
+ * @since 1.0.0
+ * @see BioCCollectionReader
+ * @author Yifan Peng
  */
-public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
+public class BioCDocumentReader implements Closeable {
 
   private BioCReader reader;
 
-  public BioCDocumentReader(File inputFile)
+  /**
+   * Creates a new BioCDocumentReader, given the File to read from.
+   * 
+   * @param file the File to read from
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws FileNotFoundException if the file does not exist, is a directory
+   *           rather than a regular file, or for some other reason cannot be
+   *           opened for reading.
+   */
+  public BioCDocumentReader(File file)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
-    this(new FileReader(inputFile));
+    this(new FileReader(file));
   }
 
-  public BioCDocumentReader(InputStream inputStream)
+  /**
+   * Creates an BioCDocumentReader that uses the input stream in.
+   * 
+   * @param in an InputStream
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   */
+  public BioCDocumentReader(InputStream in)
       throws FactoryConfigurationError, XMLStreamException {
-    this(new InputStreamReader(inputStream));
+    this(new InputStreamReader(in));
   }
 
+  /**
+   * Creates an BioCDocumentReader that uses the reader in.
+   * 
+   * @param in a Reader
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   */
   public BioCDocumentReader(Reader in)
       throws FactoryConfigurationError, XMLStreamException {
     reader = new BioCReader(in, Level.DOCUMENT_LEVEL);
     reader.read();
   }
 
-  public BioCDocumentReader(String inputFilename)
+  /**
+   * Creates a new BioCDocumentReader, given the name of the file to read from.
+   * 
+   * @param fileName the name of the file to read from
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws FileNotFoundException if the file does not exist, is a directory
+   *           rather than a regular file, or for some other reason cannot be
+   *           opened for reading.
+   */
+  public BioCDocumentReader(String fileName)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
-    this(new FileReader(inputFilename));
+    this(new FileReader(fileName));
   }
 
+  /**
+   * Closes the reader and releases any system resources associated with it.
+   * Once the reader has been closed, further readDocument() invocations will
+   * throw an IOException. Closing a previously closed reader has no effect.
+   */
   @Override
   public void close()
       throws IOException {
     reader.close();
   }
 
-  @Override
-  public Iterator<BioCDocument> iterator() {
-    return new Iterator<BioCDocument>() {
-
-      @Override
-      public boolean hasNext() {
-        return reader.document != null;
-      }
-
-      @Override
-      public BioCDocument next() {
-        BioCDocument thisDocument = reader.document;
-        reader.sentence = null;
-        reader.passage = null;
-        reader.document = null;
-        try {
-          reader.read();
-        } catch (XMLStreamException e) {
-          throw new NoSuchElementException(e.getMessage());
-        }
-        return thisDocument;
-      }
-
-      @Override
-      public void remove() {
-        throw new UnsupportedOperationException("remove is not supported");
-      }
-
-    };
-  }
-
   /**
-   * Read the collection information: source, date, key, infons, etc.
+   * Reads the collection information: encoding, version, DTD, source, date,
+   * key, infons, etc.
    * 
    * @return the BioC collection that contains only information
-   * @throws XMLStreamException unexpected processing errors
+   * @throws XMLStreamException if an unexpected processing error occurs
    */
   public BioCCollection readCollectionInfo()
       throws XMLStreamException {
@@ -99,10 +109,10 @@ public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
   }
 
   /**
-   * Read a BioC document from the XML file.
+   * Reads one BioC document from the XML file.
    * 
    * @return the BioC document
-   * @throws XMLStreamException unexpected processing errors
+   * @throws XMLStreamException if an unexpected processing error occurs
    */
   public BioCDocument readDocument()
       throws XMLStreamException {

@@ -28,9 +28,6 @@ import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
 
-/**
- * can only read collection DTD or sentence DTD
- */
 class BioCReader implements Closeable {
 
   static enum Level {
