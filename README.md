@@ -7,6 +7,18 @@ Data structures and code to read/write BioC XML.
 BioC XML format can be used to share text documents and annotations.
 The development of Java BioC IO API is independent of the particular XML parser used.
 
+### Getting started
+
+The latest release is 0.1.0-SNAPSHOT.
+
+It is available in Maven Central as com.pengyifan:bioc-core:jar:0.1.0-SNAPSHOT
+
+<dependency>
+  <groupId>com.pengyifan</groupId>
+  <artifactId>bioc-core</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+</dependency>
+
 ### Developers
 
 * Yifan Peng (yfpeng@udel.edu)
