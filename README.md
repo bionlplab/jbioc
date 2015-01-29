@@ -26,8 +26,8 @@ It is available in Maven Central as com.pengyifan:bioc-core:jar:0.1.0-SNAPSHOT
 </repositories>
 ...
 <dependency>
-  <groupId>com.pengyifan</groupId>
-  <artifactId>bioc-core</artifactId>
+  <groupId>com.pengyifan.bioc</groupId>
+  <artifactId>pengyifan-bioc</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 </dependency>
 ```
