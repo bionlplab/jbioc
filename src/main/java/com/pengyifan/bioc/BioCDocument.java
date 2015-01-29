@@ -39,6 +39,12 @@ public class BioCDocument {
     relations = Maps.newHashMap();
   }
 
+  /**
+   * Constructs a builder initialized with the current document. Use this to
+   * derive a new document from the current one.
+   * 
+   * @param document bioc document
+   */
   public BioCDocument(BioCDocument document) {
     this();
     setID(document.id);
@@ -47,36 +53,63 @@ public class BioCDocument {
     annotations.putAll(document.annotations);
     relations.putAll(document.relations);
   }
-  
+
+  /**
+   * Adds annotation in this document.
+   * 
+   * @param annotation annotation
+   */
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
     checkArgument(annotations.containsKey(annotation.getID()));
     this.annotations.put(annotation.getID(), annotation);
   }
 
+  /**
+   * Adds passage in this document.
+   * 
+   * @param passage passage
+   */
   public void addPassage(BioCPassage passage) {
     checkNotNull(passage, "passage cannot be null");
     this.passages.add(passage);
   }
 
+  /**
+   * Adds relation in this document.
+   * 
+   * @param relation relation
+   */
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
     checkArgument(relations.containsKey(relation.getID()));
     this.relations.put(relation.getID(), relation);
   }
 
+  /**
+   * Clears all annotations.
+   */
   public void clearAnnotations() {
     annotations.clear();
   }
 
+  /**
+   * Clears all information.
+   */
   public void clearInfons() {
     infons.clear();
   }
 
+  /**
+   * Clears all passages.
+   */
   public void clearPassages() {
     passages.clear();
   }
 
+  /**
+   * Clears all relations.
+   */
   public void clearRelations() {
     annotations.clear();
   }
@@ -97,21 +130,28 @@ public class BioCDocument {
   }
 
   /**
-   * Returns the annotation at the specified position in this sentence.
+   * Returns the annotation at the specified position in this document.
+   * 
+   * @param annotationID id of a specified annotation
+   * @return the annotation of the specified ID in this document
    */
   public BioCAnnotation getAnnotation(String annotationID) {
     return annotations.get(annotationID);
   }
-  
+
   /**
-   * Annotations on the text of the passage.
+   * Annotations on the text of the document.
+   * 
+   * @return annotations on the text of the document
    */
   public Collection<BioCAnnotation> getAnnotations() {
     return annotations.values();
   }
 
   /**
-   * Returns the id to identify the particular {@code Document}.
+   * Returns the id to identify the particular {@code BioCDocument}.
+   * 
+   * @return the id to identify the particular {@code BioCDocument}
    */
   public String getID() {
     checkNotNull(id, "id has to be set");
@@ -121,6 +161,9 @@ public class BioCDocument {
   /**
    * Returns the value to which the specified key is mapped, or null if this
    * {@code infons} contains no mapping for the key.
+   * 
+   * @param key the key whose associated value is to be returned
+   * @return the value to which the specified key is mapped
    */
   public Optional<String> getInfon(String key) {
     return Optional.ofNullable(infons.get(key));
@@ -128,6 +171,8 @@ public class BioCDocument {
 
   /**
    * Returns the information in the document.
+   * 
+   * @return the information in the document
    */
   public Map<String, String> getInfons() {
     return infons;
@@ -135,6 +180,9 @@ public class BioCDocument {
 
   /**
    * Returns the passage at the specified position in this document.
+   * 
+   * @param index passage position in this document
+   * @return the passage at the specified position in this document
    */
   public BioCPassage getPassage(int index) {
     return passages.get(index);
@@ -142,6 +190,8 @@ public class BioCDocument {
 
   /**
    * Returns the number of passages in this document.
+   * 
+   * @return the number of passages in this document
    */
   public int getPassageCount() {
     return passages.size();
@@ -153,13 +203,18 @@ public class BioCDocument {
    * For PubMed references, they might be "title" and "abstract". For full text
    * papers, they might be Introduction, Methods, Results, and Conclusions. Or
    * they might be paragraphs.
+   * 
+   * @return passages of the document
    */
   public List<BioCPassage> getPassages() {
     return passages;
   }
 
   /**
-   * Returns the relation at the specified position in this sentence.
+   * Returns the relation at the specified position in this document.
+   * 
+   * @param relationID id of a specified relation
+   * @return the relation of the specified ID in this document
    */
   public BioCRelation getRelation(String relationID) {
     return relations.get(relationID);
@@ -167,7 +222,9 @@ public class BioCDocument {
 
   /**
    * Relations between the annotations and possibly other relations on the text
-   * of the sentence.
+   * of the document.
+   * 
+   * @return relations of the document
    */
   public Collection<BioCRelation> getRelations() {
     return relations.values();
@@ -181,28 +238,57 @@ public class BioCDocument {
   /**
    * Returns an unmodifiable iterator over the passages in this document in
    * proper sequence.
+   * 
+   * @return an iterator over the passages in this document in proper sequence
    */
   public Iterator<BioCPassage> passageIterator() {
     return passages.iterator();
   }
 
+  /**
+   * Associates the specified value with the specified key in this document.
+   * 
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
+   */
   public void putInfon(String key, String value) {
     infons.put(key, value);
   }
 
+  /**
+   * Removes the value for a key from this document if it is present (optional
+   * operation).
+   * 
+   * @param key key with which the specified value is to be associated
+   */
   public void removeInfon(String key) {
     infons.remove(key);
   }
 
+  /**
+   * Sets the id used to identify this document.
+   * 
+   * @param id the id used to identify document
+   */
   public void setID(String id) {
     this.id = id;
   }
 
+  /**
+   * Sets the information in this document.
+   * 
+   * @param infons the information in this document
+   */
   public void setInfons(Map<String, String> infons) {
     clearInfons();
     this.infons.putAll(infons);
   }
 
+  /**
+   * Sets the passage in this document.
+   * 
+   * @param passages the passage in this document
+   */
   public void setPassages(List<BioCPassage> passages) {
     clearPassages();
     this.passages.addAll(passages);

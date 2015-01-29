@@ -36,24 +36,76 @@ class BioCWriter implements Closeable {
         xmlOutputFactory.createXMLEventWriter(writer));
   }
 
-  protected BioCWriter writeStartDocument(String encoding,
-      String version,
-      boolean standalone)
+  @Override
+  public void close()
+      throws IOException {
+    try {
+      writer.flush();
+      writer.close();
+    } catch (XMLStreamException e) {
+      throw new IOException(e.getMessage());
+    }
+  }
+
+  private QName getElement(String localPart) {
+    return new QName(localPart);
+  }
+
+  protected final BioCWriter write(BioCAnnotation annotation)
       throws XMLStreamException {
-    writer.add(eventFactory.createStartDocument(encoding, version, standalone));
+    writeStartElement("annotation")
+        // id
+        .writeAttribute("id", annotation.getID())
+        // infon
+        .write(annotation.getInfons());
+    // location
+    for (BioCLocation loc : annotation.getLocations()) {
+      write(loc);
+    }
+    // text
+    if (annotation.getText().isPresent()) {
+      write(annotation.getText().get());
+    }
+    //
+    writeEndElement("annotation");
     return this;
   }
 
-  protected BioCWriter writeEndDocument()
+  protected final BioCWriter write(BioCDocument document)
       throws XMLStreamException {
-    writer.add(eventFactory.createEndDocument());
+    writeStartElement("document")
+        // id
+        .writeStartElement("id")
+        .writeCharacters(document.getID())
+        .writeEndElement("id")
+        // infon
+        .write(document.getInfons());
+    // passages
+    for (BioCPassage passage : document.getPassages()) {
+      write(passage);
+    }
+    // relations
+    for (BioCRelation rel : document.getRelations()) {
+      write(rel);
+    }
+    writeEndElement("document");
     return this;
   }
 
-  protected BioCWriter writeDTD(String dtd)
+  protected final BioCWriter write(BioCLocation location)
       throws XMLStreamException {
-    writer.add(eventFactory.createDTD(dtd));
-    return this;
+    return writeStartElement("location")
+        .writeAttribute("offset", location.getOffset())
+        .writeAttribute("length", location.getLength())
+        .writeEndElement("location");
+  }
+
+  protected final BioCWriter write(BioCNode node)
+      throws XMLStreamException {
+    return writeStartElement("node")
+        .writeAttribute("refid", node.getRefid())
+        .writeAttribute("role", node.getRole())
+        .writeEndElement("node");
   }
 
   protected BioCWriter write(BioCPassage passage)
@@ -86,6 +138,21 @@ class BioCWriter implements Closeable {
     return this;
   }
 
+  protected final BioCWriter write(BioCRelation relation)
+      throws XMLStreamException {
+    writeStartElement("relation")
+        // id
+        .writeAttribute("id", relation.getID())
+        // infon
+        .write(relation.getInfons());
+    // labels
+    for (BioCNode label : relation.getNodes()) {
+      write(label);
+    }
+    writeEndElement("relation");
+    return this;
+  }
+
   protected BioCWriter write(BioCSentence sentence)
       throws XMLStreamException {
     writeStartElement("sentence")
@@ -112,85 +179,6 @@ class BioCWriter implements Closeable {
     return this;
   }
 
-  protected final BioCWriter write(BioCAnnotation annotation)
-      throws XMLStreamException {
-    writeStartElement("annotation")
-        // id
-        .writeAttribute("id", annotation.getID())
-        // infon
-        .write(annotation.getInfons());
-    // location
-    for (BioCLocation loc : annotation.getLocations()) {
-      write(loc);
-    }
-    // text
-    if (annotation.getText().isPresent()) {
-      write(annotation.getText().get());
-    }
-    //
-    writeEndElement("annotation");
-    return this;
-  }
-
-  protected final BioCWriter write(BioCLocation location)
-      throws XMLStreamException {
-    return writeStartElement("location")
-        .writeAttribute("offset", location.getOffset())
-        .writeAttribute("length", location.getLength())
-        .writeEndElement("location");
-  }
-
-  protected final BioCWriter write(String text)
-      throws XMLStreamException {
-    return writeStartElement("text")
-        .writeCharacters(text)
-        .writeEndElement("text");
-  }
-
-  protected final BioCWriter write(BioCRelation relation)
-      throws XMLStreamException {
-    writeStartElement("relation")
-        // id
-        .writeAttribute("id", relation.getID())
-        // infon
-        .write(relation.getInfons());
-    // labels
-    for (BioCNode label : relation.getNodes()) {
-      write(label);
-    }
-    writeEndElement("relation");
-    return this;
-  }
-
-  protected final BioCWriter write(BioCNode node)
-      throws XMLStreamException {
-    return writeStartElement("node")
-        .writeAttribute("refid", node.getRefid())
-        .writeAttribute("role", node.getRole())
-        .writeEndElement("node");
-  }
-
-  protected final BioCWriter write(BioCDocument document)
-      throws XMLStreamException {
-    writeStartElement("document")
-        // id
-        .writeStartElement("id")
-        .writeCharacters(document.getID())
-        .writeEndElement("id")
-        // infon
-        .write(document.getInfons());
-    // passages
-    for (BioCPassage passage : document.getPassages()) {
-      write(passage);
-    }
-    // relations
-    for (BioCRelation rel : document.getRelations()) {
-      write(rel);
-    }
-    writeEndElement("document");
-    return this;
-  }
-
   protected final BioCWriter write(Map<String, String> infons)
       throws XMLStreamException {
     for (Entry<String, String> infon : infons.entrySet()) {
@@ -202,9 +190,22 @@ class BioCWriter implements Closeable {
     return this;
   }
 
-  protected final BioCWriter writeEndCollection()
+  protected final BioCWriter write(String text)
       throws XMLStreamException {
-    return writeEndElement("collection");
+    return writeStartElement("text")
+        .writeCharacters(text)
+        .writeEndElement("text");
+  }
+
+  private BioCWriter writeAttribute(String key, int value)
+      throws XMLStreamException {
+    return writeAttribute(key, Integer.toString(value));
+  }
+
+  private BioCWriter writeAttribute(String key, String value)
+      throws XMLStreamException {
+    writer.add(eventFactory.createAttribute(key, value));
+    return this;
   }
 
   protected final BioCWriter
@@ -227,27 +228,26 @@ class BioCWriter implements Closeable {
         .write(collection.getInfons());
   }
 
-  @Override
-  public void close()
-      throws IOException {
-    try {
-      writer.flush();
-      writer.close();
-    } catch (XMLStreamException e) {
-      throw new IOException(e.getMessage());
-    }
-  }
-
-  private QName getElement(String localPart) {
-    return new QName(localPart);
-  }
-
-  private BioCWriter writeStartElement(String localPart)
+  private BioCWriter writeCharacters(String text)
       throws XMLStreamException {
-    writer.add(eventFactory.createStartElement(
-        getElement(localPart),
-        null,
-        null));
+    writer.add(eventFactory.createCharacters(text));
+    return this;
+  }
+
+  protected BioCWriter writeDTD(String dtd)
+      throws XMLStreamException {
+    writer.add(eventFactory.createDTD(dtd));
+    return this;
+  }
+
+  protected final BioCWriter writeEndCollection()
+      throws XMLStreamException {
+    return writeEndElement("collection");
+  }
+
+  protected BioCWriter writeEndDocument()
+      throws XMLStreamException {
+    writer.add(eventFactory.createEndDocument());
     return this;
   }
 
@@ -257,20 +257,20 @@ class BioCWriter implements Closeable {
     return this;
   }
 
-  private BioCWriter writeCharacters(String text)
+  protected BioCWriter writeStartDocument(String encoding,
+      String version,
+      boolean standalone)
       throws XMLStreamException {
-    writer.add(eventFactory.createCharacters(text));
+    writer.add(eventFactory.createStartDocument(encoding, version, standalone));
     return this;
   }
 
-  private BioCWriter writeAttribute(String key, String value)
+  private BioCWriter writeStartElement(String localPart)
       throws XMLStreamException {
-    writer.add(eventFactory.createAttribute(key, value));
+    writer.add(eventFactory.createStartElement(
+        getElement(localPart),
+        null,
+        null));
     return this;
-  }
-
-  private BioCWriter writeAttribute(String key, int value)
-      throws XMLStreamException {
-    return writeAttribute(key, Integer.toString(value));
   }
 }

@@ -44,22 +44,36 @@ public class BioCCollection {
     setDocuments(collection.documents);
   }
 
+  /**
+   * Adds document in this collection.
+   * 
+   * @param document document
+   */
   public void addDocument(BioCDocument document) {
     checkNotNull(document, "document cannot be null");
     this.documents.add(document);
   }
 
+  /**
+   * Clears all documents.
+   */
   public void clearDocuments() {
     documents.clear();
   }
 
+  /**
+   * Clears all information.
+   */
   public void clearInfons() {
     infons.clear();
   }
 
   /**
-   * Returns a unmodifiable iterator over the document in this collection in
-   * proper sequence.
+   * Returns a iterator over the document in this collection in proper
+   * sequence.
+   * 
+   * @return a iterator over the document in this collection in proper
+   *         sequence.
    */
   public Iterator<BioCDocument> documentIterator() {
     return documents.iterator();
@@ -83,6 +97,8 @@ public class BioCCollection {
 
   /**
    * Returns date the documents obtained from the source.
+   * 
+   * @return date the documents obtained from the source
    */
   public String getDate() {
     checkNotNull(date, "date cannot be null");
@@ -90,7 +106,9 @@ public class BioCCollection {
   }
 
   /**
-   * Returns the document at the specified position in this collection.
+   * Returns the number of documents in this collection.
+   * 
+   * @return the number of documents in this collection
    */
   public int getDocmentCount() {
     return documents.size();
@@ -98,6 +116,9 @@ public class BioCCollection {
 
   /**
    * Returns the document at the specified position in this collection.
+   * 
+   * @param index document position in this collection
+   * @return the document at the specified position in this collection
    */
   public BioCDocument getDocument(int index) {
     return documents.get(index);
@@ -107,6 +128,8 @@ public class BioCCollection {
    * Returns all the documents in the collection. This will be empty if
    * document at a time IO is used to read the XML file. Any contents will be
    * ignored if written with document at a time IO.
+   * 
+   * @return all the documents in the collection
    */
   public List<BioCDocument> getDocuments() {
     return documents;
@@ -115,6 +138,9 @@ public class BioCCollection {
   /**
    * Returns the value to which the specified key is mapped, or null if this
    * {@code infons} contains no mapping for the key.
+   * 
+   * @param key the key whose associated value is to be returned
+   * @return the value to which the specified key is mapped
    */
   public Optional<String> getInfon(String key) {
     return Optional.ofNullable(infons.get(key));
@@ -122,6 +148,8 @@ public class BioCCollection {
 
   /**
    * Returns the information in the collection.
+   * 
+   * @return the information in the collection
    */
   public Map<String, String> getInfons() {
     return infons;
@@ -130,6 +158,9 @@ public class BioCCollection {
   /**
    * Returns name of a file describing the contents and conventions used in
    * this XML file.
+   * 
+   * @return name of a file describing the contents and conventions used in
+   *         this XML file
    */
   public String getKey() {
     checkNotNull(key, "key cannot be null");
@@ -138,6 +169,8 @@ public class BioCCollection {
 
   /**
    * Returns the original source of the documents.
+   * 
+   * @return the original source of the documents
    */
   public String getSource() {
     checkNotNull(source, "source cannot be null");
@@ -149,32 +182,71 @@ public class BioCCollection {
     return Objects.hash(source, date, key, infons, documents);
   }
 
+  /**
+   * Associates the specified value with the specified key in this collection.
+   * 
+   * @param key key with which the specified value is to be associated
+   * @param value value to be associated with the specified key
+   */
   public void putInfon(String key, String value) {
     infons.put(key, value);
   }
 
+  /**
+   * Removes the value for a key from this collection if it is present
+   * (optional operation).
+   * 
+   * @param key key with which the specified value is to be associated
+   */
   public void removeInfon(String key) {
     infons.remove(key);
   }
 
+  /**
+   * Sets the date the documents obtained from the source.
+   * 
+   * @param date the date the documents obtained from the source
+   */
   public void setDate(String date) {
     this.date = date;
   }
 
+  /**
+   * Sets the documents in this collection.
+   * 
+   * @param documents the passage in this collection
+   */
   public void setDocuments(List<BioCDocument> documents) {
     clearDocuments();
     this.documents.addAll(documents);
   }
 
+  /**
+   * Sets the information in this collection.
+   * 
+   * @param infons the information in this collection
+   */
   public void setInfons(Map<String, String> infons) {
     clearInfons();
     this.infons.putAll(infons);
   }
 
+  /**
+   * Sets the name of a file describing the contents and conventions used in
+   * this XML file.
+   * 
+   * @param key the name of a file describing the contents and conventions used
+   *          in this XML file
+   */
   public void setKey(String key) {
     this.key = key;
   }
 
+  /**
+   * Sets the original source of the documents.
+   * 
+   * @param source the original source of the documents
+   */
   public void setSource(String source) {
     this.source = source;
   }

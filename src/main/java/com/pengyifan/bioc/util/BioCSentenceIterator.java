@@ -52,7 +52,9 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
   }
 
   /**
-   * Returns the passage that contains current sentence.
+   * Returns the document that contains current sentence.
+   * 
+   * @return the document that contains current sentence
    */
   public BioCDocument getDocument() {
     return passageItr.getDocument();
@@ -60,6 +62,8 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
 
   /**
    * Returns the passage that contains current sentence.
+   * 
+   * @return the passage that contains current sentence
    */
   public BioCPassage getPassage() {
     return currentPassage;

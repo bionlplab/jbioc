@@ -38,58 +38,6 @@ public class BioCDocumentWriter implements Closeable {
     standalone = true;
   }
 
-  /**
-   * Returns the charset encoding of the BioC file.
-   */
-  public String getEncoding() {
-    return encoding;
-  }
-
-  /**
-   * Sets the charset encoding of the BioC file.
-   */
-  public void setEncoding(String encoding) {
-    Validate.notNull(encoding);
-    this.encoding = encoding;
-  }
-
-  /**
-   * Gets the xml version declared on the xml declaration. Returns null if none
-   * was declared
-   */
-  public String getVersion() {
-    return version;
-  }
-
-  /**
-   * Sets the xml version declared on the xml declaration.
-   */
-  public void setVersion(String version) {
-    Validate.notNull(version);
-    this.version = version;
-  }
-
-  /**
-   * Gets the standalone declaration from the xml declaration
-   */
-  public boolean isStandalone() {
-    return standalone;
-  }
-
-  /**
-   * Sets the standalone declaration to the xml declaration
-   */
-  public void setStandalone(boolean standalone) {
-    this.standalone = standalone;
-  }
-
-  /**
-   * Sets the absolute URI of the BioC DTD file.
-   */
-  public void setDTD(String dtd) {
-    this.dtd = dtd;
-  }
-
   @Override
   public final void close()
       throws IOException {
@@ -104,7 +52,85 @@ public class BioCDocumentWriter implements Closeable {
   }
 
   /**
-   * Writes the BioC document information: source, date, key, infons
+   * Returns the absolute URI of the BioC DTD file.
+   * 
+   * @return the absolute URI of the BioC DTD file
+   */
+  public String getDTD() {
+    return dtd;
+  }
+
+  /**
+   * Returns the charset encoding of the BioC file.
+   * 
+   * @return the charset encoding of the BioC file
+   */
+  public String getEncoding() {
+    return encoding;
+  }
+
+  /**
+   * Gets the XML version declared on the XML declaration. Returns null if none
+   * was declared
+   * 
+   * @return the XML version declared on the XML declaration
+   */
+  public String getVersion() {
+    return version;
+  }
+
+  /**
+   * Gets the standalone declaration from the XML declaration.
+   * 
+   * @return true if the DTD is ignored by the parser.
+   */
+  public boolean isStandalone() {
+    return standalone;
+  }
+
+  /**
+   * Sets the absolute URI of the BioC DTD file.
+   * 
+   * @param dtd the absolute URI of the BioC DTD file
+   */
+  public void setDTD(String dtd) {
+    this.dtd = dtd;
+  }
+
+  /**
+   * Sets the charset encoding of the BioC file.
+   * 
+   * @param encoding the charset encoding of the BioC file
+   */
+  public void setEncoding(String encoding) {
+    Validate.notNull(encoding);
+    this.encoding = encoding;
+  }
+
+  /**
+   * Sets the standalone declaration to the XML declaration.
+   * 
+   * @param standalone true if the parser can ignore the DTD
+   */
+  public void setStandalone(boolean standalone) {
+    this.standalone = standalone;
+  }
+
+  /**
+   * Sets the XML version declared on the XML declaration.
+   * 
+   * @param version the XML version declared on the XML declaration
+   */
+  public void setVersion(String version) {
+    Validate.notNull(version);
+    this.version = version;
+  }
+
+  /**
+   * Writes the BioC collection information: source, date, key, infons, etc.
+   * 
+   * @param collection the BioC collection whose information will be written
+   * @throws XMLStreamException unexpected processing errors
    */
   public void writeBeginCollectionInfo(BioCCollection collection)
       throws XMLStreamException {
@@ -125,8 +151,11 @@ public class BioCDocumentWriter implements Closeable {
   }
 
   /**
-   * Writes the BioC document into the xml file. This method can be called
+   * Writes the BioC document into the XML file. This method can be called
    * iteratively.
+   * 
+   * @param document the BioC document
+   * @throws XMLStreamException unexpected processing errors
    */
   public void writeDocument(BioCDocument document)
       throws XMLStreamException {
@@ -135,12 +164,5 @@ public class BioCDocumentWriter implements Closeable {
           "writeCollectionInfo should be invoked before.");
     }
     writer.write(document);
-  }
-
-  /**
-   * Returns the absolute URI of the BioC DTD file.
-   */
-  public String getDTD() {
-    return dtd;
   }
 }

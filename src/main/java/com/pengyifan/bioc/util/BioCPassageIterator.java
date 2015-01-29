@@ -48,6 +48,8 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
 
   /**
    * Returns the document that contains current passage.
+   * 
+   * @return the document that contains current passage
    */
   public BioCDocument getDocument() {
     return currentDocument;

@@ -32,7 +32,10 @@ public class BioCAssert {
   private static final int BUF_SIZE = 1024;
 
   /**
-   * Asserts that a BioC file is valid based on the given dtd file.
+   * Asserts that a BioC file is valid based on the given DTD file.
+   * 
+   * @param reader BioC file reader stream
+   * @param dtdFilename the absolute URI of the BioC DTD file
    */
   public static void assertDtdValid(Reader reader, String dtdFilename) {
     try {
@@ -46,8 +49,11 @@ public class BioCAssert {
   }
 
   /**
-   * Asserts that a BioC file is valid based on the given dtd file. If the BioC
+   * Asserts that a BioC file is valid based on the given DTD file. If the BioC
    * file is invalid, prints the error message.
+   * 
+   * @param reader BioC file reader stream
+   * @param dtdFilename the absolute URI of the BioC DTD file
    */
   public static void assertAndPrintDtdValid(Reader reader, String dtdFilename) {
     try {
@@ -65,20 +71,23 @@ public class BioCAssert {
   /**
    * Asserts that two BioC files are equal. Two documents are considered to be
    * "equivalent" if they contain the same elements in the same order.
+   * 
+   * @param expected reader stream with expected BioC file
+   * @param actual reader stream with actual BioC file
+   * @throws IOException an I/O exception of some errors in the BioC file
    */
-  public static void assertEquivalentTo(Reader controlReader,
-      Reader actualReader)
-      throws IOException {
+  public static void assertEquivalentTo(Reader expected,
+      Reader actual) throws IOException {
     char[] cbuf = new char[BUF_SIZE];
     int size;
 
     StringBuilder controlXml = new StringBuilder();
-    while ((size = controlReader.read(cbuf, 0, BUF_SIZE)) != -1) {
+    while ((size = expected.read(cbuf, 0, BUF_SIZE)) != -1) {
       controlXml.append(cbuf, 0, size);
     }
 
     StringBuilder actualXml = new StringBuilder();
-    while ((size = actualReader.read(cbuf, 0, BUF_SIZE)) != -1) {
+    while ((size = actual.read(cbuf, 0, BUF_SIZE)) != -1) {
       actualXml.append(cbuf, 0, size);
     }
 
@@ -88,37 +97,46 @@ public class BioCAssert {
   /**
    * Asserts that two BioC files are equal. Two documents are considered to be
    * "equivalent" if they contain the same elements in the same order.
+   * 
+   * @param expected expected BioC file string
+   * @param actual actual BioC file string
    */
-  public static void assertEquivalentTo(String controlXml, String actualXml)
-      throws IOException {
+  public static void assertEquivalentTo(String expected, String actual) {
     assertThat(
-        the(controlXml.toString()),
-        isEquivalentTo(the(actualXml.toString())));
+        the(expected.toString()),
+        isEquivalentTo(the(actual.toString())));
   }
 
   /**
    * Asserts that two BioC files are equal. Two documents are considered to be
    * "similar" if the the content of the nodes in the documents are the same,
    * but minor differences exist e.g. sequencing of sibling elements.
+   * 
+   * @param expected expected BioC file string
+   * @param actual actual BioC file string
    */
-  public static void assertSimilarTo(String controlXml, String actualXml)
-      throws IOException {
+  public static void assertSimilarTo(String expected, String actual) {
     assertThat(
-        the(controlXml.toString()),
-        isSimilarTo(the(actualXml.toString())));
+        the(expected.toString()),
+        isSimilarTo(the(actual.toString())));
   }
 
   /**
    * Asserts that two BioC files are equal. If two BioC files are not equal,
    * prints the different parts.
+   * 
+   * @param expected reader stream with expected BioC file
+   * @param actual reader stream with actual BioC file
+   * @throws IOException an I/O exception of some errors in the BioC file
+   * @throws SAXException SAX error or warning
    */
-  public static void assertAndPrintEquals(Reader controlReader,
-      Reader testReader)
-      throws Exception {
+  public static void assertAndPrintEquals(Reader expected,
+      Reader actual)
+      throws SAXException, IOException {
 
     boolean isIgnoreWhitespace = XMLUnit.getIgnoreWhitespace();
     XMLUnit.setIgnoreWhitespace(true);
-    Diff diff = new Diff(controlReader, testReader);
+    Diff diff = new Diff(expected, actual);
 
     try {
       assertTrue(diff.similar());

@@ -19,12 +19,15 @@ public class BioCLocation {
   /**
    * Constructs a newly <code>BioCLocation</code> object that has offset and
    * length.
+   * 
+   * @param offset the offset of annotation
+   * @param length the length of the annotated text
    */
   public BioCLocation(int offset, int length) {
     this.offset = offset;
     this.length = length;
   }
-  
+
   public BioCLocation(BioCLocation location) {
     this(location.offset, location.length);
   }
@@ -45,6 +48,8 @@ public class BioCLocation {
   /**
    * Returns the length of the annotated text. While unlikely, this could be
    * zero to describe an annotation that belongs between two characters.
+   * 
+   * @return the length of the annotated text
    */
   public int getLength() {
     checkArgument(length > 0, "length has to be > 0");
@@ -53,6 +58,8 @@ public class BioCLocation {
 
   /**
    * Returns the offset of annotation.
+   * 
+   * @return the offset of annotation
    */
   public int getOffset() {
     checkArgument(offset >= 0, "offset has to be >= 0");
@@ -66,6 +73,8 @@ public class BioCLocation {
 
   /**
    * Sets the length of the annotated text.
+   * 
+   * @param length the length of the annotated text
    */
   public void setLength(int length) {
     this.length = length;
@@ -73,6 +82,8 @@ public class BioCLocation {
 
   /**
    * Sets the offset of annotation.
+   * 
+   * @param offset the offset of annotation
    */
   public void setOffset(int offset) {
     checkArgument(offset >= 0, "offset has to be >= 0");

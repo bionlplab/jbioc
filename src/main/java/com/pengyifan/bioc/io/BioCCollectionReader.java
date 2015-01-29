@@ -24,6 +24,12 @@ public class BioCCollectionReader implements Closeable {
   private BioCCollection collection;
   private BioCReader reader;
 
+  public BioCCollectionReader(File inputFile)
+      throws FactoryConfigurationError, XMLStreamException,
+      FileNotFoundException {
+    this(new FileReader(inputFile));
+  }
+
   public BioCCollectionReader(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
     this(new InputStreamReader(inputStream));
@@ -36,20 +42,32 @@ public class BioCCollectionReader implements Closeable {
     collection = reader.collection;
   }
 
-  public BioCCollectionReader(File inputFile)
-      throws FactoryConfigurationError, XMLStreamException,
-      FileNotFoundException {
-    this(new FileReader(inputFile));
-  }
-
   public BioCCollectionReader(String inputFilename)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
     this(new FileReader(inputFilename));
   }
 
+  @Override
+  public void close()
+      throws IOException {
+    reader.close();
+  }
+
+  /**
+   * Returns the absolute URI of the BioC DTD file.
+   * 
+   * @return the absolute URI of the BioC DTD file
+   */
+  public String getDTD() {
+    return reader.getDtd();
+  }
+
   /**
    * Returns the collection of documents.
+   * 
+   * @return the BioC collection
+   * @throws XMLStreamException unexpected processing errors
    */
   public BioCCollection readCollection()
       throws XMLStreamException {
@@ -59,18 +77,5 @@ public class BioCCollectionReader implements Closeable {
       return thisCollection;
     }
     return null;
-  }
-
-  /**
-   * Returns the absolute URI of the BioC DTD file.
-   */
-  public String getDTD() {
-    return reader.getDtd();
-  }
-
-  @Override
-  public void close()
-      throws IOException {
-    reader.close();
   }
 }

@@ -1,10 +1,10 @@
-package com.pengyifan.nlp.bioc.util;
+package com.pengyifan.bioc.util;
 
-import com.pengyifan.nlp.bioc.BioCAnnotation;
-import com.pengyifan.nlp.bioc.BioCCollection;
-import com.pengyifan.nlp.bioc.BioCDocument;
-import com.pengyifan.nlp.bioc.BioCPassage;
-import com.pengyifan.nlp.bioc.BioCSentence;
+import com.pengyifan.bioc.BioCAnnotation;
+import com.pengyifan.bioc.BioCCollection;
+import com.pengyifan.bioc.BioCDocument;
+import com.pengyifan.bioc.BioCPassage;
+import com.pengyifan.bioc.BioCSentence;
 
 public class BioCAnnotationSearch {
 

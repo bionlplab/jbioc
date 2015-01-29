@@ -71,8 +71,8 @@ public class BioCAnnotationTest {
     assertEquals(TEXT, base.getText().get());
     assertEquals(VALUE, base.getInfon(KEY).get());
     assertEquals(2, base.getLocationCount());
-    assertEquals(LOC_1, base.getLocation(0));
-    assertEquals(LOC_2, base.getLocation(1));
+    assertTrue(base.containsLocation(LOC_1));
+    assertTrue(base.containsLocation(LOC_2));
   }
 
   @Test
@@ -114,8 +114,9 @@ public class BioCAnnotationTest {
 
   @Test
   public void test_addLocation() {
-    base.addLocation(LOC_3.getOffset(), LOC_3.getLength());
-    assertEquals(LOC_3, base.getLocation(2));
+    assertFalse(base.containsLocation(LOC_3));
+    base.addLocation(new BioCLocation(LOC_3.getOffset(), LOC_3.getLength()));
+    assertTrue(base.containsLocation(LOC_3));
   }
 
   @Test

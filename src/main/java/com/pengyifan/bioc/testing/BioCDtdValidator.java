@@ -32,6 +32,8 @@ public class BioCDtdValidator {
 
   /**
    * BioCValidation [options...] arguments...
+   * 
+   * @param args arguments
    */
   public static void main(String[] args) {
     new BioCDtdValidator().doMain(args);

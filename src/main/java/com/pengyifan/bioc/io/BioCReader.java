@@ -58,10 +58,6 @@ class BioCReader implements Closeable {
     state = 0;
   }
 
-  protected String getDtd() {
-    return dtd;
-  }
-
   @Override
   public void close()
       throws IOException {
@@ -70,6 +66,19 @@ class BioCReader implements Closeable {
     } catch (XMLStreamException e) {
       throw new IOException(e.getMessage(), e);
     }
+  }
+
+  private String getAttribute(StartElement startElement, String key) {
+    return startElement.getAttributeByName(new QName(key)).getValue();
+  }
+
+  protected String getDtd() {
+    return dtd;
+  }
+
+  private String getText()
+      throws XMLStreamException {
+    return reader.nextEvent().asCharacters().getData();
   }
 
   protected Object read()
@@ -239,11 +248,6 @@ class BioCReader implements Closeable {
     return collection;
   }
 
-  private String getText()
-      throws XMLStreamException {
-    return reader.nextEvent().asCharacters().getData();
-  }
-
   private BioCAnnotation readAnnotation(StartElement annotationEvent)
       throws XMLStreamException {
     BioCAnnotation ann = new BioCAnnotation();
@@ -312,9 +316,5 @@ class BioCReader implements Closeable {
     }
     Validate.isTrue(false, "should not reach here");
     return null;
-  }
-
-  private String getAttribute(StartElement startElement, String key) {
-    return startElement.getAttributeByName(new QName(key)).getValue();
   }
 }

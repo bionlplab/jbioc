@@ -67,8 +67,8 @@ public class BioCRelationTest {
     assertEquals(ID, base.getID());
     assertEquals(VALUE, base.getInfon(KEY).get());
     assertEquals(2, base.getNodeCount());
-    assertEquals(NODE_1, base.getNode(0));
-    assertEquals(NODE_2, base.getNode(1));
+    assertTrue(base.containsNode(NODE_1));
+    assertTrue(base.containsNode(NODE_2));
   }
 
   @Test
@@ -109,7 +109,8 @@ public class BioCRelationTest {
 
   @Test
   public void test_addLocation() {
+    assertFalse(base.containsNode(NODE_3));
     base.addNode(NODE_3);
-    assertEquals(NODE_3, base.getNode(2));
+    assertTrue(base.containsNode(NODE_3));
   }
 }

@@ -27,6 +27,12 @@ public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
 
   private BioCReader reader;
 
+  public BioCDocumentReader(File inputFile)
+      throws FactoryConfigurationError, XMLStreamException,
+      FileNotFoundException {
+    this(new FileReader(inputFile));
+  }
+
   public BioCDocumentReader(InputStream inputStream)
       throws FactoryConfigurationError, XMLStreamException {
     this(new InputStreamReader(inputStream));
@@ -38,39 +44,25 @@ public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
     reader.read();
   }
 
-  public BioCDocumentReader(File inputFile)
-      throws FactoryConfigurationError, XMLStreamException,
-      FileNotFoundException {
-    this(new FileReader(inputFile));
-  }
-
   public BioCDocumentReader(String inputFilename)
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
     this(new FileReader(inputFilename));
   }
 
-  /**
-   * Read a BioCDocument from the XML file
-   */
-  public BioCDocument readDocument()
-      throws XMLStreamException {
-
-    if (reader.document != null) {
-      BioCDocument thisDocument = reader.document;
-      reader.read();
-      return thisDocument;
-    } else {
-      return null;
-    }
+  @Override
+  public void close()
+      throws IOException {
+    reader.close();
   }
 
   /**
-   * Read the collection information: source, date, key, infons
+   * Returns the absolute URI of the BioC DTD file.
+   * 
+   * @return the absolute URI of the BioC DTD file
    */
-  public BioCCollection readCollectionInfo()
-      throws XMLStreamException {
-    return reader.collection;
+  public String getDTD() {
+    return reader.getDtd();
   }
 
   @Override
@@ -105,15 +97,31 @@ public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
   }
 
   /**
-   * Returns the absolute URI of the BioC DTD file.
+   * Read the collection information: source, date, key, infons, etc.
+   * 
+   * @return the BioC collection that contains only information
+   * @throws XMLStreamException unexpected processing errors
    */
-  public String getDTD() {
-    return reader.getDtd();
+  public BioCCollection readCollectionInfo()
+      throws XMLStreamException {
+    return reader.collection;
   }
 
-  @Override
-  public void close()
-      throws IOException {
-    reader.close();
+  /**
+   * Read a BioC document from the XML file.
+   * 
+   * @return the BioC document
+   * @throws XMLStreamException unexpected processing errors
+   */
+  public BioCDocument readDocument()
+      throws XMLStreamException {
+
+    if (reader.document != null) {
+      BioCDocument thisDocument = reader.document;
+      reader.read();
+      return thisDocument;
+    } else {
+      return null;
+    }
   }
 }

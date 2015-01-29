@@ -17,12 +17,16 @@ public class BioCNode {
 
   /**
    * Constructs a newly <code>BioCNode</code> object that has id and role.
+   * 
+   * @param refid the id of an annotated object or another relation
+   * @param role the role of how the referenced annotation or other relation
+   *          participates in the current relation
    */
   public BioCNode(String refid, String role) {
     this.refid = refid;
     this.role = role;
   }
-  
+
   public BioCNode(BioCNode node) {
     this(node.refid, node.role);
   }
@@ -43,6 +47,8 @@ public class BioCNode {
   /**
    * Returns the id of an annotated object or another relation. Typically there
    * will be one label for each node.
+   * 
+   * @return the id of an annotated object or another relation
    */
   public String getRefid() {
     checkNotNull(refid, "refid has to be set");
@@ -52,6 +58,9 @@ public class BioCNode {
   /**
    * Returns the role of how the referenced annotation or other relation
    * participates in the current relation.
+   * 
+   * @return the role of how the referenced annotation or other relation
+   *         participates in the current relation
    */
   public String getRole() {
     checkNotNull(role, "role has to be set");
@@ -65,6 +74,8 @@ public class BioCNode {
 
   /**
    * Sets the id of an annotated object or another relation.
+   * 
+   * @param refid the id of an annotated object or another relation
    */
   public void setRefid(String refid) {
     this.refid = refid;
@@ -73,6 +84,9 @@ public class BioCNode {
   /**
    * Set the role of how the referenced annotation or other relation
    * participates in the current relation.
+   * 
+   * @param role the role of how the referenced annotation or other relation
+   *          participates in the current relation
    */
   public void setRole(String role) {
     this.role = role;
