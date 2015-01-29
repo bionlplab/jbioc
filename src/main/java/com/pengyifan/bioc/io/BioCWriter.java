@@ -10,10 +10,12 @@ import javanet.staxutils.IndentingXMLEventWriter;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+
+import org.codehaus.stax2.evt.DTD2;
+import org.codehaus.stax2.evt.XMLEventFactory2;
 
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
@@ -27,7 +29,8 @@ import com.pengyifan.bioc.BioCSentence;
 class BioCWriter implements Closeable {
 
   XMLEventWriter writer;
-  XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+  XMLEventFactory2 eventFactory = (XMLEventFactory2) XMLEventFactory2
+      .newInstance();
 
   protected BioCWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
@@ -234,9 +237,9 @@ class BioCWriter implements Closeable {
     return this;
   }
 
-  protected BioCWriter writeDTD(String dtd)
+  protected BioCWriter writeDTD(DTD2 dtd)
       throws XMLStreamException {
-    writer.add(eventFactory.createDTD(dtd));
+    writer.add(eventFactory.createDTD(dtd.getDocumentTypeDeclaration()));
     return this;
   }
 

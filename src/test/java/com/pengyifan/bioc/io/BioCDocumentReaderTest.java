@@ -101,7 +101,8 @@ public class BioCDocumentReaderTest {
         new InputStreamReader(Thread.currentThread()
             .getContextClassLoader()
             .getResourceAsStream(XML_FILENAME)));
-    assertEquals(DTD, reader.getDTD());
+    BioCCollection collection = reader.readCollectionInfo();
+    assertEquals(DTD, collection.getDtd().getSystemId());
     reader.close();
   }
 }

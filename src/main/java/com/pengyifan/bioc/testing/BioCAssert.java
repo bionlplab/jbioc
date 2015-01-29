@@ -1,10 +1,6 @@
 package com.pengyifan.bioc.testing;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertThat;
-import static org.xmlmatchers.transform.XmlConverters.the;
-import static org.xmlmatchers.XmlMatchers.isEquivalentTo;
-import static org.xmlmatchers.XmlMatchers.isSimilarTo;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -26,6 +22,8 @@ import org.xml.sax.SAXException;
  * contain the same elements in the same order. Two documents are considered to
  * be "similar" if the the content of the nodes in the documents are the same,
  * but minor differences exist.
+ * 
+ * @deprecated
  */
 public class BioCAssert {
 
@@ -75,9 +73,11 @@ public class BioCAssert {
    * @param expected reader stream with expected BioC file
    * @param actual reader stream with actual BioC file
    * @throws IOException an I/O exception of some errors in the BioC file
+   * @throws SAXException 
    */
   public static void assertEquivalentTo(Reader expected,
-      Reader actual) throws IOException {
+      Reader actual)
+      throws IOException, SAXException {
     char[] cbuf = new char[BUF_SIZE];
     int size;
 
@@ -100,11 +100,15 @@ public class BioCAssert {
    * 
    * @param expected expected BioC file string
    * @param actual actual BioC file string
+   * @throws IOException 
+   * @throws SAXException 
    */
-  public static void assertEquivalentTo(String expected, String actual) {
-    assertThat(
-        the(expected.toString()),
-        isEquivalentTo(the(actual.toString())));
+  public static void assertEquivalentTo(String expected, String actual) throws SAXException, IOException {
+    Diff d = new Diff(expected, actual);
+    assertTrue(d.identical());
+//    assertThat(
+//        the(expected.toString()),
+//        isEquivalentTo(the(actual.toString())));
   }
 
   /**
@@ -114,11 +118,48 @@ public class BioCAssert {
    * 
    * @param expected expected BioC file string
    * @param actual actual BioC file string
+   * @throws IOException 
+   * @throws SAXException 
    */
-  public static void assertSimilarTo(String expected, String actual) {
-    assertThat(
-        the(expected.toString()),
-        isSimilarTo(the(actual.toString())));
+  public static void assertSimilarTo(String expected, String actual) throws SAXException, IOException {
+    XMLUnit.setIgnoreWhitespace(true);
+    Diff d = new Diff(expected, actual);
+//    DetailedDiff dd = new DetailedDiff(d);
+    assertTrue(d.similar());
+//    List l = dd.getAllDifferences();
+//    System.out.println(l);
+////    assertThat(
+////        the(expected.toString()),
+////        isSimilarTo(the(actual.toString())));
+  }
+
+  /**
+   * Asserts that two BioC files are equal. Two documents are considered to be
+   * "similar" if the the content of the nodes in the documents are the same,
+   * but minor differences exist e.g. sequencing of sibling elements.
+   * 
+   * @param expected reader stream with expected BioC file
+   * @param actual reader stream with actual BioC file
+   * @throws IOException an I/O exception of some errors in the BioC file
+   * @throws SAXException 
+   */
+  public static void assertSimilarTo(Reader expected,
+      Reader actual)
+      throws IOException, SAXException {
+    char[] cbuf = new char[BUF_SIZE];
+    int size;
+
+    StringBuilder controlXml = new StringBuilder();
+    while ((size = expected.read(cbuf, 0, BUF_SIZE)) != -1) {
+      controlXml.append(cbuf, 0, size);
+    }
+
+    StringBuilder actualXml = new StringBuilder();
+    while ((size = actual.read(cbuf, 0, BUF_SIZE)) != -1) {
+      actualXml.append(cbuf, 0, size);
+    }
+
+    assertSimilarTo(controlXml.toString(), actualXml.toString());
   }
 
   /**

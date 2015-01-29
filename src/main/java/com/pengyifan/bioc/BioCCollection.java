@@ -8,8 +8,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.codehaus.stax2.evt.DTD2;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -23,6 +25,12 @@ import com.google.common.collect.Maps;
  * Documents may appear empty if doing document at a time IO.
  */
 public class BioCCollection {
+
+  // XML information
+  private DTD2 dtd;
+  private String encoding;
+  private String version;
+  private boolean standalone;
 
   private String source;
   private String date;
@@ -136,6 +144,26 @@ public class BioCCollection {
   }
 
   /**
+   * DOCTYPE declaration constructs in the XML file.
+   * 
+   * @return DOCTYPE declaration constructs in the XML file
+   */
+  public DTD2 getDtd() {
+    checkNotNull(dtd, "haven't set DTD yet");
+    return dtd;
+  }
+
+  /**
+   * Returns the charset encoding of the BioC file.
+   * 
+   * @return the charset encoding of the BioC file
+   */
+  public String getEncoding() {
+    checkNotNull(encoding, "haven't set encoding yet");
+    return encoding;
+  }
+
+  /**
    * Returns the value to which the specified key is mapped, or null if this
    * {@code infons} contains no mapping for the key.
    * 
@@ -177,9 +205,29 @@ public class BioCCollection {
     return source;
   }
 
+  /**
+   * Gets the XML version declared on the XML declaration. Returns null if none
+   * was declared.
+   * 
+   * @return the XML version declared on the XML declaration
+   */
+  public String getVersion() {
+    checkNotNull(version, "haven't set version yet");
+    return version;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(source, date, key, infons, documents);
+  }
+
+  /**
+   * Gets the standalone declaration from the XML declaration
+   * 
+   * @return true if the DTD is ignored by the parser
+   */
+  public boolean isStandalone() {
+    return standalone;
   }
 
   /**
@@ -222,6 +270,24 @@ public class BioCCollection {
   }
 
   /**
+   * Sets DOCTYPE declaration constructs in the XML file.
+   * 
+   * @param dtd DOCTYPE declaration constructs in the XML file
+   */
+  public void setDtd(DTD2 dtd) {
+    this.dtd = dtd;
+  }
+
+  /**
+   * Sets the charset encoding of the BioC file.
+   * 
+   * @param encoding the charset encoding of the BioC file
+   */
+  public void setEncoding(String encoding) {
+    this.encoding = encoding;
+  }
+
+  /**
    * Sets the information in this collection.
    * 
    * @param infons the information in this collection
@@ -249,6 +315,25 @@ public class BioCCollection {
    */
   public void setSource(String source) {
     this.source = source;
+  }
+
+  /**
+   * Sets the standalone declaration to the XML declaration.
+   * 
+   * @param standalone true if the parser can ignore the DTD
+   */
+  public void setStandalone(boolean standalone) {
+    this.standalone = standalone;
+  }
+
+  /**
+   * Sets the XML version declared on the XML declaration.
+   * 
+   * @param version the XML version declared on the XML declaration
+   */
+  public void setVersion(String version) {
+    Validate.notNull(version);
+    this.version = version;
   }
 
   @Override

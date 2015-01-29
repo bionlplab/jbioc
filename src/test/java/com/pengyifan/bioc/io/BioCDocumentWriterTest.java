@@ -1,12 +1,14 @@
 package com.pengyifan.bioc.io;
 
-import static com.pengyifan.bioc.testing.BioCAssert.assertEquivalentTo;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
+import org.custommonkey.xmlunit.Diff;
+import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -36,13 +38,11 @@ public class BioCDocumentWriterTest {
             .getContextClassLoader()
             .getResourceAsStream(XML_FILENAME)));
     BioCCollection collection = reader.readCollection();
-    String dtd = reader.getDTD();
     reader.close();
 
     // write
     File tmpFile = testFolder.newFile();
     BioCDocumentWriter writer = new BioCDocumentWriter(new FileWriter(tmpFile));
-    writer.setDTD(dtd);
     writer.writeBeginCollectionInfo(collection);
 
     for (BioCDocument document : collection.getDocuments()) {
@@ -52,10 +52,11 @@ public class BioCDocumentWriterTest {
     writer.close();
 
     // test
-    assertEquivalentTo(
-        new InputStreamReader(Thread.currentThread()
+    XMLUnit.setIgnoreWhitespace(true);
+    Diff diff = new Diff(new InputStreamReader(Thread.currentThread()
             .getContextClassLoader()
             .getResourceAsStream(XML_FILENAME)),
-        new FileReader(tmpFile));
+            new FileReader(tmpFile));
+    assertTrue(diff.similar());
   }
 }

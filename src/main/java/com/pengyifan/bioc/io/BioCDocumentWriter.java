@@ -7,8 +7,6 @@ import java.io.Writer;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
-import org.apache.commons.lang3.Validate;
-
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 
@@ -23,19 +21,12 @@ import com.pengyifan.bioc.BioCDocument;
 public class BioCDocumentWriter implements Closeable {
 
   private BioCWriter writer;
-  private String dtd;
-  private String encoding;
-  private String version;
-  private boolean standalone;
   private boolean hasWrittenCollectionInfo;
 
   public BioCDocumentWriter(Writer out)
       throws FactoryConfigurationError, XMLStreamException {
     writer = new BioCWriter(out);
     hasWrittenCollectionInfo = false;
-    encoding = "UTF-8";
-    version = "1.0";
-    standalone = true;
   }
 
   @Override
@@ -49,81 +40,6 @@ public class BioCDocumentWriter implements Closeable {
     } catch (XMLStreamException e) {
       throw new IOException(e.getMessage());
     }
-  }
-
-  /**
-   * Returns the absolute URI of the BioC DTD file.
-   * 
-   * @return the absolute URI of the BioC DTD file
-   */
-  public String getDTD() {
-    return dtd;
-  }
-
-  /**
-   * Returns the charset encoding of the BioC file.
-   * 
-   * @return the charset encoding of the BioC file
-   */
-  public String getEncoding() {
-    return encoding;
-  }
-
-  /**
-   * Gets the XML version declared on the XML declaration. Returns null if none
-   * was declared
-   * 
-   * @return the XML version declared on the XML declaration
-   */
-  public String getVersion() {
-    return version;
-  }
-
-  /**
-   * Gets the standalone declaration from the XML declaration.
-   * 
-   * @return true if the DTD is ignored by the parser.
-   */
-  public boolean isStandalone() {
-    return standalone;
-  }
-
-  /**
-   * Sets the absolute URI of the BioC DTD file.
-   * 
-   * @param dtd the absolute URI of the BioC DTD file
-   */
-  public void setDTD(String dtd) {
-    this.dtd = dtd;
-  }
-
-  /**
-   * Sets the charset encoding of the BioC file.
-   * 
-   * @param encoding the charset encoding of the BioC file
-   */
-  public void setEncoding(String encoding) {
-    Validate.notNull(encoding);
-    this.encoding = encoding;
-  }
-
-  /**
-   * Sets the standalone declaration to the XML declaration.
-   * 
-   * @param standalone true if the parser can ignore the DTD
-   */
-  public void setStandalone(boolean standalone) {
-    this.standalone = standalone;
-  }
-
-  /**
-   * Sets the XML version declared on the XML declaration.
-   * 
-   * @param version the XML version declared on the XML declaration
-   */
-  public void setVersion(String version) {
-    Validate.notNull(version);
-    this.version = version;
   }
 
   /**
@@ -142,11 +58,12 @@ public class BioCDocumentWriter implements Closeable {
 
     hasWrittenCollectionInfo = true;
 
-    Validate.notNull(dtd, "haven't set DTD yet");
-
     writer
-        .writeStartDocument(encoding, version, standalone)
-        .writeDTD(dtd)
+        .writeStartDocument(
+            collection.getEncoding(),
+            collection.getVersion(),
+            collection.isStandalone())
+        .writeDTD(collection.getDtd())
         .writeBeginCollectionInfo(collection);
   }
 

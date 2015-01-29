@@ -55,15 +55,6 @@ public class BioCCollectionReader implements Closeable {
   }
 
   /**
-   * Returns the absolute URI of the BioC DTD file.
-   * 
-   * @return the absolute URI of the BioC DTD file
-   */
-  public String getDTD() {
-    return reader.getDtd();
-  }
-
-  /**
    * Returns the collection of documents.
    * 
    * @return the BioC collection

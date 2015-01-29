@@ -56,15 +56,6 @@ public class BioCDocumentReader implements Closeable, Iterable<BioCDocument> {
     reader.close();
   }
 
-  /**
-   * Returns the absolute URI of the BioC DTD file.
-   * 
-   * @return the absolute URI of the BioC DTD file
-   */
-  public String getDTD() {
-    return reader.getDtd();
-  }
-
   @Override
   public Iterator<BioCDocument> iterator() {
     return new Iterator<BioCDocument>() {

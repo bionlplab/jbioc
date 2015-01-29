@@ -6,16 +6,18 @@ import java.io.Reader;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.DTD;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
 import org.apache.commons.lang3.Validate;
+import org.codehaus.stax2.XMLEventReader2;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.evt.DTD2;
 
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
@@ -39,21 +41,21 @@ class BioCReader implements Closeable {
   BioCDocument document;
   BioCPassage passage;
   BioCSentence sentence;
-  XMLEventReader reader;
-  String dtd;
+  XMLEventReader2 reader;
   private int state;
 
   Level level;
 
   protected BioCReader(Reader reader, Level level)
       throws FactoryConfigurationError, XMLStreamException {
-    XMLInputFactory factory = XMLInputFactory.newInstance();
+    XMLInputFactory2 factory = (XMLInputFactory2) XMLInputFactory2
+        .newInstance();
     factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
     factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     factory.setProperty(XMLInputFactory.IS_COALESCING, false);
     factory.setProperty(XMLInputFactory.IS_VALIDATING, false);
     factory.setProperty(XMLInputFactory.SUPPORT_DTD, true);
-    this.reader = factory.createXMLEventReader(reader);
+    this.reader = (XMLEventReader2) factory.createXMLEventReader(reader);
     this.level = level;
     state = 0;
   }
@@ -70,10 +72,6 @@ class BioCReader implements Closeable {
 
   private String getAttribute(StartElement startElement, String key) {
     return startElement.getAttributeByName(new QName(key)).getValue();
-  }
-
-  protected String getDtd() {
-    return dtd;
   }
 
   private String getText()
@@ -94,13 +92,16 @@ class BioCReader implements Closeable {
           StartElement startElement = event.asStartElement();
           localName = startElement.getName().getLocalPart();
           if (localName.equals("collection")) {
-            collection = new BioCCollection();
             state = 1;
           }
-        }
-        if (event.getEventType() == XMLStreamConstants.DTD) {
-          DTD dtd = (DTD) event;
-          this.dtd = dtd.getDocumentTypeDeclaration();
+        } else if (event.isStartDocument()) {
+          StartDocument startDocument = (StartDocument) event;
+          collection = new BioCCollection();
+          collection.setEncoding(startDocument.getCharacterEncodingScheme());
+          collection.setVersion(startDocument.getVersion());
+          collection.setStandalone(startDocument.isStandalone());
+        } else if (event.getEventType() == XMLStreamConstants.DTD) {
+          collection.setDtd((DTD2) event);
         }
         break;
       case 1:

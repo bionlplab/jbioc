@@ -1,17 +1,21 @@
 package com.pengyifan.bioc.testing;
 
-import static com.pengyifan.bioc.testing.BioCAssert.assertAndPrintDtdValid;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Reader;
 import java.util.List;
 
+import junit.framework.AssertionFailedError;
+
+import org.custommonkey.xmlunit.Validator;
+import org.custommonkey.xmlunit.exceptions.ConfigurationException;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.ParserProperties;
+import org.xml.sax.SAXException;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
@@ -107,6 +111,26 @@ public class BioCDtdValidator {
         }
         System.out.printf("testing %s: PASSED\n", biocFilename);
       }
+    }
+  }
+  
+  /**
+   * Asserts that a BioC file is valid based on the given DTD file. If the BioC
+   * file is invalid, prints the error message.
+   * 
+   * @param reader BioC file reader stream
+   * @param dtdFilename the absolute URI of the BioC DTD file
+   */
+  public void assertAndPrintDtdValid(Reader reader, String dtdFilename) {
+    try {
+      Validator v = new Validator(reader, dtdFilename);
+      v.assertIsValid();
+    } catch (ConfigurationException e) {
+      e.printStackTrace();
+    } catch (SAXException e) {
+      e.printStackTrace();
+    } catch (AssertionFailedError e) {
+      System.out.println(e.getMessage());
     }
   }
 }
