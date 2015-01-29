@@ -9,7 +9,12 @@ import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
 
 /**
- * This class provides a simple way to iterate over BioC passages.
+ * A passage iterator over a collection, a document or a single passage.
+ * 
+ * @since 1.0.0
+ * @see BioCDocumentIterator
+ * @see BioCSentenceIterator
+ * @author Yifan Peng
  */
 public class BioCPassageIterator implements Iterator<BioCPassage> {
 
@@ -17,10 +22,18 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
   private BioCDocument currentDocument;
   private Iterator<BioCPassage> passageItr;
 
+  /**
+   * Creates an empty iterator.
+   */
   public BioCPassageIterator() {
     this(new BioCDocumentIterator());
   }
-  
+
+  /**
+   * Creates an iterator given the BioCDocumentIterator.
+   * 
+   * @param documentItr the BioCDocumentIterator
+   */
   public BioCPassageIterator(BioCDocumentIterator documentItr) {
     this.documentItr = documentItr;
     if (documentItr.hasNext()) {
@@ -31,15 +44,30 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
       passageItr = Collections.emptyIterator();
     }
   }
-  
+
+  /**
+   * Creates an iterator given the BioC collection.
+   * 
+   * @param collection the BioC collection
+   */
   public BioCPassageIterator(BioCCollection collection) {
     this(new BioCDocumentIterator(collection));
   }
 
+  /**
+   * Creates an iterator given the BioC document.
+   * 
+   * @param document the BioC collection
+   */
   public BioCPassageIterator(BioCDocument document) {
     this(new BioCDocumentIterator(document));
   }
-  
+
+  /**
+   * Creates an iterator containing only passage.
+   * 
+   * @param passage the BioC passage
+   */
   public BioCPassageIterator(BioCPassage passage) {
     documentItr = new BioCDocumentIterator();
     currentDocument = null;
@@ -55,6 +83,11 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
     return currentDocument;
   }
 
+  /**
+   * Returns true if the iteration has more passages.
+   * 
+   * @return if the iteration has more passages
+   */
   @Override
   public boolean hasNext() {
     if (passageItr.hasNext()) {
@@ -68,6 +101,11 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
     }
   }
 
+  /**
+   * Returns the next passage in the iteration.
+   * 
+   * @return the next passage in the iteration
+   */
   @Override
   public BioCPassage next() {
     return passageItr.next();

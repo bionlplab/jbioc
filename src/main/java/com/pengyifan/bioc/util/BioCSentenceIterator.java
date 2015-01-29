@@ -10,7 +10,13 @@ import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCSentence;
 
 /**
- * This class provides a simple way to iterate over BioC sentences.
+ * A sentence iterator over a collection, a document, a passage or a single
+ * sentence.
+ * 
+ * @since 1.0.0
+ * @see BioCDocumentIterator
+ * @see BioCPassageIterator
+ * @author Yifan Peng
  */
 public class BioCSentenceIterator implements Iterator<BioCSentence> {
 
@@ -18,10 +24,18 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
   private BioCPassage currentPassage;
   private Iterator<BioCSentence> sentenceItr;
 
+  /**
+   * Creates an empty iterator.
+   */
   public BioCSentenceIterator() {
     this(new BioCPassageIterator());
   }
 
+  /**
+   * Creates an iterator given the BioCPassageIterator.
+   * 
+   * @param passageItr the BioCPassageIterator
+   */
   public BioCSentenceIterator(BioCPassageIterator passageItr) {
     this.passageItr = passageItr;
     if (passageItr.hasNext()) {
@@ -33,18 +47,38 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     }
   }
 
+  /**
+   * Creates an iterator given the BioC collection.
+   * 
+   * @param collection the BioC collection
+   */
   public BioCSentenceIterator(BioCCollection collection) {
     this(new BioCPassageIterator(collection));
   }
 
+  /**
+   * Creates an iterator given the BioC document.
+   * 
+   * @param document the BioC collection
+   */
   public BioCSentenceIterator(BioCDocument document) {
     this(new BioCPassageIterator(document));
   }
 
+  /**
+   * Creates an iterator given the BioC passage.
+   * 
+   * @param passage the BioC collection
+   */
   public BioCSentenceIterator(BioCPassage passage) {
     this(new BioCPassageIterator(passage));
   }
 
+  /**
+   * Creates an iterator containing only sentence.
+   * 
+   * @param sentence the BioC sentence
+   */
   public BioCSentenceIterator(BioCSentence sentence) {
     passageItr = new BioCPassageIterator();
     currentPassage = null;
@@ -69,6 +103,11 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     return currentPassage;
   }
 
+  /**
+   * Returns true if the iteration has more sentences.
+   * 
+   * @return if the iteration has more sentences
+   */
   @Override
   public boolean hasNext() {
     if (sentenceItr.hasNext()) {
@@ -82,6 +121,11 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     }
   }
 
+  /**
+   * Returns the next sentence in the iteration.
+   * 
+   * @return the next sentence in the iteration
+   */
   @Override
   public BioCSentence next() {
     return sentenceItr.next();

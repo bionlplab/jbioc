@@ -8,7 +8,7 @@ import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 
 /**
- * A document iterator over a collection
+ * A document iterator over a collection or a single document.
  * 
  * @since 1.0.0
  * @see BioCPassageIterator
@@ -36,7 +36,7 @@ public class BioCDocumentIterator implements Iterator<BioCDocument> {
   }
 
   /**
-   * an iterator containing only document.
+   * Creates an iterator containing only document.
    * 
    * @param document the BioC document
    */
