@@ -13,11 +13,13 @@ The latest release is 0.1.0-SNAPSHOT.
 
 It is available in Maven Central as com.pengyifan:bioc-core:jar:0.1.0-SNAPSHOT
 
+```XML
 <dependency>
   <groupId>com.pengyifan</groupId>
   <artifactId>bioc-core</artifactId>
   <version>0.1.0-SNAPSHOT</version>
 </dependency>
+```
 
 ### Developers
 
