@@ -14,6 +14,17 @@ The latest release is 0.1.0-SNAPSHOT.
 It is available in Maven Central as com.pengyifan:bioc-core:jar:0.1.0-SNAPSHOT
 
 ```XML
+<repositories>
+    <repository>
+        <id>oss-sonatype</id>
+        <name>oss-sonatype</name>
+        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+...
 <dependency>
   <groupId>com.pengyifan</groupId>
   <artifactId>bioc-core</artifactId>

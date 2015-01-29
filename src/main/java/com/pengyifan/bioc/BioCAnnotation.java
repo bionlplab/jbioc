@@ -40,6 +40,8 @@ public class BioCAnnotation {
 
   /**
    * Add the location at the specified position in this annotation.
+   * 
+   * @param location The location at the specified position in this annotation
    */
   public void addLocation(BioCLocation location) {
     checkNotNull(location, "location cannot be null");
@@ -75,6 +77,8 @@ public class BioCAnnotation {
 
   /**
    * Returns the id used to identify this annotation in a {@link BioCRelation}.
+   * 
+   * @return the id used to identify this annotation in a {@link BioCRelation}.
    */
   public String getID() {
     checkNotNull(id, "id has to be set");
@@ -91,6 +95,8 @@ public class BioCAnnotation {
 
   /**
    * Returns the information in this annotation.
+   * 
+   * @return the information in this annotation.
    */
   public Map<String, String> getInfons() {
     return infons;
