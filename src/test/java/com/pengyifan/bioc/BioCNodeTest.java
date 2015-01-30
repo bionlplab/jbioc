@@ -26,12 +26,19 @@ public class BioCNodeTest {
     BioCNode base = new BioCNode(REFID, ROLE);
     BioCNode baseCopy = new BioCNode(base);
     BioCNode diffRefid = new BioCNode(REFID_2, ROLE);
+    
+    BioCNode diffRefid2 = new BioCNode(base);
+    diffRefid2.setRefid(REFID_2);
+    
     BioCNode diffRole = new BioCNode(REFID, ROLE_2);
-
+    
+    BioCNode diffRole2 = new BioCNode(base);
+    diffRole2.setRole(ROLE_2);
+    
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
-        .addEqualityGroup(diffRefid)
-        .addEqualityGroup(diffRole)
+        .addEqualityGroup(diffRefid, diffRefid2)
+        .addEqualityGroup(diffRole, diffRole2)
         .testEquals();
   }
 

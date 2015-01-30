@@ -71,7 +71,10 @@ public class BioCPassage {
    */
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
-    checkArgument(annotations.containsKey(annotation.getID()));
+    checkArgument(
+        !annotations.containsKey(annotation.getID()),
+        "duplicated annotation: %s",
+        annotation);
     this.annotations.put(annotation.getID(), annotation);
   }
 
@@ -82,7 +85,10 @@ public class BioCPassage {
    */
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
-    checkArgument(relations.containsKey(relation.getID()));
+    checkArgument(
+        !relations.containsKey(relation.getID()),
+        "duplicated relation: %s",
+        relation);
     this.relations.put(relation.getID(), relation);
   }
 
@@ -114,7 +120,7 @@ public class BioCPassage {
    * Clears all relations.
    */
   public void clearRelations() {
-    annotations.clear();
+    relations.clear();
   }
 
   /**
@@ -167,8 +173,8 @@ public class BioCPassage {
    * @param key the key whose associated value is to be returned
    * @return the value to which the specified key is mapped
    */
-  public String getInfon(String key) {
-    return infons.get(key);
+  public Optional<String> getInfon(String key) {
+    return Optional.ofNullable(infons.get(key));
   }
 
   /**

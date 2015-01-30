@@ -31,13 +31,19 @@ public class BioCLocationTest {
   public void test_equals() {
     BioCLocation base = new BioCLocation(OFFSET, LENGTH);
     BioCLocation baseCopy = new BioCLocation(base);
+
     BioCLocation diffOffset = new BioCLocation(OFFSET_2, LENGTH);
+    BioCLocation diffOffset2 = new BioCLocation(base);
+    diffOffset2.setOffset(OFFSET_2);
+
     BioCLocation diffLength = new BioCLocation(OFFSET, LENGTH_2);
+    BioCLocation diffLength2 = new BioCLocation(base);
+    diffLength2.setLength(LENGTH_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
-        .addEqualityGroup(diffOffset)
-        .addEqualityGroup(diffLength)
+        .addEqualityGroup(diffOffset, diffOffset2)
+        .addEqualityGroup(diffLength, diffLength2)
         .testEquals();
   }
 

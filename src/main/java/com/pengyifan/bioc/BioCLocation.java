@@ -96,7 +96,6 @@ public class BioCLocation {
    * @param offset the offset of annotation
    */
   public void setOffset(int offset) {
-    checkArgument(offset >= 0, "offset has to be >= 0");
     this.offset = offset;
   }
 

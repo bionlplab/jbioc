@@ -67,7 +67,10 @@ public class BioCDocument {
    */
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
-    checkArgument(annotations.containsKey(annotation.getID()));
+    checkArgument(
+        !annotations.containsKey(annotation.getID()),
+        "duplicated annotation: %s",
+        annotation);
     this.annotations.put(annotation.getID(), annotation);
   }
 
@@ -88,7 +91,10 @@ public class BioCDocument {
    */
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
-    checkArgument(relations.containsKey(relation.getID()));
+    checkArgument(
+        !relations.containsKey(relation.getID()),
+        "duplicated relation: %s",
+        relation);
     this.relations.put(relation.getID(), relation);
   }
 
@@ -117,7 +123,7 @@ public class BioCDocument {
    * Clears all relations.
    */
   public void clearRelations() {
-    annotations.clear();
+    relations.clear();
   }
 
   @Override
@@ -132,6 +138,7 @@ public class BioCDocument {
     return Objects.equals(id, rhs.id)
         && Objects.equals(infons, rhs.infons)
         && Objects.equals(passages, rhs.passages)
+        && Objects.equals(annotations, rhs.annotations)
         && Objects.equals(relations, rhs.relations);
   }
 
@@ -238,7 +245,7 @@ public class BioCDocument {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, infons, passages, relations);
+    return Objects.hash(id, infons, passages, annotations, relations);
   }
 
   /**

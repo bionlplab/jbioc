@@ -1,9 +1,9 @@
 package com.pengyifan.bioc.util;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,7 +17,6 @@ import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCSentence;
-import com.pengyifan.bioc.util.BioCSentenceIterator;
 
 /**
  * Test BioCCollectionReader and BioCCollectionWriter
@@ -55,21 +54,29 @@ public class BioCSentenceIteratorTest {
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    List<BioCSentence> sentences = Lists.newArrayList();
     BioCSentenceIterator itr = new BioCSentenceIterator(COLLECTION);
-    while (itr.hasNext()) {
-      BioCSentence sentence = itr.next();
-      sentences.add(sentence);
-    }
+    List<BioCSentence> actual = Lists.newArrayList(itr);
+    List<BioCSentence> expected = Lists.newArrayList(
+        EXPECTED_SEN_0,
+        EXPECTED_SEN_1,
+        EXPECTED_SEN_2,
+        EXPECTED_SEN_3);
+    assertThat(actual, is(expected));
+  }
 
-    assertEquals(sentences.size(), 4);
-    assertThat(
-        sentences,
-        hasItems(
-            EXPECTED_SEN_0,
-            EXPECTED_SEN_1,
-            EXPECTED_SEN_2,
-            EXPECTED_SEN_3));
+  @Test
+  public void test_constructorSentence() {
+    BioCSentenceIterator itr = new BioCSentenceIterator(EXPECTED_SEN_0);
+    List<BioCSentence> actual = Lists.newArrayList(itr);
+    List<BioCSentence> expected = Lists.newArrayList(EXPECTED_SEN_0);
+    assertThat(actual, is(expected));
+  }
+
+  @Test
+  public void test_constructorEmpty() {
+    BioCSentenceIterator itr = new BioCSentenceIterator();
+    List<BioCSentence> actual = Lists.newArrayList(itr);
+    assertTrue(actual.isEmpty());
   }
 
   @Test

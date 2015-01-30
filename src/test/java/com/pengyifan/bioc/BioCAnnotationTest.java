@@ -1,29 +1,34 @@
 package com.pengyifan.bioc;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.common.collect.Lists;
 import com.google.common.testing.EqualsTester;
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCLocation;
 
 public class BioCAnnotationTest {
 
-  private static final String TEXT = "ABC";
-
   private static final String ID = "1";
   private static final String KEY = "KEY";
   private static final String VALUE = "VALUE";
+  private static final String TEXT = "ABC";
 
   private static final String ID_2 = "2";
   private static final String KEY_2 = "KEY2";
   private static final String VALUE_2 = "VALUE2";
+  private static final String TEXT_2 = "DEF";
 
   private static final BioCLocation LOC_1 = new BioCLocation(0, 1);
   private static final BioCLocation LOC_2 = new BioCLocation(1, 2);
@@ -56,12 +61,16 @@ public class BioCAnnotationTest {
 
     BioCAnnotation diffLocation = new BioCAnnotation(base);
     diffLocation.addLocation(LOC_3);
+    
+    BioCAnnotation diffText = new BioCAnnotation(base);
+    diffText.setText(TEXT_2);
 
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
         .addEqualityGroup(diffId)
         .addEqualityGroup(diffLocation)
         .addEqualityGroup(diffInfon)
+        .addEqualityGroup(diffText)
         .testEquals();
   }
 
@@ -124,4 +133,10 @@ public class BioCAnnotationTest {
     assertFalse(base.getInfon(null).isPresent());
   }
 
+  @Test
+  public void test_nodeIterator() {
+    List<BioCLocation> expected = Lists.newArrayList(LOC_1, LOC_2);
+    List<BioCLocation> actual = Lists.newArrayList(base.locationIterator());
+    assertThat(actual, is(expected));
+  }
 }

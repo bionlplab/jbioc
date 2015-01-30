@@ -1,17 +1,20 @@
 package com.pengyifan.bioc;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import com.google.common.collect.Lists;
 import com.google.common.testing.EqualsTester;
-import com.pengyifan.bioc.BioCNode;
-import com.pengyifan.bioc.BioCRelation;
 
 public class BioCRelationTest {
 
@@ -57,8 +60,8 @@ public class BioCRelationTest {
     new EqualsTester()
         .addEqualityGroup(base, baseCopy)
         .addEqualityGroup(diffId)
-//        .addEqualityGroup(diffNode)
-//        .addEqualityGroup(diffInfon)
+        .addEqualityGroup(diffNode)
+        .addEqualityGroup(diffInfon)
         .testEquals();
   }
 
@@ -112,5 +115,12 @@ public class BioCRelationTest {
     assertFalse(base.containsNode(NODE_3));
     base.addNode(NODE_3);
     assertTrue(base.containsNode(NODE_3));
+  }
+  
+  @Test
+  public void test_nodeIterator() {
+    List<BioCNode> expected = Lists.newArrayList(NODE_1, NODE_2);
+    List<BioCNode> actual = Lists.newArrayList(base.nodeIterator());
+    assertThat(actual, is(expected));
   }
 }

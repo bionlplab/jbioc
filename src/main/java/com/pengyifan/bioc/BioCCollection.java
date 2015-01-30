@@ -62,6 +62,9 @@ public class BioCCollection {
     setDate(collection.date);
     setInfons(collection.infons);
     setKey(collection.key);
+    setVersion(collection.version);
+    setEncoding(collection.encoding);
+    setStandalone(collection.standalone);
     setDocuments(collection.documents);
   }
 
@@ -113,6 +116,9 @@ public class BioCCollection {
         && Objects.equals(infons, rhs.infons)
         && Objects.equals(key, rhs.key)
         && Objects.equals(date, rhs.date)
+        && Objects.equals(version, rhs.version)
+        && Objects.equals(encoding, rhs.encoding)
+        && Objects.equals(standalone, rhs.standalone)
         && Objects.equals(documents, rhs.documents);
   }
 
@@ -231,7 +237,15 @@ public class BioCCollection {
 
   @Override
   public int hashCode() {
-    return Objects.hash(source, date, key, infons, documents);
+    return Objects.hash(
+        source,
+        date,
+        key,
+        infons,
+        version,
+        encoding,
+        standalone,
+        documents);
   }
 
   /**
