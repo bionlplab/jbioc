@@ -21,7 +21,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
 
 /**
- * A class to validate the BioC file via the command line.
+ * Validate the BioC file via the command line.
  */
 public class BioCDtdValidator {
 

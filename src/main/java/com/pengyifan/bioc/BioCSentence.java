@@ -15,13 +15,16 @@ import com.google.common.collect.Maps;
 
 /**
  * One sentence in a {@link BioCPassage}.
- * 
+ * <p>
  * It may contain the original text of the sentence or it might be
  * {@link BioCAnnotation}s and possibly {@link BioCRelation}s on the text of
  * the passage.
- * 
+ * <p>
  * There is no code to keep those possibilities mutually exclusive. However the
- * currently available DTDs only describe the listed possibilities
+ * currently available DTDs only describe the listed possibilities.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCSentence {
 
@@ -31,6 +34,9 @@ public class BioCSentence {
   private Map<String, BioCAnnotation> annotations;
   private Map<String, BioCRelation> relations;
 
+  /**
+   * Constructs an empty sentence.
+   */
   public BioCSentence() {
     offset = -1;
     text = null;
@@ -40,10 +46,11 @@ public class BioCSentence {
   }
 
   /**
-   * Constructs a builder initialized with the current sentence. Use this to
-   * derive a new sentence from the current one.
+   * Constructs a sentence containing the information of the specified
+   * sentence.
    * 
-   * @param sentence bioc sentence
+   * @param sentence the sentence whose information is to be placed into this
+   *          passage
    */
   public BioCSentence(BioCSentence sentence) {
     this();
@@ -185,7 +192,7 @@ public class BioCSentence {
   }
 
   /**
-   * The original text of the sentence.
+   * Returns the original text of the sentence.
    * 
    * @return the original text of the sentence
    */

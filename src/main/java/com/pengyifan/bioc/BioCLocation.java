@@ -10,6 +10,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 /**
  * The connection to the original text can be made through the {@code offset}
  * and {@code length} fields.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCLocation {
 
@@ -28,6 +31,13 @@ public class BioCLocation {
     this.length = length;
   }
 
+  /**
+   * Constructs a location containing the information of the specified
+   * location.
+   * 
+   * @param location the location whose information is to be placed into
+   *          this location
+   */
   public BioCLocation(BioCLocation location) {
     this(location.offset, location.length);
   }

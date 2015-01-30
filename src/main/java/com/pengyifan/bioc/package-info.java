@@ -1,4 +1,6 @@
 /**
+ * Defines data structures of BioC.
+ * <p>
  * BioC is a collection of data structures to represent data often used in
  * natural language text processing. These data structures are defined in Java.
  * <p>

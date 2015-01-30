@@ -22,6 +22,9 @@ import com.google.common.collect.Maps;
  * An id, typically from the original corpus, identifies the particular
  * document. It includes {@link BioCPassage}s in the document and possibly
  * {@link BioCRelation}s over annotations on the document.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCDocument {
 
@@ -31,6 +34,9 @@ public class BioCDocument {
   private Map<String, BioCAnnotation> annotations;
   private Map<String, BioCRelation> relations;
 
+  /**
+   * Constructs an empty document.
+   */
   public BioCDocument() {
     id = null;
     infons = Maps.newHashMap();
@@ -40,8 +46,8 @@ public class BioCDocument {
   }
 
   /**
-   * Constructs a builder initialized with the current document. Use this to
-   * derive a new document from the current one.
+   * Constructs an document containing the information of the specified
+   * document.
    * 
    * @param document bioc document
    */

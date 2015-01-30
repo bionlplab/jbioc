@@ -23,6 +23,9 @@ import com.google.common.collect.Maps;
  * {@link BioCAnnotation}s over that text. It could be the {@link BioCSentence}
  * s in the passage. In either case it might include {@link BioCRelation}s over
  * annotations on the passage.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCPassage {
 
@@ -33,6 +36,9 @@ public class BioCPassage {
   private Map<String, BioCAnnotation> annotations;
   private Map<String, BioCRelation> relations;
 
+  /**
+   * Constructs an empty passage.
+   */
   public BioCPassage() {
     offset = -1;
     text = null;
@@ -43,10 +49,10 @@ public class BioCPassage {
   }
 
   /**
-   * Constructs a builder initialized with the current passage. Use this to
-   * derive a new passage from the current one.
+   * Constructs a passage containing the information of the specified passage.
    * 
-   * @param passage bioc passage
+   * @param passage the passage whose information is to be placed into this
+   *          passage
    */
   public BioCPassage(BioCPassage passage) {
     this();
@@ -241,7 +247,7 @@ public class BioCPassage {
   }
 
   /**
-   * The original text of the passage.
+   * Returns the original text of the passage.
    * 
    * @return the original text of the passage
    */

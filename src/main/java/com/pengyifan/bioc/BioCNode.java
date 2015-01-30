@@ -9,6 +9,9 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * The annotations and/or other relations in the relation.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCNode {
 
@@ -27,6 +30,13 @@ public class BioCNode {
     this.role = role;
   }
 
+  /**
+   * Constructs a node containing the information of the specified
+   * location.
+   * 
+   * @param node the node whose information is to be placed into
+   *          this node
+   */
   public BioCNode(BioCNode node) {
     this(node.refid, node.role);
   }

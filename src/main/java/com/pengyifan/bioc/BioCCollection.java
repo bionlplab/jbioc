@@ -23,6 +23,9 @@ import com.google.common.collect.Maps;
  * portion of a corpus. Fields are provided to describe the collection.
  * <p>
  * Documents may appear empty if doing document at a time IO.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCCollection {
 
@@ -38,11 +41,21 @@ public class BioCCollection {
   private Map<String, String> infons;
   private List<BioCDocument> documents;
 
+  /**
+   * Constructs an empty collection.
+   */
   public BioCCollection() {
     infons = Maps.newHashMap();
     documents = Lists.newArrayList();
   }
 
+  /**
+   * Constructs a collection containing the information of the specified
+   * collection.
+   * 
+   * @param collection the collection whose information is to be placed into
+   *          this collection
+   */
   public BioCCollection(BioCCollection collection) {
     this();
     setSource(collection.source);
@@ -77,10 +90,10 @@ public class BioCCollection {
   }
 
   /**
-   * Returns a iterator over the document in this collection in proper
+   * Returns an iterator over the document in this collection in proper
    * sequence.
    * 
-   * @return a iterator over the document in this collection in proper
+   * @return an iterator over the document in this collection in proper
    *         sequence.
    */
   public Iterator<BioCDocument> documentIterator() {

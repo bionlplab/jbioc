@@ -17,6 +17,9 @@ import com.google.common.collect.Sets;
 /**
  * Relationship between multiple {@link BioCAnnotation}s and possibly other
  * {@code BioCRelation}s.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCRelation {
 
@@ -24,11 +27,21 @@ public class BioCRelation {
   private Map<String, String> infons;
   private Set<BioCNode> nodes;
 
+  /**
+   * Constructs an empty relation.
+   */
   public BioCRelation() {
     infons = Maps.newHashMap();
     nodes = Sets.newHashSet();
   }
 
+  /**
+   * Constructs a relation containing the information of the specified
+   * relation.
+   * 
+   * @param relation the relation whose information is to be placed into this
+   *          relation
+   */
   public BioCRelation(BioCRelation relation) {
     this();
     setID(relation.id);
@@ -36,6 +49,11 @@ public class BioCRelation {
     setNodes(relation.nodes);
   }
 
+  /**
+   * Add the node to this relation
+   * 
+   * @param node node to be added to this relation
+   */
   public void addNode(BioCNode node) {
     checkNotNull(node, "node cannot be null");
     nodes.add(node);
@@ -57,6 +75,7 @@ public class BioCRelation {
 
   /**
    * Returns true if this relation contains the specified node.
+   * 
    * @param node node whose presence in this relation is to be tested
    * @return if this relation contains the specified node
    */
@@ -98,7 +117,7 @@ public class BioCRelation {
   public Optional<String> getInfon(String key) {
     return Optional.ofNullable(infons.get(key));
   }
-  
+
   /**
    * Returns the information of relation. Implemented examples include
    * abbreviation long forms and short forms and protein events.
@@ -154,8 +173,8 @@ public class BioCRelation {
   }
 
   /**
-   * Removes the value for a key from this relation if it is present
-   * (optional operation).
+   * Removes the value for a key from this relation if it is present (optional
+   * operation).
    * 
    * @param key key with which the specified value is to be associated
    */

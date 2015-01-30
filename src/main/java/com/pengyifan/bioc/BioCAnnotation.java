@@ -15,8 +15,10 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
 /**
- * Stand off annotation. The connection to the original text can be made
- * through the {@code location} and the {@code text} fields.
+ * Stand off annotation.
+ * 
+ * @since 1.0.0
+ * @author Yifan Peng
  */
 public class BioCAnnotation {
 
@@ -25,11 +27,21 @@ public class BioCAnnotation {
   private Set<BioCLocation> locations;
   private String text;
 
+  /**
+   * Constructs an empty annotation.
+   */
   public BioCAnnotation() {
     infons = Maps.newHashMap();
     locations = Sets.newHashSet();
   }
 
+  /**
+   * Constructs an annotation containing the information of the specified
+   * annotation.
+   * 
+   * @param annotation the annotation whose information is to be placed into
+   *          this annotation
+   */
   public BioCAnnotation(BioCAnnotation annotation) {
     this();
     setID(annotation.id);
@@ -137,7 +149,7 @@ public class BioCAnnotation {
   }
 
   /**
-   * The original text of the annotation
+   * Returns the original text of the annotation
    * 
    * @return the original text of the annotation
    */
