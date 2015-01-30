@@ -1,6 +1,6 @@
 package com.pengyifan.bioc;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -119,8 +119,7 @@ public class BioCRelationTest {
   
   @Test
   public void test_nodeIterator() {
-    List<BioCNode> expected = Lists.newArrayList(NODE_1, NODE_2);
     List<BioCNode> actual = Lists.newArrayList(base.nodeIterator());
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(NODE_1, NODE_2));
   }
 }

@@ -1,6 +1,6 @@
 package com.pengyifan.bioc;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -153,9 +153,8 @@ public class BioCCollectionTest {
   @Test
   public void test_documentIterator() {
     base.addDocument(DOC_2);
-    List<BioCDocument> expected = Lists.newArrayList(DOC_1, DOC_2);
     List<BioCDocument> actual = Lists.newArrayList(base.documentIterator());
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(DOC_1, DOC_2));
   }
 
   private static BioCDocument createDocument(String id) {

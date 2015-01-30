@@ -1,6 +1,6 @@
 package com.pengyifan.bioc;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -161,9 +161,8 @@ public class BioCPassageTest {
   @Test
   public void test_sentenceIterator() {
     base.addSentence(SEN_2);
-    List<BioCSentence> expected = Lists.newArrayList(SEN_1, SEN_2);
     List<BioCSentence> actual = Lists.newArrayList(base.sentenceIterator());
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(SEN_1, SEN_2));
   }
 
   private static BioCAnnotation createAnnotation(String id) {

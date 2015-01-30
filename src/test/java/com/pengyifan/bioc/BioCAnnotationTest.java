@@ -1,6 +1,6 @@
 package com.pengyifan.bioc;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -135,8 +135,7 @@ public class BioCAnnotationTest {
 
   @Test
   public void test_nodeIterator() {
-    List<BioCLocation> expected = Lists.newArrayList(LOC_1, LOC_2);
     List<BioCLocation> actual = Lists.newArrayList(base.locationIterator());
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(LOC_1, LOC_2));
   }
 }
