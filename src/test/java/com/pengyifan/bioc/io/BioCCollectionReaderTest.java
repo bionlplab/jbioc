@@ -3,8 +3,11 @@ package com.pengyifan.bioc.io;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.StringReader;
+import java.net.URL;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -20,9 +23,10 @@ import com.pengyifan.bioc.BioCPassage;
 public class BioCCollectionReaderTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-//  private static final String DTD = "<!DOCTYPE collection SYSTEM \"BioC.dtd\" []>";
+  // private static final String DTD =
+  // "<!DOCTYPE collection SYSTEM \"BioC.dtd\" []>";
   private static final String DTD = "BioC.dtd";
-  
+
   @Rule
   public TemporaryFolder testFolder = new TemporaryFolder();
 
@@ -32,20 +36,12 @@ public class BioCCollectionReaderTest {
   @Test
   public void test_success()
       throws Exception {
-    BioCCollectionReader reader = new BioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
-    BioCCollection collection = reader.readCollection();
-    reader.close();
-    assertEquals(collection.getSource(), "PubMed");
-    assertEquals(collection.getKey(), "PMID-8557975-simplified-sentences.key");
-
-    BioCDocument doc = collection.getDocument(0);
-    assertEquals(doc.getPassageCount(), 1);
-
-    BioCPassage pass = doc.getPassage(0);
-    assertEquals(pass.getSentenceCount(), 7);
+    URL url = this.getClass().getResource("/" + XML_FILENAME);
+    File file = new File(url.getFile());
+    test(new BioCCollectionReader(new FileReader(file)));
+    test(new BioCCollectionReader(new FileInputStream(file)));
+    test(new BioCCollectionReader(file));
+    test(new BioCCollectionReader(file.getAbsolutePath()));
   }
 
   @Test
@@ -60,10 +56,8 @@ public class BioCCollectionReaderTest {
   @Test
   public void test_readTwice()
       throws Exception {
-    BioCCollectionReader reader = new BioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    URL url = this.getClass().getResource("/" + XML_FILENAME);
+    BioCCollectionReader reader = new BioCCollectionReader(url.getFile());
     reader.readCollection();
     // twice
     assertNull(reader.readCollection());
@@ -73,12 +67,24 @@ public class BioCCollectionReaderTest {
   @Test
   public void test_dtd()
       throws Exception {
-    BioCCollectionReader reader = new BioCCollectionReader(
-            new InputStreamReader(Thread.currentThread()
-                .getContextClassLoader()
-                .getResourceAsStream(XML_FILENAME)));
+    URL url = this.getClass().getResource("/" + XML_FILENAME);
+    BioCCollectionReader reader = new BioCCollectionReader(url.getFile());
     BioCCollection collection = reader.readCollection();
-    assertEquals(DTD, collection.getDtd().getSystemId());
     reader.close();
+    assertEquals(DTD, collection.getDtd().getSystemId());
+  }
+
+  private void test(BioCCollectionReader reader)
+      throws Exception {
+    BioCCollection collection = reader.readCollection();
+    reader.close();
+    assertEquals(collection.getSource(), "PubMed");
+    assertEquals(collection.getKey(), "PMID-8557975-simplified-sentences.key");
+
+    BioCDocument doc = collection.getDocument(0);
+    assertEquals(doc.getPassageCount(), 1);
+
+    BioCPassage pass = doc.getPassage(0);
+    assertEquals(pass.getSentenceCount(), 7);
   }
 }

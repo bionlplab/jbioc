@@ -1,9 +1,10 @@
 package com.pengyifan.bioc.util;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,33 +44,59 @@ public class BioCSentenceIteratorTest {
       3,
       "MEK1 in turn phosphorylates ERK1.");
 
-  private static final BioCCollection COLLECTION = createCollection(
-      DATE,
-      KEY,
-      SOURCE,
-      createDocument("1",
-          createPassage(0, EXPECTED_SEN_0),
-          createPassage(1, EXPECTED_SEN_1, EXPECTED_SEN_2, EXPECTED_SEN_3)));
+  private static final BioCPassage EXPECTED_PASSAGE_0 = createPassage(
+      0,
+      EXPECTED_SEN_0);
+  private static final BioCPassage EXPECTED_PASSAGE_1 = createPassage(
+      1, EXPECTED_SEN_1, EXPECTED_SEN_2, EXPECTED_SEN_3);
+
+  private static final BioCDocument EXPECTED_DOCUMENT = createDocument(
+      "1",
+      EXPECTED_PASSAGE_0,
+      EXPECTED_PASSAGE_1);
+
+  private static final BioCCollection EXPECTED_COLLECTION = createCollection(
+      DATE, KEY, SOURCE, EXPECTED_DOCUMENT);
 
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    BioCSentenceIterator itr = new BioCSentenceIterator(COLLECTION);
+    BioCSentenceIterator itr = new BioCSentenceIterator(EXPECTED_COLLECTION);
     List<BioCSentence> actual = Lists.newArrayList(itr);
-    List<BioCSentence> expected = Lists.newArrayList(
-        EXPECTED_SEN_0,
-        EXPECTED_SEN_1,
-        EXPECTED_SEN_2,
-        EXPECTED_SEN_3);
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(EXPECTED_SEN_0, EXPECTED_SEN_1,
+        EXPECTED_SEN_2, EXPECTED_SEN_3));
+
+    itr = new BioCSentenceIterator(EXPECTED_COLLECTION);
+    assertTrue(itr.hasNext());
+    itr.next();
+    assertEquals(EXPECTED_DOCUMENT, itr.getDocument());
+    assertEquals(EXPECTED_PASSAGE_0, itr.getPassage());
+
+    assertTrue(itr.hasNext());
+    itr.next();
+    assertEquals(EXPECTED_PASSAGE_1, itr.getPassage());
   }
 
   @Test
   public void test_constructorSentence() {
     BioCSentenceIterator itr = new BioCSentenceIterator(EXPECTED_SEN_0);
     List<BioCSentence> actual = Lists.newArrayList(itr);
-    List<BioCSentence> expected = Lists.newArrayList(EXPECTED_SEN_0);
-    assertThat(actual, is(expected));
+    assertThat(actual, contains(EXPECTED_SEN_0));
+  }
+
+  @Test
+  public void test_constructorPassage() {
+    BioCSentenceIterator itr = new BioCSentenceIterator(EXPECTED_PASSAGE_1);
+    List<BioCSentence> actual = Lists.newArrayList(itr);
+    assertThat(actual, contains(EXPECTED_SEN_1, EXPECTED_SEN_2, EXPECTED_SEN_3));
+  }
+
+  @Test
+  public void test_constructorDocument() {
+    BioCSentenceIterator itr = new BioCSentenceIterator(EXPECTED_DOCUMENT);
+    List<BioCSentence> actual = Lists.newArrayList(itr);
+    assertThat(actual, contains(EXPECTED_SEN_0, EXPECTED_SEN_1, EXPECTED_SEN_2,
+        EXPECTED_SEN_3));
   }
 
   @Test

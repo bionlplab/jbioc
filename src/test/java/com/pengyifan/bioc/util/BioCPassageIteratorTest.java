@@ -1,7 +1,6 @@
 package com.pengyifan.bioc.util;
 
-import static org.hamcrest.CoreMatchers.hasItems;
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.contains;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
@@ -16,7 +15,6 @@ import com.google.common.collect.Lists;
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
-import com.pengyifan.bioc.util.BioCPassageIterator;
 
 /**
  * Test BioCCollectionReader and BioCCollectionWriter
@@ -39,39 +37,42 @@ public class BioCPassageIteratorTest {
           + "Active Raf-1 activates MEK1."
           + "MEK1 in turn phosphorylates ERK1.");
 
-  private static final BioCCollection COLLECTION = createCollection(
-      DATE,
-      KEY,
-      SOURCE,
-      createDocument("1", EXPECTED_PASSAGE_0, EXPECTED_PASSAGE_1));
+  private static final BioCDocument EXPECTED_DOCUMENT_0 = createDocument(
+      "1", EXPECTED_PASSAGE_0);
+
+  private static final BioCDocument EXPECTED_DOCUMENT_1 = createDocument(
+      "1", EXPECTED_PASSAGE_1);
+
+  private static final BioCCollection EXPECTED_COLLECTION = createCollection(
+      DATE, KEY, SOURCE, EXPECTED_DOCUMENT_0, EXPECTED_DOCUMENT_1);
 
   @Test
   public void test_success()
       throws XMLStreamException, IOException {
-    List<BioCPassage> passages = Lists.newArrayList();
-    BioCPassageIterator itr = new BioCPassageIterator(COLLECTION);
-    while (itr.hasNext()) {
-      BioCPassage passage = itr.next();
-      // System.out.println(passage);
-      passages.add(passage);
-    }
-
-    assertEquals(passages.size(), 2);
-    assertThat(
-        passages,
-        hasItems(
-            EXPECTED_PASSAGE_0,
-            EXPECTED_PASSAGE_1));
+    BioCPassageIterator itr = new BioCPassageIterator(EXPECTED_COLLECTION);
+    List<BioCPassage> actual = Lists.newArrayList(itr);
+    assertThat(actual, contains(EXPECTED_PASSAGE_0, EXPECTED_PASSAGE_1));
   }
 
   @Test
   public void test_empty() {
     BioCCollection collection = new BioCCollection();
-    collection.setDate(DATE);
-    collection.setKey(KEY);
-    collection.setSource(SOURCE);
     BioCPassageIterator itr = new BioCPassageIterator(collection);
     assertFalse(itr.hasNext());
+  }
+
+  @Test
+  public void test_constructorDocument() {
+    BioCPassageIterator itr = new BioCPassageIterator(EXPECTED_DOCUMENT_0);
+    List<BioCPassage> actual = Lists.newArrayList(itr);
+    assertThat(actual, contains(EXPECTED_PASSAGE_0));
+  }
+
+  @Test
+  public void test_constructorPassage() {
+    BioCPassageIterator itr = new BioCPassageIterator(EXPECTED_PASSAGE_1);
+    List<BioCPassage> actual = Lists.newArrayList(itr);
+    assertThat(actual, contains(EXPECTED_PASSAGE_1));
   }
 
   private static BioCCollection createCollection(String date,
