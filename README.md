@@ -9,7 +9,7 @@ The development of Java BioC IO API is independent of the particular XML parser 
 
 ### Getting started
 
-The latest release is 0.1.0-SNAPSHOT.
+The latest release is 1.0.0-SNAPSHOT.
 
 It is available in Maven Central as com.pengyifan:bioc-core:jar:0.1.0-SNAPSHOT
 
