@@ -21,7 +21,17 @@ import com.pengyifan.bioc.BioCDocument;
  * level's information such as source, date, and key. Then users can call
  * {@link #writeDocument(BioCDocument)} repeatedly to sequentially write BioC
  * documents into the file. Method close is required at the end to finish the
- * writing task and free any resources associated with the writer.
+ * writing task and free any resources associated with the writer. For example,
+ * <p>
+ * 
+ * <pre>
+ * BioCCollectionWriter writer = new BioCCollectionWriter(&quot;foo.xml&quot;);
+ * writer.writeBeginCollectionInfo(collection);
+ * for (BioCDocument document : collection.getDocuments()) {
+ *   writer.writeDocument(document);
+ * }
+ * writer.close();
+ * </pre>
  * 
  * @since 1.0.0
  * @see BioCCollectionWriter

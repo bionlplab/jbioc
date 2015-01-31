@@ -16,7 +16,13 @@ import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.io.BioCReader.Level;
 
 /**
- * Reads the entire BioC file into one collection.
+ * Reads the entire BioC file into one collection. For example,
+ * <p>
+ * <pre>
+ * BioCCollectionReader reader = new BioCCollectionReader(&quot;foo.xml&quot;);
+ * BioCCollection collection = reader.readCollection();
+ * reader.close();
+ * </pre>
  * 
  * @since 1.0.0
  * @see BioCDocumentReader
