@@ -19,7 +19,14 @@ import com.pengyifan.bioc.BioCDocument;
  * collection information before, then calls
  * {@link #writeCollection(BioCCollection)} once to write the whole BioC
  * collection. Method close is required at the end to finish the writing task
- * and free any resources associated with the writer.
+ * and free any resources associated with the writer. For example,
+ * <p>
+ * 
+ * <pre>
+ * BioCCollectionWriter writer = new BioCCollectionWriter("foo.xml");
+ * writer.writeCollection(collection);
+ * writer.close();
+ * </pre>
  * 
  * @since 1.0.0
  * @see BioCDocumentWriter

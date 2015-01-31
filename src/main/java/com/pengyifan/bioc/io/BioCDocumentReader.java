@@ -18,7 +18,17 @@ import com.pengyifan.bioc.io.BioCReader.Level;
 
 /**
  * Reads the BioC file sequentially into BioCDocument every time the method
- * {@link #readDocument} is called.
+ * {@link #readDocument} is called. For example,
+ * <p>
+ * <pre>
+ * BioCDocumentReader reader = new BioCDocumentReader(&quot;foo.xml&quot;);
+ * BioCCollection collection = reader.readCollectionInfo();
+ * BioCDocument doc = null;
+ * while ((doc = reader.readDocument()) != null) {
+ *   collection.addDocument(doc);
+ * }
+ * reader.close();
+ * </pre>
  * 
  * @since 1.0.0
  * @see BioCCollectionReader
