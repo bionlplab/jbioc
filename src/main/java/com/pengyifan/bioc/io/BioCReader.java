@@ -120,7 +120,7 @@ class BioCReader implements Closeable {
             document = new BioCDocument();
             state = 2;
           } else {
-            ;
+            // blank
           }
         }
         else if (event.isEndElement()) {
@@ -153,7 +153,7 @@ class BioCReader implements Closeable {
             // read relation
             document.addRelation(readRelation(startElement));
           } else {
-            ;
+            // blank
           }
         }
         else if (event.isEndElement()) {
@@ -191,7 +191,7 @@ class BioCReader implements Closeable {
             sentence = new BioCSentence();
             state = 4;
           } else {
-            ;
+            // blank
           }
         }
         else if (event.isEndElement()) {
@@ -225,7 +225,7 @@ class BioCReader implements Closeable {
           } else if (localName.equals("relation")) {
             sentence.addRelation(readRelation(startElement));
           } else {
-            ;
+            // blank
           }
         }
         else if (event.isEndElement()) {
