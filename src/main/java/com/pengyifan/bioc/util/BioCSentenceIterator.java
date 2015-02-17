@@ -59,7 +59,7 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
   /**
    * Creates an iterator given the BioC document.
    * 
-   * @param document the BioC collection
+   * @param document the BioC document
    */
   public BioCSentenceIterator(BioCDocument document) {
     this(new BioCPassageIterator(document));
@@ -68,7 +68,7 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
   /**
    * Creates an iterator given the BioC passage.
    * 
-   * @param passage the BioC collection
+   * @param passage the BioC passage
    */
   public BioCSentenceIterator(BioCPassage passage) {
     this(new BioCPassageIterator(passage));
