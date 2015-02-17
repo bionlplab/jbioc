@@ -2,6 +2,7 @@ package com.pengyifan.bioc;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.codehaus.stax2.evt.DTD2;
 
+import com.ctc.wstx.evt.WDTD;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -43,10 +45,68 @@ public class BioCCollection {
 
   /**
    * Constructs an empty collection.
+   * <ul>
+   * <li>encoding: UTF-8</li>
+   * <li>date: today</li>
+   * <li>version: 1.0</li>
+   * <li>standalone: true</li>
+   * <li>dtd: rootName=collection SYSTEM="BioC.dtd"</li>
+   * <li>source: empty</li>
+   * <li>key: empty</li>
+   * </ul>
    */
   public BioCCollection() {
     infons = Maps.newHashMap();
     documents = Lists.newArrayList();
+    setEncoding("UTF-8");
+    setDate(LocalDateTime.now().toString());
+    setVersion("1.0");
+    setStandalone(true);
+    setDtd(new WDTD(null, "collection", "BioC.dtd", null, null));
+    setSource(new String());
+    setKey(new String());
+  }
+  
+  /**
+   * Constructs an empty collection.
+   * 
+   * <ul>
+   * <li>encoding: UTF-8</li>
+   * <li>date: today</li>
+   * <li>version: 1.0</li>
+   * <li>standalone: true</li>
+   * <li>dtd: rootName=collection SYSTEM="BioC.dtd"</li>
+   * </ul>
+   * @param source source
+   * @param key key
+   */
+  public BioCCollection(String source, String key) {
+    this();
+    setSource(source);
+    setKey(key);
+  }
+
+  /**
+   * Constructs an empty collection.
+   * 
+   * @param encoding encoding
+   * @param version version
+   * @param date date
+   * @param isStandalone standalone
+   * @param source source
+   * @param key key
+   * @param dtd dtd
+   */
+  public BioCCollection(String encoding, String version, String date,
+      boolean isStandalone, String source, String key, DTD2 dtd) {
+    this();
+    setEncoding(encoding);
+    setDate(date);
+    setVersion(version);
+    setStandalone(isStandalone);
+    setDtd(dtd);
+    setSource(source);
+    setKey(key);
   }
 
   /**

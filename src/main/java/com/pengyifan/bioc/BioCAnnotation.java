@@ -34,6 +34,17 @@ public class BioCAnnotation {
     infons = Maps.newHashMap();
     locations = Sets.newHashSet();
   }
+  
+  /**
+   * Constructs an empty annotation with id.
+   * 
+   * @param id the id used to identify annotation
+   */
+  public BioCAnnotation(String id) {
+    this.id = id;
+    infons = Maps.newHashMap();
+    locations = Sets.newHashSet();
+  }
 
   /**
    * Constructs an annotation containing the information of the specified

@@ -44,6 +44,19 @@ public class BioCDocument {
     annotations = Maps.newHashMap();
     relations = Maps.newHashMap();
   }
+  
+  /**
+   * Constructs an empty document with id.
+   * 
+   * @param id the id used to identify document
+   */
+  public BioCDocument(String id) {
+    this.id = id;
+    infons = Maps.newHashMap();
+    passages = Lists.newArrayList();
+    annotations = Maps.newHashMap();
+    relations = Maps.newHashMap();
+  }
 
   /**
    * Constructs an document containing the information of the specified

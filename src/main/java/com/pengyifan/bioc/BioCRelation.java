@@ -34,6 +34,17 @@ public class BioCRelation {
     infons = Maps.newHashMap();
     nodes = Sets.newHashSet();
   }
+  
+  /**
+   * Constructs an empty relation with id.
+   * 
+   * @param id the id used to identify relation
+   */
+  public BioCRelation(String id) {
+    this.id = id;
+    infons = Maps.newHashMap();
+    nodes = Sets.newHashSet();
+  }
 
   /**
    * Constructs a relation containing the information of the specified
