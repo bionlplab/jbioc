@@ -10,6 +10,16 @@ The development of Java BioC IO API is independent of the particular XML parser 
 ### Getting started
 
 ```XML
+<dependency>
+  <groupId>com.pengyifan.bioc</groupId>
+  <artifactId>pengyifan-bioc</artifactId>
+  <version>1.0.1</version>
+</dependency>
+```
+
+or
+
+```XML
 <repositories>
     <repository>
         <id>oss-sonatype</id>
@@ -24,7 +34,7 @@ The development of Java BioC IO API is independent of the particular XML parser 
 <dependency>
   <groupId>com.pengyifan.bioc</groupId>
   <artifactId>pengyifan-bioc</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.2-SNAPSHOT</version>
 </dependency>
 ```
 
