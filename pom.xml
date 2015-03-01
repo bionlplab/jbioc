@@ -3,7 +3,7 @@
   <groupId>com.pengyifan.bioc</groupId>
   <artifactId>pengyifan-bioc</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>The bioc main core project.</description>
   <url>https://github.com/yfpeng/pengyifan-bioc</url>
