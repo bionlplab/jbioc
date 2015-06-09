@@ -149,6 +149,9 @@ class BioCReader implements Closeable {
             // read passage
             passage = new BioCPassage();
             state = 3;
+          } else if (localName.equals("annotation")) {
+            // read annotation
+            document.addAnnotation(readAnnotation(startElement));
           } else if (localName.equals("relation")) {
             // read relation
             document.addRelation(readRelation(startElement));
