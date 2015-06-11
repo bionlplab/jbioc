@@ -1,5 +1,6 @@
 package com.pengyifan.bioc;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Iterator;
@@ -8,11 +9,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
+import com.google.common.collect.*;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 
 /**
  * Stand off annotation.
@@ -157,6 +156,23 @@ public class BioCAnnotation {
    */
   public Set<BioCLocation> getLocations() {
     return locations;
+  }
+
+  /**
+   * Returns the minimal range which encloses all locations in this annotation.
+   *
+   * @return the minimal range which encloses all locations in this annotation
+   */
+  public BioCLocation getTotalLocation() {
+    checkArgument(getLocationCount()>0, "No location added");
+    RangeSet<Integer> rangeSet = TreeRangeSet.create();
+    for(BioCLocation location: getLocations()) {
+      rangeSet.add(
+          Range.closedOpen(location.getOffset(), location.getOffset() + location.getLength()));
+    }
+    Range<Integer> totalSpan = rangeSet.span();
+    return new BioCLocation(totalSpan.lowerEndpoint(),
+        totalSpan.upperEndpoint() - totalSpan.lowerEndpoint());
   }
 
   /**
