@@ -73,7 +73,12 @@ class BioCReader implements Closeable {
 
   private String getText()
       throws XMLStreamException {
-    return reader.nextEvent().asCharacters().getData();
+    XMLEvent event = reader.nextEvent();
+    if (event.isCharacters()) {
+      return event.asCharacters().getData();
+    } else {
+      return "";
+    }
   }
 
   protected Object read()
