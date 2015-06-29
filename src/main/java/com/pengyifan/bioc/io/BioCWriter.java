@@ -28,15 +28,15 @@ import com.pengyifan.bioc.BioCSentence;
 
 class BioCWriter implements Closeable {
 
-  XMLEventWriter writer;
+  IndentingXMLEventWriter writer;
   XMLEventFactory2 eventFactory = (XMLEventFactory2) XMLEventFactory2
       .newInstance();
 
   protected BioCWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
     XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
-    this.writer = new IndentingXMLEventWriter(
-        xmlOutputFactory.createXMLEventWriter(writer));
+    this.writer = new IndentingXMLEventWriter(xmlOutputFactory.createXMLEventWriter(writer));
+    // this.writer.setNewLine(System.getProperty("line.separator"));
   }
 
   @Override
