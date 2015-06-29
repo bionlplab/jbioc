@@ -92,8 +92,8 @@ public class BioCPassageTest {
     assertEquals(base.getOffset(), OFFSET);
     assertEquals(base.getText().get(), TEXT);
     assertEquals(base.getInfon(KEY).get(), VALUE);
-    assertEquals(ANN_1, base.getAnnotation(ANN_1.getID()));
-    assertEquals(REL_1, base.getRelation(REL_1.getID()));
+    assertEquals(ANN_1, base.getAnnotation(ANN_1.getID()).get());
+    assertEquals(REL_1, base.getRelation(REL_1.getID()).get());
     assertEquals(SEN_1, base.getSentence(0));
   }
 
@@ -113,13 +113,13 @@ public class BioCPassageTest {
   @Test
   public void test_addAnnotation() {
     base.addAnnotation(ANN_2);
-    assertEquals(ANN_2, base.getAnnotation(ANN_2.getID()));
+    assertEquals(ANN_2, base.getAnnotation(ANN_2.getID()).get());
   }
 
   @Test
   public void test_addRelation() {
     base.addRelation(REL_2);
-    assertEquals(REL_2, base.getRelation(REL_2.getID()));
+    assertEquals(REL_2, base.getRelation(REL_2.getID()).get());
   }
 
   @Test

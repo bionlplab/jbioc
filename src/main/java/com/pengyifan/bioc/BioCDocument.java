@@ -31,18 +31,14 @@ public class BioCDocument {
   private String id;
   private Map<String, String> infons;
   private List<BioCPassage> passages;
-  private Map<String, BioCAnnotation> annotations;
-  private Map<String, BioCRelation> relations;
+  private List<BioCAnnotation> annotations;
+  private List<BioCRelation> relations;
 
   /**
    * Constructs an empty document.
    */
   public BioCDocument() {
-    id = null;
-    infons = Maps.newHashMap();
-    passages = Lists.newArrayList();
-    annotations = Maps.newHashMap();
-    relations = Maps.newHashMap();
+    this((String)null);
   }
   
   /**
@@ -54,8 +50,8 @@ public class BioCDocument {
     this.id = id;
     infons = Maps.newHashMap();
     passages = Lists.newArrayList();
-    annotations = Maps.newHashMap();
-    relations = Maps.newHashMap();
+    annotations = Lists.newArrayList();
+    relations = Lists.newArrayList();
   }
 
   /**
@@ -69,8 +65,8 @@ public class BioCDocument {
     setID(document.id);
     setInfons(document.infons);
     setPassages(document.passages);
-    annotations.putAll(document.annotations);
-    relations.putAll(document.relations);
+    annotations.addAll(document.annotations);
+    relations.addAll(document.relations);
   }
 
   /**
@@ -81,10 +77,10 @@ public class BioCDocument {
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
     checkArgument(
-        !annotations.containsKey(annotation.getID()),
+        !getAnnotation(annotation.getID()).isPresent(),
         "duplicated annotation: %s",
         annotation);
-    this.annotations.put(annotation.getID(), annotation);
+    this.annotations.add(annotation);
   }
 
   /**
@@ -105,10 +101,10 @@ public class BioCDocument {
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
     checkArgument(
-        !relations.containsKey(relation.getID()),
+        !getRelation(relation.getID()).isPresent(),
         "duplicated relation: %s",
         relation);
-    this.relations.put(relation.getID(), relation);
+    this.relations.add(relation);
   }
 
   /**
@@ -161,8 +157,10 @@ public class BioCDocument {
    * @param annotationID id of a specified annotation
    * @return the annotation of the specified ID in this document
    */
-  public BioCAnnotation getAnnotation(String annotationID) {
-    return annotations.get(annotationID);
+  public Optional<BioCAnnotation> getAnnotation(String annotationID) {
+    return annotations.stream()
+        .filter(a -> a.getID().equals(annotationID))
+        .findFirst();
   }
 
   /**
@@ -171,7 +169,7 @@ public class BioCDocument {
    * @return annotations on the text of the document
    */
   public Collection<BioCAnnotation> getAnnotations() {
-    return annotations.values();
+    return annotations;
   }
 
   /**
@@ -242,8 +240,10 @@ public class BioCDocument {
    * @param relationID id of a specified relation
    * @return the relation of the specified ID in this document
    */
-  public BioCRelation getRelation(String relationID) {
-    return relations.get(relationID);
+  public Optional<BioCRelation> getRelation(String relationID) {
+    return relations.stream()
+        .filter(r -> r.getID().equals(relationID))
+        .findAny();
   }
 
   /**
@@ -253,7 +253,7 @@ public class BioCDocument {
    * @return relations of the document
    */
   public Collection<BioCRelation> getRelations() {
-    return relations.values();
+    return relations;
   }
 
   @Override

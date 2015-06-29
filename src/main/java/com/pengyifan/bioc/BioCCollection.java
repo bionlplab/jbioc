@@ -3,6 +3,7 @@ package com.pengyifan.bioc;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,8 @@ import com.google.common.collect.Maps;
  * @author Yifan Peng
  */
 public class BioCCollection {
+
+  private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   // XML information
   private DTD2 dtd;
@@ -59,7 +62,7 @@ public class BioCCollection {
     infons = Maps.newHashMap();
     documents = Lists.newArrayList();
     setEncoding("UTF-8");
-    setDate(LocalDateTime.now().toString());
+    setDate(formatter.format(LocalDateTime.now()));
     setVersion("1.0");
     setStandalone(true);
     setDtd(new WDTD(null, "collection", "BioC.dtd", null, null));

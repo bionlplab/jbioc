@@ -33,8 +33,8 @@ public class BioCPassage {
   private String text;
   private Map<String, String> infons;
   private List<BioCSentence> sentences;
-  private Map<String, BioCAnnotation> annotations;
-  private Map<String, BioCRelation> relations;
+  private List<BioCAnnotation> annotations;
+  private List<BioCRelation> relations;
 
   /**
    * Constructs an empty passage.
@@ -43,8 +43,8 @@ public class BioCPassage {
     offset = -1;
     text = null;
     infons = Maps.newHashMap();
-    annotations = Maps.newHashMap();
-    relations = Maps.newHashMap();
+    annotations = Lists.newArrayList();
+    relations = Lists.newArrayList();
     sentences = Lists.newArrayList();
   }
 
@@ -60,8 +60,8 @@ public class BioCPassage {
     setInfons(passage.infons);
     setSentences(passage.sentences);
     setText(passage.text);
-    annotations.putAll(passage.annotations);
-    relations.putAll(passage.relations);
+    annotations.addAll(passage.annotations);
+    relations.addAll(passage.relations);
   }
 
   /**
@@ -72,10 +72,10 @@ public class BioCPassage {
   public void addAnnotation(BioCAnnotation annotation) {
     checkNotNull(annotation, "annotation cannot be null");
     checkArgument(
-        !annotations.containsKey(annotation.getID()),
+        !getAnnotation(annotation.getID()).isPresent(),
         "duplicated annotation: %s",
         annotation);
-    this.annotations.put(annotation.getID(), annotation);
+    this.annotations.add(annotation);
   }
 
   /**
@@ -86,10 +86,10 @@ public class BioCPassage {
   public void addRelation(BioCRelation relation) {
     checkNotNull(relation, "relation cannot be null");
     checkArgument(
-        !relations.containsKey(relation.getID()),
+        !getRelation(relation.getID()).isPresent(),
         "duplicated relation: %s",
         relation);
-    this.relations.put(relation.getID(), relation);
+    this.relations.add(relation);
   }
 
   /**
@@ -153,8 +153,10 @@ public class BioCPassage {
    * @param annotationID id of a specified annotation
    * @return the annotation of the specified ID in this passage
    */
-  public BioCAnnotation getAnnotation(String annotationID) {
-    return annotations.get(annotationID);
+  public Optional<BioCAnnotation> getAnnotation(String annotationID) {
+    return annotations.stream()
+        .filter(a -> a.getID().equals(annotationID))
+        .findFirst();
   }
 
   /**
@@ -163,7 +165,7 @@ public class BioCPassage {
    * @return annotations on the text of the passage
    */
   public Collection<BioCAnnotation> getAnnotations() {
-    return annotations.values();
+    return annotations;
   }
 
   /**
@@ -210,8 +212,10 @@ public class BioCPassage {
    * @param relationID id of a specified relation
    * @return the relation of the specified ID in this passage
    */
-  public BioCRelation getRelation(String relationID) {
-    return relations.get(relationID);
+  public Optional<BioCRelation> getRelation(String relationID) {
+    return relations.stream()
+        .filter(r -> r.getID().equals(relationID))
+        .findAny();
   }
 
   /**
@@ -221,7 +225,7 @@ public class BioCPassage {
    * @return relations of the passage
    */
   public Collection<BioCRelation> getRelations() {
-    return relations.values();
+    return relations;
   }
 
   /**
