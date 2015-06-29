@@ -87,6 +87,10 @@ class BioCWriter implements Closeable {
     for (BioCPassage passage : document.getPassages()) {
       write(passage);
     }
+    // annotation
+    for (BioCAnnotation annotation : document.getAnnotations()) {
+      write(annotation);
+    }
     // relations
     for (BioCRelation rel : document.getRelations()) {
       write(rel);
