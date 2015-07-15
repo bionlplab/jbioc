@@ -78,7 +78,8 @@ public class BioCDocument {
     checkNotNull(annotation, "annotation cannot be null");
     checkArgument(
         !getAnnotation(annotation.getID()).isPresent(),
-        "duplicated annotation: %s",
+        "Document id: %s\nDuplicated annotation: %s",
+        getID(),
         annotation);
     this.annotations.add(annotation);
   }
@@ -102,7 +103,8 @@ public class BioCDocument {
     checkNotNull(relation, "relation cannot be null");
     checkArgument(
         !getRelation(relation.getID()).isPresent(),
-        "duplicated relation: %s",
+        "Document id: %s\nDuplicated relation: %s",
+        getID(),
         relation);
     this.relations.add(relation);
   }
