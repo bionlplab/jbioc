@@ -73,18 +73,6 @@ public class BioCDocumentReaderTest {
     reader.close();
   }
 
-  @Test
-  public void test_dtd()
-      throws Exception {
-    BioCDocumentReader reader = new BioCDocumentReader(
-        new InputStreamReader(Thread.currentThread()
-            .getContextClassLoader()
-            .getResourceAsStream(XML_FILENAME)));
-    BioCCollection collection = reader.readCollectionInfo();
-    assertEquals(DTD, collection.getDtd().getSystemId());
-    reader.close();
-  }
-
   private void test(BioCDocumentReader reader)
       throws XMLStreamException, IOException {
     BioCCollection collection = reader.readCollectionInfo();

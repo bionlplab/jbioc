@@ -241,12 +241,6 @@ class BioCWriter implements Closeable {
     return this;
   }
 
-  protected BioCWriter writeDTD(DTD2 dtd)
-      throws XMLStreamException {
-    writer.add(eventFactory.createDTD(dtd.getDocumentTypeDeclaration()));
-    return this;
-  }
-
   protected final BioCWriter writeEndCollection()
       throws XMLStreamException {
     return writeEndElement("collection");

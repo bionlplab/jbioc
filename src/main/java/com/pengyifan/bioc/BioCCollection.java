@@ -35,7 +35,6 @@ public class BioCCollection {
   private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   // XML information
-  private DTD2 dtd;
   private String encoding;
   private String version;
   private boolean standalone;
@@ -53,7 +52,6 @@ public class BioCCollection {
    * <li>date: today</li>
    * <li>version: 1.0</li>
    * <li>standalone: true</li>
-   * <li>dtd: rootName=collection SYSTEM="BioC.dtd"</li>
    * <li>source: empty</li>
    * <li>key: empty</li>
    * </ul>
@@ -65,7 +63,6 @@ public class BioCCollection {
     setDate(formatter.format(LocalDateTime.now()));
     setVersion("1.0");
     setStandalone(true);
-    setDtd(new WDTD(null, "collection", "BioC.dtd", null, null));
     setSource(new String());
     setKey(new String());
   }
@@ -78,7 +75,6 @@ public class BioCCollection {
    * <li>date: today</li>
    * <li>version: 1.0</li>
    * <li>standalone: true</li>
-   * <li>dtd: rootName=collection SYSTEM="BioC.dtd"</li>
    * </ul>
    * @param source source
    * @param key key
@@ -98,16 +94,14 @@ public class BioCCollection {
    * @param isStandalone standalone
    * @param source source
    * @param key key
-   * @param dtd dtd
    */
   public BioCCollection(String encoding, String version, String date,
-      boolean isStandalone, String source, String key, DTD2 dtd) {
+      boolean isStandalone, String source, String key) {
     this();
     setEncoding(encoding);
     setDate(date);
     setVersion(version);
     setStandalone(isStandalone);
-    setDtd(dtd);
     setSource(source);
     setKey(key);
   }
@@ -223,16 +217,6 @@ public class BioCCollection {
    */
   public List<BioCDocument> getDocuments() {
     return documents;
-  }
-
-  /**
-   * DOCTYPE declaration constructs in the XML file.
-   * 
-   * @return DOCTYPE declaration constructs in the XML file
-   */
-  public DTD2 getDtd() {
-    checkNotNull(dtd, "haven't set DTD yet");
-    return dtd;
   }
 
   /**
@@ -357,15 +341,6 @@ public class BioCCollection {
   public void setDocuments(List<BioCDocument> documents) {
     clearDocuments();
     this.documents.addAll(documents);
-  }
-
-  /**
-   * Sets DOCTYPE declaration constructs in the XML file.
-   * 
-   * @param dtd DOCTYPE declaration constructs in the XML file
-   */
-  public void setDtd(DTD2 dtd) {
-    this.dtd = dtd;
   }
 
   /**

@@ -30,7 +30,7 @@ import com.pengyifan.bioc.BioCSentence;
 
 class BioCReader implements Closeable {
 
-  static enum Level {
+  enum Level {
     COLLECTION_LEVEL, DOCUMENT_LEVEL, PASSAGE_LEVEL, SENTENCE_LEVEL
   }
 
@@ -103,7 +103,7 @@ class BioCReader implements Closeable {
           collection.setVersion(startDocument.getVersion());
           collection.setStandalone(startDocument.isStandalone());
         } else if (event.getEventType() == XMLStreamConstants.DTD) {
-          collection.setDtd((DTD2) event);
+//          DTD2 dtd = (DTD2) event;
         }
         break;
       case 1:

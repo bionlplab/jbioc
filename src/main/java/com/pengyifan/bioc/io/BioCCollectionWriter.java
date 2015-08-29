@@ -125,7 +125,6 @@ public class BioCCollectionWriter implements Closeable {
         collection.getEncoding(),
         collection.getVersion(),
         collection.isStandalone())
-        .writeDTD(collection.getDtd())
         .writeBeginCollectionInfo(collection);
 
     for (BioCDocument doc : collection.getDocuments()) {

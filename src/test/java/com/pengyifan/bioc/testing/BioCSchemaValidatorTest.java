@@ -1,25 +1,24 @@
 package com.pengyifan.bioc.testing;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
-public class BioCDtdValidatorTest {
+public class BioCSchemaValidatorTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
-  private static final String LOCAL_DTD = "BioC.dtd";
+  private static final String LOCAL_XSD = "BioC.xsd";
 
   @Test
   public void testIsValid() throws Exception {
     URL url = Thread.currentThread().getContextClassLoader().getSystemResource(XML_FILENAME);
     File biocFile = new File(url.getFile());
-    File dtdFile = new File(LOCAL_DTD);
+    File xsdFile = new File(LOCAL_XSD);
 
-    BioCDtdValidator validator = new BioCDtdValidator();
-    assertTrue(validator.isValid(biocFile, dtdFile));
+    BioCSchemaValidator validator = new BioCSchemaValidator();
+    assertTrue(validator.isValid(biocFile, xsdFile));
   }
 }

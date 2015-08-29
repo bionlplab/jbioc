@@ -64,16 +64,6 @@ public class BioCCollectionReaderTest {
     reader.close();
   }
 
-  @Test
-  public void test_dtd()
-      throws Exception {
-    URL url = this.getClass().getResource("/" + XML_FILENAME);
-    BioCCollectionReader reader = new BioCCollectionReader(url.getFile());
-    BioCCollection collection = reader.readCollection();
-    reader.close();
-    assertEquals(DTD, collection.getDtd().getSystemId());
-  }
-
   private void test(BioCCollectionReader reader)
       throws Exception {
     BioCCollection collection = reader.readCollection();
