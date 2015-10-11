@@ -13,7 +13,7 @@ The development of Java BioC IO API is independent of the particular XML parser 
 <dependency>
   <groupId>com.pengyifan.bioc</groupId>
   <artifactId>pengyifan-bioc</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ or
 <dependency>
   <groupId>com.pengyifan.bioc</groupId>
   <artifactId>pengyifan-bioc</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.3-SNAPSHOT</version>
 </dependency>
 ```
 
