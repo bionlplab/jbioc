@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -43,8 +45,24 @@ public class BioCDocumentWriter implements Closeable {
   private boolean hasWrittenCollectionInfo;
 
   /**
-   * Creates a new BioCDocumentWriter, given the File object.
+   * Creates a new BioCDocumentWriter, given the Path object.
    * 
+   * @param path a file path object to write to
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws IOException if the file exists but is a directory rather than a
+   *           regular file, does not exist but cannot be created, or cannot be
+   *           opened for any other reason
+   */
+  public BioCDocumentWriter(Path path)
+      throws FactoryConfigurationError, XMLStreamException,
+      IOException {
+    this(Files.newBufferedWriter(path));
+  }
+
+  /**
+   * Creates a new BioCDocumentWriter, given the Path object.
+   *
    * @param file a File object to write to
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs

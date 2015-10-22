@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -47,6 +49,20 @@ public class BioCCollectionReader implements Closeable {
       throws FactoryConfigurationError, XMLStreamException,
       FileNotFoundException {
     this(new FileReader(file));
+  }
+
+  /**
+   * Creates a new BioCCollectionReader, given the Path to read from.
+   *
+   * @param path the file path to read from
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws IOException if an I/O exception of some sort has occurred
+   */
+  public BioCCollectionReader(Path path)
+      throws FactoryConfigurationError, XMLStreamException,
+      IOException {
+    this(Files.newBufferedReader(path));
   }
 
   /**

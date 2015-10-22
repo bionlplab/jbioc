@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
@@ -52,6 +54,23 @@ public class BioCCollectionWriter implements Closeable {
       IOException {
     this(new FileWriter(file));
   }
+
+  /**
+   * Creates a new BioCCollectionReader, given the Path object.
+   *
+   * @param path a file path object to write to
+   * @throws FactoryConfigurationError if a factory configuration error occurs
+   * @throws XMLStreamException if an unexpected processing error occurs
+   * @throws IOException if the file exists but is a directory rather than a
+   *           regular file, does not exist but cannot be created, or cannot be
+   *           opened for any other reason
+   */
+  public BioCCollectionWriter(Path path)
+      throws FactoryConfigurationError, XMLStreamException,
+      IOException {
+    this(Files.newBufferedWriter(path));
+  }
+
 
   /**
    * Creates a BioCCollectionWriter that uses the output stream out.
