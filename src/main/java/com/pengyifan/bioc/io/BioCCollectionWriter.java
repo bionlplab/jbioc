@@ -101,7 +101,7 @@ public class BioCCollectionWriter implements Closeable {
    * Creates a new BioCCollectionWriter, given the name of the file to read
    * from.
    * 
-   * @param fileName the name of the file to read from
+   * @param fileName the name of the file to write to
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs
    * @throws IOException if the named file exists but is a directory rather
