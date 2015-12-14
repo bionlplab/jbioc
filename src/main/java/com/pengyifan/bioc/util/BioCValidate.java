@@ -1,6 +1,7 @@
 package com.pengyifan.bioc.util;
 
 import com.pengyifan.bioc.BioCAnnotation;
+import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCLocation;
 import com.pengyifan.bioc.BioCNode;
 import com.pengyifan.bioc.BioCPassage;
@@ -68,6 +69,18 @@ public class BioCValidate {
         checkArgument(passage.getAnnotation(node.getRefid()).isPresent(),
             "Cannot find node %s in relation %s", node, relation);
       }
+    }
+  }
+
+  /**
+   * Checks annotations and relations.
+   *
+   * @param collection input collection
+   */
+  public static void check(BioCCollection collection) {
+    BioCPassageIterator iterator = new BioCPassageIterator(collection);
+    while (iterator.hasNext()) {
+      BioCValidate.check(iterator.next());
     }
   }
 }

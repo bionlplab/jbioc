@@ -135,6 +135,7 @@ class BioCReader implements Closeable {
             sentence = null;
             passage = null;
             document = null;
+
             state = 0;
           }
           break;
