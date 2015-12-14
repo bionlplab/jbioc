@@ -3,7 +3,6 @@ package com.pengyifan.bioc.util;
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
-import com.pengyifan.bioc.BioCLocation;
 import com.pengyifan.bioc.BioCNode;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
@@ -14,7 +13,16 @@ import java.util.StringJoiner;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+/**
+ * @deprecated Use {@code BioCValidate2} instead.
+ */
 public class BioCValidate {
+
+  private static boolean NonStop = false;
+
+  public static void setNonStop(boolean nonStop) {
+    NonStop = nonStop;
+  }
 
   /**
    * Checks the annotations and relations.
@@ -62,7 +70,7 @@ public class BioCValidate {
    * @param document input document
    */
   public static void check(BioCDocument document) {
-    for(BioCPassage passage: document.getPassages()) {
+    for (BioCPassage passage : document.getPassages()) {
       check(passage);
     }
 
@@ -84,9 +92,8 @@ public class BioCValidate {
    * @param collection input collection
    */
   public static void check(BioCCollection collection) {
-    BioCPassageIterator iterator = new BioCPassageIterator(collection);
-    while (iterator.hasNext()) {
-      BioCValidate.check(iterator.next());
+    for (BioCDocument document: collection.getDocuments()) {
+      check(document);
     }
   }
 
@@ -117,17 +124,30 @@ public class BioCValidate {
       String text, int offset) {
     for (BioCAnnotation annotation : annotations) {
       StringJoiner sj = new StringJoiner(" ");
-      for (BioCLocation location : annotation.getLocations()) {
-        String substring = text.substring(
-            location.getOffset() - offset,
-            location.getOffset() + location.getLength() - offset
-        );
-        sj.add(substring);
+      annotation.getLocations().stream()
+          .sorted((l1, l2) -> Integer.compare(l1.getOffset(), l2.getOffset()))
+          .forEach(
+              l -> {
+                String substring = text.substring(
+                    l.getOffset() - offset,
+                    l.getOffset() + l.getLength() - offset
+                );
+                sj.add(substring);
+              }
+          );
+      try {
+        checkArgument(sj.toString().equals(annotation.getText().get()),
+            "Annotation text is incorrect: %s\n" +
+                "Annotation : %s\n" +
+                "Actual text: %s",
+            annotation, sj.toString());
+      } catch (IllegalArgumentException e) {
+        if (NonStop) {
+          System.err.println(e.getMessage());
+        } else {
+          throw  e;
+        }
       }
-      checkArgument(sj.toString().equals(annotation.getText().get()),
-          "Annotation text is incorrect.\n" +
-              "Annotation:  %s\n" +
-              "Actual text: %s", annotation, sj.toString());
     }
   }
 
