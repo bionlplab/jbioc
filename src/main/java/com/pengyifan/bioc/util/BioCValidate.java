@@ -10,6 +10,7 @@ import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
 
 import java.util.Collection;
+import java.util.StringJoiner;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -115,16 +116,18 @@ public class BioCValidate {
   public static void checkAnnotations(Collection<BioCAnnotation> annotations,
       String text, int offset) {
     for (BioCAnnotation annotation : annotations) {
+      StringJoiner sj = new StringJoiner(" ");
       for (BioCLocation location : annotation.getLocations()) {
         String substring = text.substring(
             location.getOffset() - offset,
             location.getOffset() + location.getLength() - offset
         );
-        checkArgument(substring.equals(annotation.getText().get()),
-            "Annotation text is incorrect.\n" +
-                "Annotation:  %s\n" +
-                "Actual text: %s", annotation, substring);
+        sj.add(substring);
       }
+      checkArgument(sj.toString().equals(annotation.getText().get()),
+          "Annotation text is incorrect.\n" +
+              "Annotation:  %s\n" +
+              "Actual text: %s", annotation, sj.toString());
     }
   }
 
