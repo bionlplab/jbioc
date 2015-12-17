@@ -31,7 +31,7 @@ public class BioCValidate2 {
    *
    * @param document input document
    */
-  private static void check(BioCDocument document) {
+  public static void check(BioCDocument document) {
     String text = getText(document);
     // check annotation offset and text
     checkAnnotations(document.getAnnotations(), text, 0, BioCUtils.getXPathString(document));
@@ -92,16 +92,12 @@ public class BioCValidate2 {
                 sj.add(substring);
               }
           );
-      try {
-        checkArgument(sj.toString().equals(annotation.getText().get()),
-            "Annotation text is incorrect.\n" +
-                "  Annotation : %s\n" +
-                "  Actual text: %s\n" +
-                "  Location   : %s",
-            annotation, sj.toString(), head);
-      } catch (IllegalArgumentException e) {
-        System.err.println(e.getMessage());
-      }
+      checkArgument(sj.toString().equals(annotation.getText().get()),
+          "Annotation text is incorrect.\n" +
+              "  Annotation : %s\n" +
+              "  Actual text: %s\n" +
+              "  Location   : %s",
+          annotation, sj.toString(), head);
     }
   }
 
