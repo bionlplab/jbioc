@@ -222,6 +222,16 @@ public class BioCRelation {
     this.nodes.addAll(nodes);
   }
 
+  /**
+   * Gets the first node based on the role.
+   *
+   * @param role the role of the node
+   * @return node that has the same role
+   */
+  public Optional<BioCNode> getNode(String role) {
+    return getNodes().stream().filter(n -> n.getRole().equals(role)).findFirst();
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
