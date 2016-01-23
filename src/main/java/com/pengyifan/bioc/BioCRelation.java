@@ -8,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.google.common.base.Preconditions.checkNotNull;
