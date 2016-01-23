@@ -1,5 +1,10 @@
 package com.pengyifan.bioc.io;
 
+import com.pengyifan.bioc.BioCCollection;
+import com.pengyifan.bioc.io.BioCReader.Level;
+
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLStreamException;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,12 +16,6 @@ import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLStreamException;
-
-import com.pengyifan.bioc.BioCCollection;
-import com.pengyifan.bioc.io.BioCReader.Level;
-
 /**
  * Reads the entire BioC file into one collection. For example,
  * <p>
@@ -25,7 +24,7 @@ import com.pengyifan.bioc.io.BioCReader.Level;
  * BioCCollection collection = reader.readCollection();
  * reader.close();
  * </pre>
- * 
+ *
  * @since 1.0.0
  * @see BioCDocumentReader
  * @author Yifan Peng
@@ -37,7 +36,7 @@ public class BioCCollectionReader implements Closeable {
 
   /**
    * Creates a new BioCCollectionReader, given the File to read from.
-   * 
+   *
    * @param file the File to read from
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs
@@ -67,7 +66,7 @@ public class BioCCollectionReader implements Closeable {
 
   /**
    * Creates an BioCCollectionReader that uses the input stream in.
-   * 
+   *
    * @param in an InputStream
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs
@@ -79,7 +78,7 @@ public class BioCCollectionReader implements Closeable {
 
   /**
    * Creates an BioCCollectionReader that uses the reader in.
-   * 
+   *
    * @param in a Reader
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs
@@ -94,7 +93,7 @@ public class BioCCollectionReader implements Closeable {
   /**
    * Creates a new BioCCollectionReader, given the name of the file to read
    * from.
-   * 
+   *
    * @param fileName the name of the file to read from
    * @throws FactoryConfigurationError if a factory configuration error occurs
    * @throws XMLStreamException if an unexpected processing error occurs
@@ -121,7 +120,7 @@ public class BioCCollectionReader implements Closeable {
 
   /**
    * Reads the collection of documents.
-   * 
+   *
    * @return the BioC collection
    * @throws XMLStreamException if an unexpected processing error occurs
    */

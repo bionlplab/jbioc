@@ -12,7 +12,7 @@ import java.util.Optional;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-abstract class BioCStructure implements BioCInfons {
+public abstract class BioCStructure implements BioCInfons {
 
   private Map<String, String> infons;
   private List<BioCAnnotation> annotations;

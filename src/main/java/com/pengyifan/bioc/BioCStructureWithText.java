@@ -1,13 +1,11 @@
 package com.pengyifan.bioc;
 
-import com.google.common.collect.Lists;
-
 import java.util.Objects;
 import java.util.Optional;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-abstract class BioCStructureWithText extends BioCStructure {
+public abstract class BioCStructureWithText extends BioCStructure {
   private int offset;
   private String text;
 
@@ -24,7 +22,7 @@ abstract class BioCStructureWithText extends BioCStructure {
    * Constructs a passage containing the information of the specified structure.
    *
    * @param structure the passage whose information is to be placed into this
-   *          structure
+   *                  structure
    */
   public BioCStructureWithText(BioCStructureWithText structure) {
     super(structure);
