@@ -179,6 +179,7 @@ public class BioCPassageTest {
 
   private static BioCSentence createSentence(String text) {
     BioCSentence sen = new BioCSentence();
+    sen.setOffset(0);
     sen.setText(text);
     return sen;
   }

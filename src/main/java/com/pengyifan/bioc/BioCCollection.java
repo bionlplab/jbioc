@@ -1,6 +1,10 @@
 package com.pengyifan.bioc;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,29 +12,21 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.codehaus.stax2.evt.DTD2;
-
-import com.ctc.wstx.evt.WDTD;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Collection of documents.
  * <p>
- * Collection of documents for a project. They may be an entire corpus or some
- * portion of a corpus. Fields are provided to describe the collection.
+ * Collection of documents for a project. They may be an entire corpus or some portion of a corpus.
+ * Fields are provided to describe the collection.
  * <p>
  * Documents may appear empty if doing document at a time IO.
- * 
- * @since 1.0.0
+ *
  * @author Yifan Peng
+ * @since 1.0.0
  */
-public class BioCCollection {
+public class BioCCollection implements BioCInfons {
 
   private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -66,18 +62,19 @@ public class BioCCollection {
     setSource(new String());
     setKey(new String());
   }
-  
+
   /**
    * Constructs an empty collection.
-   * 
+   * <p>
    * <ul>
    * <li>encoding: UTF-8</li>
    * <li>date: today</li>
    * <li>version: 1.0</li>
    * <li>standalone: true</li>
    * </ul>
+   *
    * @param source source
-   * @param key key
+   * @param key    key
    */
   public BioCCollection(String source, String key) {
     this();
@@ -87,13 +84,13 @@ public class BioCCollection {
 
   /**
    * Constructs an empty collection.
-   * 
-   * @param encoding encoding
-   * @param version version
-   * @param date date
+   *
+   * @param encoding     encoding
+   * @param version      version
+   * @param date         date
    * @param isStandalone standalone
-   * @param source source
-   * @param key key
+   * @param source       source
+   * @param key          key
    */
   public BioCCollection(String encoding, String version, String date,
       boolean isStandalone, String source, String key) {
@@ -107,11 +104,9 @@ public class BioCCollection {
   }
 
   /**
-   * Constructs a collection containing the information of the specified
-   * collection.
-   * 
-   * @param collection the collection whose information is to be placed into
-   *          this collection
+   * Constructs a collection containing the information of the specified collection.
+   *
+   * @param collection the collection whose information is to be placed into this collection
    */
   public BioCCollection(BioCCollection collection) {
     this();
@@ -127,7 +122,7 @@ public class BioCCollection {
 
   /**
    * Adds document in this collection.
-   * 
+   *
    * @param document document
    */
   public void addDocument(BioCDocument document) {
@@ -143,18 +138,9 @@ public class BioCCollection {
   }
 
   /**
-   * Clears all information.
-   */
-  public void clearInfons() {
-    infons.clear();
-  }
-
-  /**
-   * Returns an iterator over the document in this collection in proper
-   * sequence.
-   * 
-   * @return an iterator over the document in this collection in proper
-   *         sequence.
+   * Returns an iterator over the document in this collection in proper sequence.
+   *
+   * @return an iterator over the document in this collection in proper sequence.
    */
   public Iterator<BioCDocument> documentIterator() {
     return documents.iterator();
@@ -181,7 +167,7 @@ public class BioCCollection {
 
   /**
    * Returns date the documents obtained from the source.
-   * 
+   *
    * @return date the documents obtained from the source
    */
   public String getDate() {
@@ -191,7 +177,7 @@ public class BioCCollection {
 
   /**
    * Returns the number of documents in this collection.
-   * 
+   *
    * @return the number of documents in this collection
    */
   public int getDocmentCount() {
@@ -200,7 +186,7 @@ public class BioCCollection {
 
   /**
    * Returns the document at the specified position in this collection.
-   * 
+   *
    * @param index document position in this collection
    * @return the document at the specified position in this collection
    */
@@ -209,10 +195,9 @@ public class BioCCollection {
   }
 
   /**
-   * Returns all the documents in the collection. This will be empty if
-   * document at a time IO is used to read the XML file. Any contents will be
-   * ignored if written with document at a time IO.
-   * 
+   * Returns all the documents in the collection. This will be empty if document at a time IO is
+   * used to read the XML file. Any contents will be ignored if written with document at a time IO.
+   *
    * @return all the documents in the collection
    */
   public List<BioCDocument> getDocuments() {
@@ -221,7 +206,7 @@ public class BioCCollection {
 
   /**
    * Returns the charset encoding of the BioC file.
-   * 
+   *
    * @return the charset encoding of the BioC file
    */
   public String getEncoding() {
@@ -230,19 +215,8 @@ public class BioCCollection {
   }
 
   /**
-   * Returns the value to which the specified key is mapped, or null if this
-   * {@code infons} contains no mapping for the key.
-   * 
-   * @param key the key whose associated value is to be returned
-   * @return the value to which the specified key is mapped
-   */
-  public Optional<String> getInfon(String key) {
-    return Optional.ofNullable(infons.get(key));
-  }
-
-  /**
    * Returns the information in the collection.
-   * 
+   *
    * @return the information in the collection
    */
   public Map<String, String> getInfons() {
@@ -252,9 +226,9 @@ public class BioCCollection {
   /**
    * Returns name of a file describing the contents and conventions used in
    * this XML file.
-   * 
+   *
    * @return name of a file describing the contents and conventions used in
-   *         this XML file
+   * this XML file
    */
   public String getKey() {
     checkNotNull(key, "key cannot be null");
@@ -263,7 +237,7 @@ public class BioCCollection {
 
   /**
    * Returns the original source of the documents.
-   * 
+   *
    * @return the original source of the documents
    */
   public String getSource() {
@@ -274,7 +248,7 @@ public class BioCCollection {
   /**
    * Gets the XML version declared on the XML declaration. Returns null if none
    * was declared.
-   * 
+   *
    * @return the XML version declared on the XML declaration
    */
   public String getVersion() {
@@ -297,7 +271,7 @@ public class BioCCollection {
 
   /**
    * Gets the standalone declaration from the XML declaration
-   * 
+   *
    * @return true if the DTD is ignored by the parser
    */
   public boolean isStandalone() {
@@ -305,28 +279,8 @@ public class BioCCollection {
   }
 
   /**
-   * Associates the specified value with the specified key in this collection.
-   * 
-   * @param key key with which the specified value is to be associated
-   * @param value value to be associated with the specified key
-   */
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  /**
-   * Removes the value for a key from this collection if it is present
-   * (optional operation).
-   * 
-   * @param key key with which the specified value is to be associated
-   */
-  public void removeInfon(String key) {
-    infons.remove(key);
-  }
-
-  /**
    * Sets the date the documents obtained from the source.
-   * 
+   *
    * @param date the date the documents obtained from the source
    */
   public void setDate(String date) {
@@ -335,7 +289,7 @@ public class BioCCollection {
 
   /**
    * Sets the documents in this collection.
-   * 
+   *
    * @param documents the passage in this collection
    */
   public void setDocuments(List<BioCDocument> documents) {
@@ -345,7 +299,7 @@ public class BioCCollection {
 
   /**
    * Sets the charset encoding of the BioC file.
-   * 
+   *
    * @param encoding the charset encoding of the BioC file
    */
   public void setEncoding(String encoding) {
@@ -353,21 +307,11 @@ public class BioCCollection {
   }
 
   /**
-   * Sets the information in this collection.
-   * 
-   * @param infons the information in this collection
-   */
-  public void setInfons(Map<String, String> infons) {
-    clearInfons();
-    this.infons.putAll(infons);
-  }
-
-  /**
    * Sets the name of a file describing the contents and conventions used in
    * this XML file.
-   * 
+   *
    * @param key the name of a file describing the contents and conventions used
-   *          in this XML file
+   *            in this XML file
    */
   public void setKey(String key) {
     this.key = key;
@@ -375,7 +319,7 @@ public class BioCCollection {
 
   /**
    * Sets the original source of the documents.
-   * 
+   *
    * @param source the original source of the documents
    */
   public void setSource(String source) {
@@ -384,7 +328,7 @@ public class BioCCollection {
 
   /**
    * Sets the standalone declaration to the XML declaration.
-   * 
+   *
    * @param standalone true if the parser can ignore the DTD
    */
   public void setStandalone(boolean standalone) {
@@ -393,7 +337,7 @@ public class BioCCollection {
 
   /**
    * Sets the XML version declared on the XML declaration.
-   * 
+   *
    * @param version the XML version declared on the XML declaration
    */
   public void setVersion(String version) {

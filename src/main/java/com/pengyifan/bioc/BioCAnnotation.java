@@ -1,7 +1,12 @@
 package com.pengyifan.bioc;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Range;
+import com.google.common.collect.RangeSet;
+import com.google.common.collect.Sets;
+import com.google.common.collect.TreeRangeSet;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -9,17 +14,16 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-import com.google.common.collect.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Stand off annotation.
- * 
- * @since 1.0.0
+ *
  * @author Yifan Peng
+ * @since 1.0.0
  */
-public class BioCAnnotation {
+public class BioCAnnotation implements BioCInfons {
 
   private String id;
   private Map<String, String> infons;
@@ -33,10 +37,10 @@ public class BioCAnnotation {
     infons = Maps.newHashMap();
     locations = Sets.newHashSet();
   }
-  
+
   /**
    * Constructs an empty annotation with id.
-   * 
+   *
    * @param id the id used to identify annotation
    */
   public BioCAnnotation(String id) {
@@ -46,11 +50,9 @@ public class BioCAnnotation {
   }
 
   /**
-   * Constructs an annotation containing the information of the specified
-   * annotation.
-   * 
-   * @param annotation the annotation whose information is to be placed into
-   *          this annotation
+   * Constructs an annotation containing the information of the specified annotation.
+   *
+   * @param annotation the annotation whose information is to be placed into this annotation
    */
   public BioCAnnotation(BioCAnnotation annotation) {
     this();
@@ -62,19 +64,12 @@ public class BioCAnnotation {
 
   /**
    * Adds the location at the specified position in this annotation.
-   * 
+   *
    * @param location The location at the specified position in this annotation
    */
   public void addLocation(BioCLocation location) {
     checkNotNull(location, "location cannot be null");
     locations.add(location);
-  }
-
-  /**
-   * Clears all information.
-   */
-  public void clearInfons() {
-    infons.clear();
   }
 
   /**
@@ -86,7 +81,7 @@ public class BioCAnnotation {
 
   /**
    * Returns true if this annotation contains the specified location.
-   * 
+   *
    * @param location location whose presence in this annotation is to be tested
    * @return if this annotation contains the specified location
    */
@@ -111,7 +106,7 @@ public class BioCAnnotation {
 
   /**
    * Returns the id used to identify this annotation in a {@link BioCRelation}.
-   * 
+   *
    * @return the id used to identify this annotation in a {@link BioCRelation}.
    */
   public String getID() {
@@ -120,28 +115,18 @@ public class BioCAnnotation {
   }
 
   /**
-   * Returns the value to which the specified key is mapped, or null if this
-   * {@code infons} contains no mapping for the key.
-   * 
-   * @param key the key whose associated value is to be returned
-   * @return the value to which the specified key is mapped
-   */
-  public Optional<String> getInfon(String key) {
-    return Optional.ofNullable(infons.get(key));
-  }
-
-  /**
    * Returns the information in this annotation.
-   * 
+   *
    * @return the information in this annotation.
    */
+  @Override
   public Map<String, String> getInfons() {
     return infons;
   }
 
   /**
    * Returns the number of locations in this annotation.
-   * 
+   *
    * @return the number of locations in this annotation
    */
   public int getLocationCount() {
@@ -151,7 +136,7 @@ public class BioCAnnotation {
   /**
    * Returns locations of the annotated text. Multiple locations indicate a
    * multispan annotation.
-   * 
+   *
    * @return locations of the annotated text
    */
   public Set<BioCLocation> getLocations() {
@@ -164,9 +149,9 @@ public class BioCAnnotation {
    * @return the minimal range which encloses all locations in this annotation
    */
   public BioCLocation getTotalLocation() {
-    checkArgument(getLocationCount()>0, "No location added");
+    checkArgument(getLocationCount() > 0, "No location added");
     RangeSet<Integer> rangeSet = TreeRangeSet.create();
-    for(BioCLocation location: getLocations()) {
+    for (BioCLocation location : getLocations()) {
       rangeSet.add(
           Range.closedOpen(location.getOffset(), location.getOffset() + location.getLength()));
     }
@@ -177,7 +162,7 @@ public class BioCAnnotation {
 
   /**
    * Returns the original text of the annotation
-   * 
+   *
    * @return the original text of the annotation
    */
   public Optional<String> getText() {
@@ -190,59 +175,26 @@ public class BioCAnnotation {
   }
 
   /**
-   * Returns a unmodifiable iterator over the locations in this annotation in
-   * proper sequence.
-   * 
-   * @return an iterator over the locations in this annotation in proper
-   *         sequence
+   * Returns a unmodifiable iterator over the locations in this annotation in proper sequence.
+   *
+   * @return an iterator over the locations in this annotation in proper sequence
    */
   public Iterator<BioCLocation> locationIterator() {
     return locations.iterator();
   }
 
   /**
-   * Associates the specified value with the specified key in this annotation.
-   * 
-   * @param key key with which the specified value is to be associated
-   * @param value value to be associated with the specified key
-   */
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  /**
-   * Removes the value for a key from this annotation if it is present
-   * (optional operation).
-   * 
-   * @param key key with which the specified value is to be associated
-   */
-  public void removeInfon(String key) {
-    infons.remove(key);
-  }
-
-  /**
    * Sets the id used to identify this annotation in a {@link BioCRelation}.
-   * 
-   * @param id the id used to identify this annotation in a
-   *          {@link BioCRelation}
+   *
+   * @param id the id used to identify this annotation in a {@link BioCRelation}
    */
   public void setID(String id) {
     this.id = id;
   }
 
   /**
-   * Sets the information in this annotation.
-   * 
-   * @param infons the information in this annotation
-   */
-  public void setInfons(Map<String, String> infons) {
-    clearInfons();
-    this.infons.putAll(infons);
-  }
-
-  /**
    * Sets the locations in this annotation.
-   * 
+   *
    * @param locations the locations in this annotation.
    */
   public void setLocations(Set<BioCLocation> locations) {
@@ -252,7 +204,7 @@ public class BioCAnnotation {
 
   /**
    * Sets the original text of the annotation.
-   * 
+   *
    * @param text the original text
    */
   public void setText(String text) {

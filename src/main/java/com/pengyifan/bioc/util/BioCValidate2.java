@@ -118,15 +118,15 @@ public class BioCValidate2 {
   }
 
   public static String getText(BioCPassage passage) {
-    StringBuilder sb = new StringBuilder();
     if (passage.getText().isPresent() && !passage.getText().get().isEmpty()) {
-      sb.append(passage.getText().get());
-    } else {
-      for (BioCSentence sentence : passage.getSentences()) {
-        fillText(sb, sentence.getOffset() - passage.getOffset());
-        checkArgument(sentence.getText().isPresent(), "BioC sentence has no text");
-        sb.append(sentence.getText().get());
-      }
+      return passage.getText().get();
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (BioCSentence sentence : passage.getSentences()) {
+      fillText(sb, sentence.getOffset() - passage.getOffset());
+      checkArgument(sentence.getText().isPresent(), "BioC sentence has no text");
+      sb.append(sentence.getText().get());
     }
     return sb.toString();
   }

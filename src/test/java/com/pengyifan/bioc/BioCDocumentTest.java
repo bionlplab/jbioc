@@ -194,6 +194,7 @@ public class BioCDocumentTest {
   
   private static BioCPassage createPassage(String text) {
     BioCPassage pass = new BioCPassage();
+    pass.setOffset(0);
     pass.setText(text);
     return pass;
   }

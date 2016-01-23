@@ -27,24 +27,15 @@ import com.google.common.collect.Maps;
  * @since 1.0.0
  * @author Yifan Peng
  */
-public class BioCPassage {
+public class BioCPassage extends BioCStructureWithText {
 
-  private int offset;
-  private String text;
-  private Map<String, String> infons;
   private List<BioCSentence> sentences;
-  private List<BioCAnnotation> annotations;
-  private List<BioCRelation> relations;
 
   /**
    * Constructs an empty passage.
    */
   public BioCPassage() {
-    offset = -1;
-    text = null;
-    infons = Maps.newHashMap();
-    annotations = Lists.newArrayList();
-    relations = Lists.newArrayList();
+    super();
     sentences = Lists.newArrayList();
   }
 
@@ -55,41 +46,8 @@ public class BioCPassage {
    *          passage
    */
   public BioCPassage(BioCPassage passage) {
-    this();
-    setOffset(passage.offset);
-    setInfons(passage.infons);
-    setSentences(passage.sentences);
-    setText(passage.text);
-    annotations.addAll(passage.annotations);
-    relations.addAll(passage.relations);
-  }
-
-  /**
-   * Adds annotation in this passage.
-   * 
-   * @param annotation annotation
-   */
-  public void addAnnotation(BioCAnnotation annotation) {
-    checkNotNull(annotation, "annotation cannot be null");
-    checkArgument(
-        !getAnnotation(annotation.getID()).isPresent(),
-        "duplicated annotation: %s",
-        annotation);
-    this.annotations.add(annotation);
-  }
-
-  /**
-   * Adds relation in this passage.
-   * 
-   * @param relation relation
-   */
-  public void addRelation(BioCRelation relation) {
-    checkNotNull(relation, "relation cannot be null");
-    checkArgument(
-        !getRelation(relation.getID()).isPresent(),
-        "duplicated relation: %s",
-        relation);
-    this.relations.add(relation);
+    super(passage);
+    sentences = Lists.newArrayList(passage.sentences);
   }
 
   /**
@@ -100,27 +58,6 @@ public class BioCPassage {
   public void addSentence(BioCSentence sentence) {
     checkNotNull(sentence, "sentence cannot be null");
     this.sentences.add(sentence);
-  }
-
-  /**
-   * Clears all annotations.
-   */
-  public void clearAnnotations() {
-    annotations.clear();
-  }
-
-  /**
-   * Clears all information.
-   */
-  public void clearInfons() {
-    infons.clear();
-  }
-
-  /**
-   * Clears all relations.
-   */
-  public void clearRelations() {
-    relations.clear();
   }
 
   /**
@@ -139,94 +76,11 @@ public class BioCPassage {
       return false;
     }
     BioCPassage rhs = (BioCPassage) obj;
-    return Objects.equals(offset, rhs.offset)
-        && Objects.equals(text, rhs.text)
-        && Objects.equals(infons, rhs.infons)
-        && Objects.equals(sentences, rhs.sentences)
-        && Objects.equals(annotations, rhs.annotations)
-        && Objects.equals(relations, rhs.relations);
+    return super.equals(rhs)
+        && Objects.equals(sentences, rhs.sentences);
   }
 
-  /**
-   * Returns the annotation at the specified position in this passage.
-   * 
-   * @param annotationID id of a specified annotation
-   * @return the annotation of the specified ID in this passage
-   */
-  public Optional<BioCAnnotation> getAnnotation(String annotationID) {
-    return annotations.stream()
-        .filter(a -> a.getID().equals(annotationID))
-        .findFirst();
-  }
 
-  /**
-   * Annotations on the text of the passage.
-   * 
-   * @return annotations on the text of the passage
-   */
-  public Collection<BioCAnnotation> getAnnotations() {
-    return annotations;
-  }
-
-  /**
-   * Returns the value to which the specified key is mapped, or null if this
-   * {@code infons} contains no mapping for the key.
-   * 
-   * @param key the key whose associated value is to be returned
-   * @return the value to which the specified key is mapped
-   */
-  public Optional<String> getInfon(String key) {
-    return Optional.ofNullable(infons.get(key));
-  }
-
-  /**
-   * Information of text in the passage.
-   * <p>
-   * For PubMed references, it might be "title" or "abstract". For full text
-   * papers, it might be Introduction, Methods, Results, or Conclusions. Or
-   * they might be paragraphs.
-   * 
-   * @return the information in the passage.
-   */
-  public Map<String, String> getInfons() {
-    return infons;
-  }
-
-  /**
-   * The offset of the passage in the parent document. The significance of the
-   * exact value may depend on the source corpus. They should be sequential and
-   * identify the passage's position in the document. Since Pubmed is extracted
-   * from an XML file, the title has an offset of zero, while the abstract is
-   * assumed to begin after the title and one space.
-   * 
-   * @return offset to where the passage begins
-   */
-  public int getOffset() {
-    checkArgument(offset >= 0, "offset has to be >= 0");
-    return offset;
-  }
-
-  /**
-   * Returns the relation at the specified position in this passage.
-   * 
-   * @param relationID id of a specified relation
-   * @return the relation of the specified ID in this passage
-   */
-  public Optional<BioCRelation> getRelation(String relationID) {
-    return relations.stream()
-        .filter(r -> r.getID().equals(relationID))
-        .findAny();
-  }
-
-  /**
-   * Relations between the annotations and possibly other relations on the text
-   * of the passage.
-   * 
-   * @return relations of the passage
-   */
-  public Collection<BioCRelation> getRelations() {
-    return relations;
-  }
 
   /**
    * Returns the sentence at the specified position in this passage.
@@ -256,39 +110,11 @@ public class BioCPassage {
     return sentences;
   }
 
-  /**
-   * Returns the original text of the passage.
-   * 
-   * @return the original text of the passage
-   */
-  public Optional<String> getText() {
-    return Optional.ofNullable(text);
-  }
+
 
   @Override
   public int hashCode() {
-    return Objects
-        .hash(offset, text, infons, sentences, annotations, relations);
-  }
-
-  /**
-   * Associates the specified value with the specified key in this passage.
-   * 
-   * @param key key with which the specified value is to be associated
-   * @param value value to be associated with the specified key
-   */
-  public void putInfon(String key, String value) {
-    infons.put(key, value);
-  }
-
-  /**
-   * Removes the value for a key from this passage if it is present (optional
-   * operation).
-   * 
-   * @param key key with which the specified value is to be associated
-   */
-  public void removeInfon(String key) {
-    infons.remove(key);
+    return Objects.hash(super.hashCode(), sentences);
   }
 
   /**
@@ -302,25 +128,6 @@ public class BioCPassage {
   }
 
   /**
-   * Sets the information in this passage.
-   * 
-   * @param infons the information in this passage
-   */
-  public void setInfons(Map<String, String> infons) {
-    clearInfons();
-    this.infons.putAll(infons);
-  }
-
-  /**
-   * Sets offset to where the passage begins.
-   * 
-   * @param offset to where the passage begins
-   */
-  public void setOffset(int offset) {
-    this.offset = offset;
-  }
-
-  /**
    * Sets the sentences in this passage.
    * 
    * @param sentences the sentences in this passage
@@ -330,24 +137,15 @@ public class BioCPassage {
     this.sentences.addAll(sentences);
   }
 
-  /**
-   * Sets the original text of the passage.
-   * 
-   * @param text the original text
-   */
-  public void setText(String text) {
-    this.text = text;
-  }
-
   @Override
   public String toString() {
     return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
-        .append("offset", offset)
-        .append("text", text)
-        .append("infons", infons)
+        .append("offset", getOffset())
+        .append("text", getText())
+        .append("infons", getInfons())
         .append("sentences", sentences)
-        .append("annotations", annotations)
-        .append("relations", relations)
+        .append("annotations", getAnnotations())
+        .append("relations", getRelations())
         .toString();
   }
 
