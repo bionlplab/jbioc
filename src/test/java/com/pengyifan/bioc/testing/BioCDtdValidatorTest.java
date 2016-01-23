@@ -1,6 +1,5 @@
 package com.pengyifan.bioc.testing;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.io.File;
