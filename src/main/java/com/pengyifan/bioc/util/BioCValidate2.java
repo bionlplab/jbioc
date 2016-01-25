@@ -32,7 +32,7 @@ public class BioCValidate2 {
    * @param document input document
    */
   public static void check(BioCDocument document) {
-    String text = getText(document);
+    String text = BioCUtils.getText(document);
     // check annotation offset and text
     checkAnnotations(document.getAnnotations(), text, 0, BioCUtils.getXPathString(document));
     // check relation
@@ -46,7 +46,7 @@ public class BioCValidate2 {
 
     // check passage
     for (BioCPassage passage : document.getPassages()) {
-      text = getText(passage);
+      text = BioCUtils.getText(passage);
       // check annotation offset and text
       checkAnnotations(passage.getAnnotations(), text, passage.getOffset(),
           BioCUtils.getXPathString(document, passage));
@@ -99,35 +99,5 @@ public class BioCValidate2 {
               "  Location   : %s",
           annotation, sj.toString(), head);
     }
-  }
-
-  private static StringBuilder fillText(StringBuilder sb, int offset) {
-    while (sb.length() < offset) {
-      sb.append('\n');
-    }
-    return sb;
-  }
-
-  public static String getText(BioCDocument document) {
-    StringBuilder sb = new StringBuilder();
-    for (BioCPassage passage : document.getPassages()) {
-      fillText(sb, passage.getOffset());
-      sb.append(getText(passage));
-    }
-    return sb.toString();
-  }
-
-  public static String getText(BioCPassage passage) {
-    if (passage.getText().isPresent() && !passage.getText().get().isEmpty()) {
-      return passage.getText().get();
-    }
-
-    StringBuilder sb = new StringBuilder();
-    for (BioCSentence sentence : passage.getSentences()) {
-      fillText(sb, sentence.getOffset() - passage.getOffset());
-      checkArgument(sentence.getText().isPresent(), "BioC sentence has no text");
-      sb.append(sentence.getText().get());
-    }
-    return sb.toString();
   }
 }

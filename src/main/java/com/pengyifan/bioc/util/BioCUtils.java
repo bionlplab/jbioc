@@ -16,6 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 public class BioCUtils {
   public static final BioCCollection readCollection(Path file)
       throws IOException, XMLStreamException {
@@ -67,5 +69,35 @@ public class BioCUtils {
 
   public static final List<BioCSentence> getSentences(BioCCollection collection) {
     return Lists.newArrayList(new BioCSentenceIterator(collection));
+  }
+
+  private static StringBuilder fillText(StringBuilder sb, int offset) {
+    while (sb.length() < offset) {
+      sb.append('\n');
+    }
+    return sb;
+  }
+
+  public static String getText(BioCDocument document) {
+    StringBuilder sb = new StringBuilder();
+    for (BioCPassage passage : document.getPassages()) {
+      fillText(sb, passage.getOffset());
+      sb.append(getText(passage));
+    }
+    return sb.toString();
+  }
+
+  public static String getText(BioCPassage passage) {
+    if (passage.getText().isPresent() && !passage.getText().get().isEmpty()) {
+      return passage.getText().get();
+    }
+
+    StringBuilder sb = new StringBuilder();
+    for (BioCSentence sentence : passage.getSentences()) {
+      fillText(sb, sentence.getOffset() - passage.getOffset());
+      checkArgument(sentence.getText().isPresent(), "BioC sentence has no text");
+      sb.append(sentence.getText().get());
+    }
+    return sb.toString();
   }
 }
