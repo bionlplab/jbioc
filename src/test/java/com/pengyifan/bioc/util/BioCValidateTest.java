@@ -15,6 +15,7 @@ import java.nio.file.Files;
 
 import static org.junit.Assert.*;
 
+@Deprecated
 public class BioCValidateTest {
 
   private static final String XML_FILENAME = "xml/PMID-8557975-simplified-sentences.xml";
