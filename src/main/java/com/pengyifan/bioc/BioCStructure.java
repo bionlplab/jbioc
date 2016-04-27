@@ -3,11 +3,7 @@ package com.pengyifan.bioc;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -80,15 +76,32 @@ public abstract class BioCStructure implements BioCInfons {
 
 
   /**
-   * Returns the annotation at the specified position in this structure.
+   * Returns the annotation at the specified ID in this structure.
    *
    * @param annotationID id of a specified annotation
-   * @return the annotation of the specified ID in this document
+   * @return the annotation of the specified ID in this structure
    */
   public Optional<BioCAnnotation> getAnnotation(String annotationID) {
     return annotations.stream()
         .filter(a -> a.getID().equals(annotationID))
         .findFirst();
+  }
+
+  /**
+   * Returns the annotation of the specified role of the relation in this structure.
+   *
+   * @param relation the specified relation
+   * @param role     the specified role in the relation
+   * @return the annotation of the specified role of the relation in this structure
+   * @throws NoSuchElementException if there is no role in the relation
+   */
+  public Optional<BioCAnnotation> getAnnotation(BioCRelation relation, String role) {
+    try {
+      return getAnnotation(relation.getNode(role).get().getRefid());
+    } catch (NoSuchElementException e) {
+      throw new NoSuchElementException(
+          String.format("Cannot find %s in relation [%s]", relation, role));
+    }
   }
 
   /**
