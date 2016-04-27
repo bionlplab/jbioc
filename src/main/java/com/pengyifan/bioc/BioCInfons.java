@@ -33,7 +33,7 @@ public interface BioCInfons {
    *
    * @param infons the information
    */
-  default void putAllInfos(Map<String, String> infons) {
+  default void putAllInfons(Map<String, String> infons) {
     getInfons().putAll(infons);
   }
 
