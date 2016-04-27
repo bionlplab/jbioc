@@ -29,6 +29,15 @@ public interface BioCInfons {
   }
 
   /**
+   * Copies all of the mappings from the specified infons.
+   *
+   * @param infons the information
+   */
+  default void putAllInfos(Map<String, String> infons) {
+    getInfons().putAll(infons);
+  }
+
+  /**
    * Removes the value for a key if it is present
    * (optional operation).
    *
