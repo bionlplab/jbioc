@@ -19,6 +19,9 @@ import java.util.List;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class BioCUtils {
+
+  private BioCUtils(){}
+
   public static final BioCCollection readCollection(Path file)
       throws IOException, XMLStreamException {
     BioCCollectionReader reader = new BioCCollectionReader(Files.newBufferedReader(file));
@@ -65,6 +68,10 @@ public class BioCUtils {
       BioCRelation relation) {
     return String.format("%s/relation[id=%s]",
         getXPathString(document, passage), relation.getID());
+  }
+
+  public static final String getXPathString(BioCSentenceIterator itr) {
+    return getXPathString(itr.getDocument(), itr.getPassage(), itr.current());
   }
 
   public static final List<BioCSentence> getSentences(BioCCollection collection) {

@@ -15,9 +15,10 @@ import com.pengyifan.bioc.BioCDocument;
  * @see BioCSentenceIterator
  * @author Yifan Peng
  */
-public class BioCDocumentIterator implements Iterator<BioCDocument> {
+public class BioCDocumentIterator implements BioCIterator<BioCDocument> {
 
   private Iterator<BioCDocument> documentItr;
+  private BioCDocument currentDocument;
 
   /**
    * Creates an empty iterator.
@@ -44,24 +45,22 @@ public class BioCDocumentIterator implements Iterator<BioCDocument> {
     documentItr = Iterators.singletonIterator(document);
   }
 
-  /**
-   * Returns true if the iteration has more documents.
-   * 
-   * @return if the iteration has more documents
-   */
   @Override
   public boolean hasNext() {
     return documentItr.hasNext();
   }
 
-  /**
-   * Returns the next document in the iteration.
-   * 
-   * @return the next document in the iteration
-   */
   @Override
   public BioCDocument next() {
-    return documentItr.next();
+    currentDocument = documentItr.next();
+    return currentDocument;
   }
 
+  @Override
+  public BioCDocument current() {
+    if (currentDocument == null) {
+      throw new IllegalStateException();
+    }
+    return currentDocument;
+  }
 }

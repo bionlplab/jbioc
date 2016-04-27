@@ -5,9 +5,6 @@ import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
-import com.pengyifan.bioc.util.BioCDocumentIterator;
-import com.pengyifan.bioc.util.BioCPassageIterator;
-import com.pengyifan.bioc.util.BioCSentenceIterator;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,13 +19,14 @@ import java.util.Iterator;
  * @see com.pengyifan.bioc.util.BioCSentenceIterator
  * @author Yifan Peng
  */
-public class BioCRelationIterator implements Iterator<BioCRelation> {
+public class BioCRelationIterator implements Iterator<BioCRelation>, BioCIterator<BioCRelation> {
 
   private Iterator<BioCRelation> relationItr;
 
   private BioCDocumentIterator documentItr;
   private BioCPassageIterator passageItr;
   private BioCSentenceIterator sentenceItr;
+  private BioCRelation currentRelation;
 
   /**
    * Creates an empty iterator.
@@ -88,11 +86,6 @@ public class BioCRelationIterator implements Iterator<BioCRelation> {
     relationItr = Collections.emptyIterator();
   }
 
-  /**
-   * Returns true if the iteration has more annotations.
-   * 
-   * @return if the iteration has more annotations
-   */
   @Override
   public boolean hasNext() {
     if (relationItr.hasNext()) {
@@ -114,13 +107,17 @@ public class BioCRelationIterator implements Iterator<BioCRelation> {
     }
   }
 
-  /**
-   * Returns the next relation in the iteration.
-   * 
-   * @return the next relation in the iteration
-   */
   @Override
   public BioCRelation next() {
-    return relationItr.next();
+    currentRelation = relationItr.next();
+    return currentRelation;
+  }
+
+  @Override
+  public BioCRelation current() {
+    if (currentRelation == null) {
+      throw new IllegalStateException();
+    }
+    return currentRelation;
   }
 }

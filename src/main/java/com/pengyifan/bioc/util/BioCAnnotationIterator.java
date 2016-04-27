@@ -5,9 +5,6 @@ import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCSentence;
-import com.pengyifan.bioc.util.BioCDocumentIterator;
-import com.pengyifan.bioc.util.BioCPassageIterator;
-import com.pengyifan.bioc.util.BioCSentenceIterator;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,13 +19,14 @@ import java.util.Iterator;
  * @see com.pengyifan.bioc.util.BioCSentenceIterator
  * @since 1.0.0
  */
-public class BioCAnnotationIterator implements Iterator<BioCAnnotation> {
+public class BioCAnnotationIterator implements BioCIterator<BioCAnnotation> {
 
   private Iterator<BioCAnnotation> annotationItr;
 
   private BioCDocumentIterator documentItr;
   private BioCPassageIterator passageItr;
   private BioCSentenceIterator sentenceItr;
+  private BioCAnnotation currentAnnotation;
 
   /**
    * Creates an empty iterator.
@@ -88,11 +86,6 @@ public class BioCAnnotationIterator implements Iterator<BioCAnnotation> {
     annotationItr = Collections.emptyIterator();
   }
 
-  /**
-   * Returns true if the iteration has more annotations.
-   *
-   * @return if the iteration has more annotations
-   */
   @Override
   public boolean hasNext() {
     if (annotationItr.hasNext()) {
@@ -114,13 +107,17 @@ public class BioCAnnotationIterator implements Iterator<BioCAnnotation> {
     }
   }
 
-  /**
-   * Returns the next annotation in the iteration.
-   *
-   * @return the next sentence in the iteration
-   */
   @Override
   public BioCAnnotation next() {
-    return annotationItr.next();
+    currentAnnotation = annotationItr.next();
+    return currentAnnotation;
+  }
+
+  @Override
+  public BioCAnnotation current() {
+    if (currentAnnotation == null) {
+      throw new IllegalStateException();
+    }
+    return currentAnnotation;
   }
 }

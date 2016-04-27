@@ -18,10 +18,11 @@ import com.pengyifan.bioc.BioCSentence;
  * @see BioCPassageIterator
  * @author Yifan Peng
  */
-public class BioCSentenceIterator implements Iterator<BioCSentence> {
+public class BioCSentenceIterator implements Iterator<BioCSentence>, BioCIterator<BioCSentence> {
 
   private BioCPassageIterator passageItr;
   private BioCPassage currentPassage;
+  private BioCSentence currentSentence;
   private Iterator<BioCSentence> sentenceItr;
 
   /**
@@ -103,11 +104,6 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     return currentPassage;
   }
 
-  /**
-   * Returns true if the iteration has more sentences.
-   * 
-   * @return if the iteration has more sentences
-   */
   @Override
   public boolean hasNext() {
     if (sentenceItr.hasNext()) {
@@ -121,14 +117,17 @@ public class BioCSentenceIterator implements Iterator<BioCSentence> {
     }
   }
 
-  /**
-   * Returns the next sentence in the iteration.
-   * 
-   * @return the next sentence in the iteration
-   */
   @Override
   public BioCSentence next() {
-    return sentenceItr.next();
+    currentSentence = sentenceItr.next();
+    return currentSentence;
   }
 
+  @Override
+  public BioCSentence current() {
+    if (currentSentence == null) {
+      throw new IllegalStateException();
+    }
+    return currentSentence;
+  }
 }

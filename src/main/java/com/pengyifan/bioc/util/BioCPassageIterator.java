@@ -16,10 +16,11 @@ import com.pengyifan.bioc.BioCPassage;
  * @see BioCSentenceIterator
  * @author Yifan Peng
  */
-public class BioCPassageIterator implements Iterator<BioCPassage> {
+public class BioCPassageIterator implements Iterator<BioCPassage>, BioCIterator<BioCPassage> {
 
   private BioCDocumentIterator documentItr;
   private BioCDocument currentDocument;
+  private BioCPassage currentPassage;
   private Iterator<BioCPassage> passageItr;
 
   /**
@@ -83,11 +84,6 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
     return currentDocument;
   }
 
-  /**
-   * Returns true if the iteration has more passages.
-   * 
-   * @return if the iteration has more passages
-   */
   @Override
   public boolean hasNext() {
     if (passageItr.hasNext()) {
@@ -101,14 +97,17 @@ public class BioCPassageIterator implements Iterator<BioCPassage> {
     }
   }
 
-  /**
-   * Returns the next passage in the iteration.
-   * 
-   * @return the next passage in the iteration
-   */
   @Override
   public BioCPassage next() {
-    return passageItr.next();
+    currentPassage = passageItr.next();
+    return currentPassage;
   }
 
+  @Override
+  public BioCPassage current() {
+    if (currentPassage == null) {
+      throw new IllegalStateException();
+    }
+    return currentPassage;
+  }
 }
