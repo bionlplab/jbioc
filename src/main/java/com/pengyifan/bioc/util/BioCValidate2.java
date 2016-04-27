@@ -80,7 +80,7 @@ public class BioCValidate2 {
   public static void checkAnnotations(Collection<BioCAnnotation> annotations,
       String text, int offset, String head) {
     for (BioCAnnotation annotation : annotations) {
-      StringJoiner sj = new StringJoiner(" ");
+      StringJoiner sj = new StringJoiner("|||");
       annotation.getLocations().stream()
           .sorted((l1, l2) -> Integer.compare(l1.getOffset(), l2.getOffset()))
           .forEach(
