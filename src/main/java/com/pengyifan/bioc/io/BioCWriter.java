@@ -91,7 +91,7 @@ class BioCWriter implements Closeable {
     for (BioCAnnotation annotation : document.getAnnotations()) {
       write(annotation);
     }
-    // relations
+    // ie
     for (BioCRelation rel : document.getRelations()) {
       write(rel);
     }

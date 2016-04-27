@@ -25,7 +25,7 @@ public class BioCValidate {
   }
 
   /**
-   * Checks the annotations and relations.
+   * Checks the annotations and ie.
    *
    * @param sentence input sentence
    */
@@ -42,7 +42,7 @@ public class BioCValidate {
   }
 
   /**
-   * If the passage has text, checks annotations and relations; otherwise directly returns.
+   * If the passage has text, checks annotations and ie; otherwise directly returns.
    *
    * @param passage input passage
    */
@@ -65,7 +65,7 @@ public class BioCValidate {
   }
 
   /**
-   * Checks annotations and relations.
+   * Checks annotations and ie.
    *
    * @param document input document
    */
@@ -87,7 +87,7 @@ public class BioCValidate {
   }
 
   /**
-   * Checks annotations and relations.
+   * Checks annotations and ie.
    *
    * @param collection input collection
    */

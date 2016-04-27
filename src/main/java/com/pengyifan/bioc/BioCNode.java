@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * The annotations and/or other relations in the relation.
+ * The annotations and/or other ie in the relation.
  * 
  * @since 1.0.0
  * @author Yifan Peng

@@ -63,7 +63,7 @@ public class BioCSentence extends BioCStructureWithText {
         .append("text", getText())
         .append("infons", getInfons())
         .append("annotations", getAnnotations())
-        .append("relations", getRelations())
+        .append("ie", getRelations())
         .toString();
   }
 }

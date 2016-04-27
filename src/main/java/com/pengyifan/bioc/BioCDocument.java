@@ -151,7 +151,7 @@ public class BioCDocument extends BioCStructure {
         .append("infons", getInfons())
         .append("passages", passages)
         .append("annotations", getAnnotations())
-        .append("relations", getRelations())
+        .append("ie", getRelations())
         .toString();
   }
 

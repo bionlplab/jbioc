@@ -72,7 +72,7 @@ public abstract class BioCStructure implements BioCInfons {
 
 
   /**
-   * Clears all relations.
+   * Clears all ie.
    */
   public void clearRelations() {
     relations.clear();
@@ -123,10 +123,10 @@ public abstract class BioCStructure implements BioCInfons {
   }
 
   /**
-   * Relations between the annotations and possibly other relations on the text
+   * Relations between the annotations and possibly other ie on the text
    * of the document.
    *
-   * @return relations of the structure
+   * @return ie of the structure
    */
   public Collection<BioCRelation> getRelations() {
     return relations;

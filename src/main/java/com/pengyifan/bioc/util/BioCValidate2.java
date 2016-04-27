@@ -16,7 +16,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class BioCValidate2 {
 
   /**
-   * Checks annotations and relations.
+   * Checks annotations and ie.
    *
    * @param collection input collection
    */
@@ -27,7 +27,7 @@ public class BioCValidate2 {
   }
 
   /**
-   * Checks annotations and relations.
+   * Checks annotations and ie.
    *
    * @param document input document
    */

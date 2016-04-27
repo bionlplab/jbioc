@@ -145,7 +145,7 @@ public class BioCPassage extends BioCStructureWithText {
         .append("infons", getInfons())
         .append("sentences", sentences)
         .append("annotations", getAnnotations())
-        .append("relations", getRelations())
+        .append("ie", getRelations())
         .toString();
   }
 
