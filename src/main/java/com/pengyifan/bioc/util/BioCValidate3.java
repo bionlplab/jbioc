@@ -97,22 +97,21 @@ public class BioCValidate3 {
         error("The annotation has no text: %s\n", annotation);
       }
 
-      List<BioCLocation> locationList = annotation.getLocations().stream()
-          .sorted((l1, l2) -> Integer.compare(l1.getOffset(), l2.getOffset()))
-          .collect(Collectors.toList());
-
-      StringJoiner sj = new StringJoiner("|||");
-      for (BioCLocation location : locationList) {
-        sj.add(text.substring(location.getOffset() - offset,
-            location.getOffset() + location.getLength() - offset));
-      }
-
-      if (!sj.toString().equals(annotation.getText().get())) {
-        error("Annotation text is incorrect.\n" +
-                "  Annotation : %s\n" +
-                "  Actual text: %s\n" +
-                "  %s",
-            annotation, sj.toString(), annotation);
+      BioCLocation total = annotation.getTotalLocation();
+      for (BioCLocation location: annotation.getLocations()) {
+        String expected = text.substring(
+            location.getOffset() - offset,
+            location.getOffset() + location.getLength() - offset);
+        String actual = annotation.getText().get().substring(
+            location.getOffset() - total.getOffset(),
+            location.getOffset() + location.getLength() - total.getOffset());
+        if (!expected.equals(actual)) {
+          error("Annotation text is incorrect.\n" +
+                  "  Annotation : %s\n" +
+                  "  Actual text: %s\n" +
+                  "  %s",
+              annotation, actual, annotation);
+        }
       }
     }
   }

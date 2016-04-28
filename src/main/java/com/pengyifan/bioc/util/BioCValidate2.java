@@ -3,6 +3,7 @@ package com.pengyifan.bioc.util;
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
+import com.pengyifan.bioc.BioCLocation;
 import com.pengyifan.bioc.BioCNode;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
@@ -80,24 +81,21 @@ public class BioCValidate2 {
   public static void checkAnnotations(Collection<BioCAnnotation> annotations,
       String text, int offset, String head) {
     for (BioCAnnotation annotation : annotations) {
-      StringJoiner sj = new StringJoiner("|||");
-      annotation.getLocations().stream()
-          .sorted((l1, l2) -> Integer.compare(l1.getOffset(), l2.getOffset()))
-          .forEach(
-              l -> {
-                String substring = text.substring(
-                    l.getOffset() - offset,
-                    l.getOffset() + l.getLength() - offset
-                );
-                sj.add(substring);
-              }
-          );
-      checkArgument(sj.toString().equals(annotation.getText().get()),
-          "Annotation text is incorrect.\n" +
-              "  Annotation : %s\n" +
-              "  Actual text: %s\n" +
-              "  Location   : %s",
-          annotation, sj.toString(), head);
+      BioCLocation total = annotation.getTotalLocation();
+      for (BioCLocation location: annotation.getLocations()) {
+        String expected = text.substring(
+            location.getOffset() - offset,
+            location.getOffset() + location.getLength() - offset);
+        String actual = annotation.getText().get().substring(
+            location.getOffset() - total.getOffset(),
+            location.getOffset() + location.getLength() - total.getOffset());
+        checkArgument(expected.equals(actual),
+            "Annotation text is incorrect.\n" +
+                "  Annotation : %s\n" +
+                "  Actual text: %s\n" +
+                "  Location   : %s",
+            annotation, actual, head);
+      }
     }
   }
 }
