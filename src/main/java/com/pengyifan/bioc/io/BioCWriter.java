@@ -1,22 +1,5 @@
 package com.pengyifan.bioc.io;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javanet.staxutils.IndentingXMLEventWriter;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-
-import org.codehaus.stax2.evt.DTD2;
-import org.codehaus.stax2.evt.XMLEventFactory2;
-
 import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
@@ -25,18 +8,28 @@ import com.pengyifan.bioc.BioCNode;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Map;
+import java.util.Map.Entry;
+import javanet.staxutils.IndentingXMLEventWriter;
+import javax.xml.namespace.QName;
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import org.codehaus.stax2.evt.XMLEventFactory2;
 
 class BioCWriter implements Closeable {
 
-  IndentingXMLEventWriter writer;
-  XMLEventFactory2 eventFactory = (XMLEventFactory2) XMLEventFactory2
-      .newInstance();
+  XMLEventWriter writer;
+  XMLEventFactory2 eventFactory = (XMLEventFactory2) XMLEventFactory2.newInstance();
 
   protected BioCWriter(Writer writer)
       throws FactoryConfigurationError, XMLStreamException {
     XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
     this.writer = new IndentingXMLEventWriter(xmlOutputFactory.createXMLEventWriter(writer));
-    // this.writer.setNewLine(System.getProperty("line.separator"));
   }
 
   @Override
