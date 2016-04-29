@@ -38,13 +38,13 @@ public class BioCValidate2 {
   public static void check(BioCDocument document) {
     String text = BioCUtils.getText(document);
     // check annotation offset and text
-    checkAnnotations(document.getAnnotations(), text, 0, BioCUtils.getXPathString(document));
+    checkAnnotations(document.getAnnotations(), text, 0, BioCLog.log(document));
     // check relation
     for (BioCRelation relation : document.getRelations()) {
       for (BioCNode node : relation.getNodes()) {
         checkArgument(document.getAnnotation(node.getRefid()).isPresent(),
             "Cannot find node %s in relation %s\n" +
-                "Location: %s", node, relation, BioCUtils.getXPathString(document));
+                "Location: %s", node, relation, BioCLog.log(document));
       }
     }
 
@@ -53,13 +53,13 @@ public class BioCValidate2 {
       text = BioCUtils.getText(passage);
       // check annotation offset and text
       checkAnnotations(passage.getAnnotations(), text, passage.getOffset(),
-          BioCUtils.getXPathString(document, passage));
+          BioCLog.log(document, passage));
       // check relation
       for (BioCRelation relation : passage.getRelations()) {
         for (BioCNode node : relation.getNodes()) {
           checkArgument(passage.getAnnotation(node.getRefid()).isPresent(),
               "Cannot find node %s in relation %s\n" +
-                  "Location: %s", node, relation, BioCUtils.getXPathString(document, passage));
+                  "Location: %s", node, relation, BioCLog.log(document, passage));
         }
       }
 

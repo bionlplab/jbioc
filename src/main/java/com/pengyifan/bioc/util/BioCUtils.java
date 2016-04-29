@@ -36,29 +36,9 @@ public class BioCUtils {
     writer.close();
   }
 
-  public static final String getXPathString(BioCDocument document) {
-    return String.format("collection/document[id=%s]", document.getID());
-  }
-
-  public static final String getXPathString(BioCDocument document, BioCPassage passage) {
-    return String.format("%s/passage[offset=%d]",
-        getXPathString(document), passage.getOffset());
-  }
-
   public static final String getXPathString(BioCDocument document, BioCPassage passage,
       BioCSentence sentence) {
-    return String.format("%s/sentence[offset=%d]",
-        getXPathString(document, passage), sentence.getOffset());
-  }
-
-  public static final String getXPathString(BioCDocument document, BioCPassage passage,
-      BioCSentence sentence, BioCAnnotation annotation) {
-    return String.format("%s/annotation[id=%s]",
-        getXPathString(document, passage, sentence), annotation.getID());
-  }
-
-  public static final String getXPathString(BioCSentenceIterator itr) {
-    return getXPathString(itr.getDocument(), itr.getPassage(), itr.current());
+    return BioCLog.log(document, passage, sentence);
   }
 
   public static final List<BioCSentence> getSentences(BioCCollection collection) {
