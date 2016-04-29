@@ -1,28 +1,26 @@
 package com.pengyifan.bioc;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import java.util.Objects;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 /**
- * The connection to the original text can be made through the {@code offset}
- * and {@code length} fields.
- * 
- * @since 1.0.0
+ * The connection to the original text can be made through the {@code offset} and {@code length}
+ * fields.
+ *
  * @author Yifan Peng
+ * @since 1.0.0
  */
-public class BioCLocation {
+public class BioCLocation implements HasOffset, BioCObject {
 
   private Integer offset;
   private Integer length;
 
   /**
-   * Constructs a newly <code>BioCLocation</code> object that has offset and
-   * length.
-   * 
+   * Constructs a newly <code>BioCLocation</code> object that has offset and length.
+   *
    * @param offset the offset of annotation
    * @param length the length of the annotated text
    */
@@ -32,11 +30,9 @@ public class BioCLocation {
   }
 
   /**
-   * Constructs a location containing the information of the specified
-   * location.
-   * 
-   * @param location the location whose information is to be placed into
-   *          this location
+   * Constructs a location containing the information of the specified location.
+   *
+   * @param location the location whose information is to be placed into this location
    */
   public BioCLocation(BioCLocation location) {
     this(location.offset, location.length);
@@ -56,9 +52,9 @@ public class BioCLocation {
   }
 
   /**
-   * Returns the length of the annotated text. While unlikely, this could be
-   * zero to describe an annotation that belongs between two characters.
-   * 
+   * Returns the length of the annotated text. While unlikely, this could be zero to describe an
+   * annotation that belongs between two characters.
+   *
    * @return the length of the annotated text
    */
   public int getLength() {
@@ -66,11 +62,7 @@ public class BioCLocation {
     return length;
   }
 
-  /**
-   * Returns the offset of annotation.
-   * 
-   * @return the offset of annotation
-   */
+  @Override
   public int getOffset() {
     checkArgument(offset >= 0, "offset has to be >= 0");
     return offset;
@@ -83,18 +75,14 @@ public class BioCLocation {
 
   /**
    * Sets the length of the annotated text.
-   * 
+   *
    * @param length the length of the annotated text
    */
   public void setLength(int length) {
     this.length = length;
   }
 
-  /**
-   * Sets the offset of annotation.
-   * 
-   * @param offset the offset of annotation
-   */
+  @Override
   public void setOffset(int offset) {
     this.offset = offset;
   }

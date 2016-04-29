@@ -1,21 +1,20 @@
 package com.pengyifan.bioc;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * One document in the {@link BioCCollection}.
  * <p>
- * An id, typically from the original corpus, identifies the particular
- * document. It includes {@link BioCPassage}s in the document and possibly
- * {@link BioCRelation}s over annotations on the document.
+ * An id, typically from the original corpus, identifies the particular document. It includes
+ * {@link BioCPassage}s in the document and possibly {@link BioCRelation}s over annotations on the
+ * document.
  *
  * @author Yifan Peng
  * @since 1.0.0
@@ -44,8 +43,7 @@ public class BioCDocument extends BioCStructure {
   }
 
   /**
-   * Constructs an document containing the information of the specified
-   * document.
+   * Constructs an document containing the information of the specified document.
    *
    * @param document bioc document
    */
@@ -109,9 +107,8 @@ public class BioCDocument extends BioCStructure {
   /**
    * Returns the list of passages that comprise the document.
    * <p>
-   * For PubMed references, they might be "title" and "abstract". For full text
-   * papers, they might be Introduction, Methods, Results, and Conclusions. Or
-   * they might be paragraphs.
+   * For PubMed references, they might be "title" and "abstract". For full text papers, they might
+   * be Introduction, Methods, Results, and Conclusions. Or they might be paragraphs.
    *
    * @return passages of the document
    */
@@ -125,8 +122,7 @@ public class BioCDocument extends BioCStructure {
   }
 
   /**
-   * Returns an unmodifiable iterator over the passages in this document in
-   * proper sequence.
+   * Returns an unmodifiable iterator over the passages in this document in proper sequence.
    *
    * @return an iterator over the passages in this document in proper sequence
    */

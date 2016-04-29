@@ -2,25 +2,23 @@ package com.pengyifan.bioc;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * Relationship between multiple {@link BioCAnnotation}s and possibly other
- * {@code BioCRelation}s.
+ * Relationship between multiple {@link BioCAnnotation}s and possibly other {@code BioCRelation}s.
  *
  * @author Yifan Peng
  * @since 1.0.0
  */
-public class BioCRelation implements BioCInfons {
+public class BioCRelation implements HasInfons, HasID, BioCObject {
 
   private String id;
   private Map<String, String> infons;
@@ -46,11 +44,9 @@ public class BioCRelation implements BioCInfons {
   }
 
   /**
-   * Constructs a relation containing the information of the specified
-   * relation.
+   * Constructs a relation containing the information of the specified relation.
    *
-   * @param relation the relation whose information is to be placed into this
-   *                 relation
+   * @param relation the relation whose information is to be placed into this relation
    */
   public BioCRelation(BioCRelation relation) {
     this();
@@ -100,24 +96,25 @@ public class BioCRelation implements BioCInfons {
         && Objects.equals(nodes, rhs.nodes);
   }
 
-  /**
-   * Returns the id used to refer to this relation in other relationships.
-   *
-   * @return the id used to identify this annotation in a {@link BioCRelation}.
-   */
+  @Override
   public String getID() {
     checkNotNull(id, "id cannot be null");
     return id;
   }
 
-  /**
-   * Returns the information of relation. Implemented examples include
-   * abbreviation long forms and short forms and protein events.
-   *
-   * @return the information in this annotation.
-   */
+  @Override
   public Map<String, String> getInfons() {
     return infons;
+  }
+
+  /**
+   * Gets the first node based on the role.
+   *
+   * @param role the role of the node
+   * @return node that has the same role
+   */
+  public Optional<BioCNode> getNode(String role) {
+    return getNodes().stream().filter(n -> n.getRole().equals(role)).findFirst();
   }
 
   /**
@@ -130,8 +127,8 @@ public class BioCRelation implements BioCInfons {
   }
 
   /**
-   * Returns nodes that describe how the referenced annotated object or other
-   * relation participates in the current relationship.
+   * Returns nodes that describe how the referenced annotated object or other relation participates
+   * in the current relationship.
    *
    * @return nodes of the relation
    */
@@ -145,8 +142,7 @@ public class BioCRelation implements BioCInfons {
   }
 
   /**
-   * Returns a unmodifiable iterator over the nodes in this relation in proper
-   * sequence.
+   * Returns a unmodifiable iterator over the nodes in this relation in proper sequence.
    *
    * @return an iterator over the nodes in this relation in proper sequence
    */
@@ -154,11 +150,7 @@ public class BioCRelation implements BioCInfons {
     return nodes.iterator();
   }
 
-  /**
-   * Sets the id used to identify this relation.
-   *
-   * @param id the id used to identify this relation
-   */
+  @Override
   public void setID(String id) {
     this.id = id;
   }
@@ -171,16 +163,6 @@ public class BioCRelation implements BioCInfons {
   public void setNodes(Set<BioCNode> nodes) {
     clearNodes();
     this.nodes.addAll(nodes);
-  }
-
-  /**
-   * Gets the first node based on the role.
-   *
-   * @param role the role of the node
-   * @return node that has the same role
-   */
-  public Optional<BioCNode> getNode(String role) {
-    return getNodes().stream().filter(n -> n.getRole().equals(role)).findFirst();
   }
 
   @Override

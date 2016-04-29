@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <collection>
-  <source>Made up file to test that everything is allowed and processed. Has text in the passage.
-  </source>
+  <source>Made up file to test that everything is allowed and processed. Has text in the passage.</source>
   <date>2013-04-26</date>
   <key>everything.key</key>
   <infon key="collection-infon-key">collection-infon-value</infon>

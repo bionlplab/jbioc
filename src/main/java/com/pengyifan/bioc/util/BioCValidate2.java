@@ -14,6 +14,9 @@ import java.util.StringJoiner;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+/**
+ * @deprecated use {@link com.pengyifan.bioc.util.BioCValidate3} instead
+ */
 public class BioCValidate2 {
 
   /**

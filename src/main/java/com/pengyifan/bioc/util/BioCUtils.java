@@ -5,7 +5,6 @@ import com.pengyifan.bioc.BioCAnnotation;
 import com.pengyifan.bioc.BioCCollection;
 import com.pengyifan.bioc.BioCDocument;
 import com.pengyifan.bioc.BioCPassage;
-import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
 import com.pengyifan.bioc.io.BioCCollectionReader;
 import com.pengyifan.bioc.io.BioCCollectionWriter;
@@ -58,18 +57,6 @@ public class BioCUtils {
         getXPathString(document, passage, sentence), annotation.getID());
   }
 
-  public static final String getXPathString(BioCDocument document, BioCPassage passage,
-      BioCAnnotation annotation) {
-    return String.format("%s/annotation[id=%s]",
-        getXPathString(document, passage), annotation.getID());
-  }
-
-  public static final String getXPathString(BioCDocument document, BioCPassage passage,
-      BioCRelation relation) {
-    return String.format("%s/relation[id=%s]",
-        getXPathString(document, passage), relation.getID());
-  }
-
   public static final String getXPathString(BioCSentenceIterator itr) {
     return getXPathString(itr.getDocument(), itr.getPassage(), itr.current());
   }
@@ -78,33 +65,11 @@ public class BioCUtils {
     return Lists.newArrayList(new BioCSentenceIterator(collection));
   }
 
-  private static StringBuilder fillText(StringBuilder sb, int offset) {
-    while (sb.length() < offset) {
-      sb.append('\n');
-    }
-    return sb;
-  }
-
   public static String getText(BioCDocument document) {
-    StringBuilder sb = new StringBuilder();
-    for (BioCPassage passage : document.getPassages()) {
-      fillText(sb, passage.getOffset());
-      sb.append(getText(passage));
-    }
-    return sb.toString();
+    return new BioCValidate3(false).checkText(document);
   }
 
   public static String getText(BioCPassage passage) {
-    if (passage.getText().isPresent() && !passage.getText().get().isEmpty()) {
-      return passage.getText().get();
-    }
-
-    StringBuilder sb = new StringBuilder();
-    for (BioCSentence sentence : passage.getSentences()) {
-      fillText(sb, sentence.getOffset() - passage.getOffset());
-      checkArgument(sentence.getText().isPresent(), "BioC sentence has no text");
-      sb.append(sentence.getText().get());
-    }
-    return sb.toString();
+    return new BioCValidate3(false).checkText(passage);
   }
 }

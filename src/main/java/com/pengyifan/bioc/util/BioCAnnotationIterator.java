@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * An annotation iterator over a collection, a document, a passage or a single
- * sentence.
+ * An annotation iterator over a collection, a document, a passage or a single sentence.
  *
  * @author Yifan Peng
  * @see com.pengyifan.bioc.util.BioCDocumentIterator

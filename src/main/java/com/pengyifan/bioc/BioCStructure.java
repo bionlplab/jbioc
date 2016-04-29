@@ -8,7 +8,7 @@ import java.util.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public abstract class BioCStructure implements BioCInfons {
+public abstract class BioCStructure implements HasInfons, HasAnnotations, HasRelations, BioCObject {
 
   private Map<String, String> infons;
   private List<BioCAnnotation> annotations;
@@ -35,113 +35,19 @@ public abstract class BioCStructure implements BioCInfons {
     relations.addAll(structure.relations);
   }
 
-  /**
-   * Adds annotation in this structure.
-   *
-   * @param annotation annotation
-   */
-  public void addAnnotation(BioCAnnotation annotation) {
-    checkNotNull(annotation, "annotation cannot be null");
-    checkArgument(!getAnnotation(annotation.getID()).isPresent(),
-        "Duplicated annotation: %s", annotation);
-    this.annotations.add(annotation);
-  }
 
-
-  /**
-   * Adds relation in this structure.
-   *
-   * @param relation relation
-   */
-  public void addRelation(BioCRelation relation) {
-    checkNotNull(relation, "relation cannot be null");
-    checkArgument(!getRelation(relation.getID()).isPresent(), "Duplicated relation: %s", relation);
-    this.relations.add(relation);
-  }
-
-  /**
-   * Clears all annotations.
-   */
-  public void clearAnnotations() {
-    annotations.clear();
-  }
-
-
-  /**
-   * Clears all ie.
-   */
-  public void clearRelations() {
-    relations.clear();
-  }
-
-
-  /**
-   * Returns the annotation at the specified ID in this structure.
-   *
-   * @param annotationID id of a specified annotation
-   * @return the annotation of the specified ID in this structure
-   */
-  public Optional<BioCAnnotation> getAnnotation(String annotationID) {
-    return annotations.stream()
-        .filter(a -> a.getID().equals(annotationID))
-        .findFirst();
-  }
-
-  /**
-   * Returns the annotation of the specified role of the relation in this structure.
-   *
-   * @param relation the specified relation
-   * @param role     the specified role in the relation
-   * @return the annotation of the specified role of the relation in this structure
-   * @throws NoSuchElementException if there is no role in the relation
-   */
-  public Optional<BioCAnnotation> getAnnotation(BioCRelation relation, String role) {
-    try {
-      return getAnnotation(relation.getNode(role).get().getRefid());
-    } catch (NoSuchElementException e) {
-      throw new NoSuchElementException(
-          String.format("Cannot find %s in relation [%s]", relation, role));
-    }
-  }
-
-  /**
-   * Annotations on the text of the structure.
-   *
-   * @return annotations on the text of the structure
-   */
-  public Collection<BioCAnnotation> getAnnotations() {
+  @Override
+  public List<BioCAnnotation> getAnnotations() {
     return annotations;
   }
 
-
-  /**
-   * Returns the information in the structure.
-   *
-   * @return the information in the structure
-   */
+  @Override
   public Map<String, String> getInfons() {
     return infons;
   }
 
-  /**
-   * Returns the relation at the specified position in this structure.
-   *
-   * @param relationID id of a specified relation
-   * @return the relation of the specified ID in this structure
-   */
-  public Optional<BioCRelation> getRelation(String relationID) {
-    return relations.stream()
-        .filter(r -> r.getID().equals(relationID))
-        .findAny();
-  }
-
-  /**
-   * Relations between the annotations and possibly other ie on the text
-   * of the document.
-   *
-   * @return ie of the structure
-   */
-  public Collection<BioCRelation> getRelations() {
+  @Override
+  public List<BioCRelation> getRelations() {
     return relations;
   }
 

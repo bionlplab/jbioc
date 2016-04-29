@@ -2,16 +2,15 @@ package com.pengyifan.bioc;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -26,7 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Yifan Peng
  * @since 1.0.0
  */
-public class BioCCollection implements BioCInfons {
+public class BioCCollection implements HasInfons, BioCObject {
 
   private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -59,8 +58,8 @@ public class BioCCollection implements BioCInfons {
     setDate(formatter.format(LocalDateTime.now()));
     setVersion("1.0");
     setStandalone(true);
-    setSource(new String());
-    setKey(new String());
+    setSource("");
+    setKey("");
   }
 
   /**
@@ -214,21 +213,14 @@ public class BioCCollection implements BioCInfons {
     return encoding;
   }
 
-  /**
-   * Returns the information in the collection.
-   *
-   * @return the information in the collection
-   */
   public Map<String, String> getInfons() {
     return infons;
   }
 
   /**
-   * Returns name of a file describing the contents and conventions used in
-   * this XML file.
+   * Returns name of a file describing the contents and conventions used in this XML file.
    *
-   * @return name of a file describing the contents and conventions used in
-   * this XML file
+   * @return name of a file describing the contents and conventions used in this XML file
    */
   public String getKey() {
     checkNotNull(key, "key cannot be null");
@@ -246,8 +238,7 @@ public class BioCCollection implements BioCInfons {
   }
 
   /**
-   * Gets the XML version declared on the XML declaration. Returns null if none
-   * was declared.
+   * Gets the XML version declared on the XML declaration. Returns null if none was declared.
    *
    * @return the XML version declared on the XML declaration
    */
@@ -307,11 +298,9 @@ public class BioCCollection implements BioCInfons {
   }
 
   /**
-   * Sets the name of a file describing the contents and conventions used in
-   * this XML file.
+   * Sets the name of a file describing the contents and conventions used in this XML file.
    *
-   * @param key the name of a file describing the contents and conventions used
-   *            in this XML file
+   * @param key the name of a file describing the contents and conventions used in this XML file
    */
   public void setKey(String key) {
     this.key = key;

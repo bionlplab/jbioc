@@ -1,28 +1,19 @@
 package com.pengyifan.bioc;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.*;
-
-import com.google.common.collect.Lists;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
-import com.google.common.collect.Maps;
 
 /**
  * One sentence in a {@link BioCPassage}.
  * <p>
- * It may contain the original text of the sentence or it might be
- * {@link BioCAnnotation}s and possibly {@link BioCRelation}s on the text of
- * the passage.
+ * It may contain the original text of the sentence or it might be {@link BioCAnnotation}s and
+ * possibly {@link BioCRelation}s on the text of the passage.
  * <p>
- * There is no code to keep those possibilities mutually exclusive. However the
- * currently available DTDs only describe the listed possibilities.
- * 
- * @since 1.0.0
+ * There is no code to keep those possibilities mutually exclusive. However the currently available
+ * DTDs only describe the listed possibilities.
+ *
  * @author Yifan Peng
+ * @since 1.0.0
  */
 public class BioCSentence extends BioCStructureWithText {
 
@@ -34,11 +25,9 @@ public class BioCSentence extends BioCStructureWithText {
   }
 
   /**
-   * Constructs a sentence containing the information of the specified
-   * sentence.
-   * 
-   * @param sentence the sentence whose information is to be placed into this
-   *          passage
+   * Constructs a sentence containing the information of the specified sentence.
+   *
+   * @param sentence the sentence whose information is to be placed into this passage
    */
   public BioCSentence(BioCSentence sentence) {
     super(sentence);

@@ -1,29 +1,28 @@
 package com.pengyifan.bioc;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.util.Objects;
-
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * The annotations and/or other ie in the relation.
- * 
- * @since 1.0.0
+ *
  * @author Yifan Peng
+ * @since 1.0.0
  */
-public class BioCNode {
+public class BioCNode implements BioCObject {
 
   private String refid;
   private String role;
 
   /**
    * Constructs a newly <code>BioCNode</code> object that has id and role.
-   * 
+   *
    * @param refid the id of an annotated object or another relation
-   * @param role the role of how the referenced annotation or other relation
-   *          participates in the current relation
+   * @param role  the role of how the referenced annotation or other relation participates in the
+   *              current relation
    */
   public BioCNode(String refid, String role) {
     this.refid = refid;
@@ -31,11 +30,9 @@ public class BioCNode {
   }
 
   /**
-   * Constructs a node containing the information of the specified
-   * location.
-   * 
-   * @param node the node whose information is to be placed into
-   *          this node
+   * Constructs a node containing the information of the specified location.
+   *
+   * @param node the node whose information is to be placed into this node
    */
   public BioCNode(BioCNode node) {
     this(node.refid, node.role);
@@ -55,9 +52,9 @@ public class BioCNode {
   }
 
   /**
-   * Returns the id of an annotated object or another relation. Typically there
-   * will be one label for each node.
-   * 
+   * Returns the id of an annotated object or another relation. Typically there will be one label
+   * for each node.
+   *
    * @return the id of an annotated object or another relation
    */
   public String getRefid() {
@@ -66,11 +63,11 @@ public class BioCNode {
   }
 
   /**
-   * Returns the role of how the referenced annotation or other relation
-   * participates in the current relation.
-   * 
-   * @return the role of how the referenced annotation or other relation
-   *         participates in the current relation
+   * Returns the role of how the referenced annotation or other relation participates in the current
+   * relation.
+   *
+   * @return the role of how the referenced annotation or other relation participates in the current
+   * relation
    */
   public String getRole() {
     checkNotNull(role, "role has to be set");
@@ -84,7 +81,7 @@ public class BioCNode {
 
   /**
    * Sets the id of an annotated object or another relation.
-   * 
+   *
    * @param refid the id of an annotated object or another relation
    */
   public void setRefid(String refid) {
@@ -92,11 +89,11 @@ public class BioCNode {
   }
 
   /**
-   * Set the role of how the referenced annotation or other relation
-   * participates in the current relation.
-   * 
-   * @param role the role of how the referenced annotation or other relation
-   *          participates in the current relation
+   * Set the role of how the referenced annotation or other relation participates in the current
+   * relation.
+   *
+   * @param role the role of how the referenced annotation or other relation participates in the
+   *             current relation
    */
   public void setRole(String role) {
     this.role = role;

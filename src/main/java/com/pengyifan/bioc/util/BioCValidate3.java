@@ -8,28 +8,24 @@ import com.pengyifan.bioc.BioCNode;
 import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
+import com.pengyifan.bioc.BioCStructure;
 import java.io.PrintStream;
-import java.util.List;
-import java.util.StringJoiner;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
+
+import static com.pengyifan.bioc.util.BioCLog.log;
 
 public class BioCValidate3 {
 
   private PrintStream ps;
-  private boolean isInterrupted;
+  private boolean throwException;
 
-  public BioCValidate3() {
-    ps = System.err;
-    isInterrupted = false;
+  public BioCValidate3(boolean throwException) {
+    this(throwException, System.err);
   }
 
-  public void setPrintStream(PrintStream ps) {
+  public BioCValidate3(boolean throwException, PrintStream ps) {
     this.ps = ps;
-  }
-
-  public void setInterrupted(boolean interrupted) {
-    isInterrupted = interrupted;
+    this.throwException = throwException;
   }
 
   /**
@@ -44,83 +40,95 @@ public class BioCValidate3 {
   }
 
   /**
-   * Checks annotations and ie.
+   * Checks text, annotations and relations of the document.
    *
    * @param document input document
    */
   public void check(BioCDocument document) {
     String text = checkText(document);
-
-    // check annotation offset
-    BioCAnnotationIterator annItr = new BioCAnnotationIterator(document);
-    checkAnnotations(annItr, text, 0);
-
-    // check relation
-    for (BioCRelation relation : document.getRelations()) {
-      for (BioCNode node : relation.getNodes()) {
-        if (!document.getAnnotation(node.getRefid()).isPresent()) {
-          error("Cannot find node %s in relation %s\nLocation: %s",
-              node, relation, BioCUtils.getXPathString(document));
-        }
-      }
-    }
-
-    // check passage
+    check(document, 0, text);
     for (BioCPassage passage : document.getPassages()) {
-      for (BioCRelation relation : passage.getRelations()) {
-        for (BioCNode node : relation.getNodes()) {
-          if (!passage.getAnnotation(node.getRefid()).isPresent()) {
-            error("Cannot find node %s in relation %s\nLocation: %s",
-                node, relation, BioCUtils.getXPathString(document, passage));
-          }
-        }
-      }
-
-      // check sentence
+      check(passage, 0, text, document);
       for (BioCSentence sentence : passage.getSentences()) {
-        for (BioCRelation relation : sentence.getRelations()) {
-          for (BioCNode node : relation.getNodes()) {
-            if (!sentence.getAnnotation(node.getRefid()).isPresent()) {
-              error("Cannot find node %s in relation %s\nLocation: %s",
-                  node, relation, BioCUtils.getXPathString(document, passage, sentence));
-            }
-          }
-        }
+        check(sentence, 0, text, document, passage);
       }
     }
   }
 
-  private void checkAnnotations(BioCAnnotationIterator annItr, String text, int offset) {
-    while (annItr.hasNext()) {
-      BioCAnnotation annotation = annItr.next();
+  /**
+   * Checks text, annotations and relations of the passage.
+   *
+   * @param passage input passage
+   */
+  public void check(BioCPassage passage) {
+    String text = checkText(passage);
+    check(passage, passage.getOffset(), text);
+    for (BioCSentence sentence : passage.getSentences()) {
+      check(sentence, 0, text, passage);
+    }
+  }
+
+  /**
+   * Checks text, annotations and relations of the sentence.
+   *
+   * @param sentence input sentence
+   */
+  public void check(BioCSentence sentence) {
+    String text = checkText(sentence);
+    check(sentence, sentence.getOffset(), text);
+  }
+
+  /**
+   * Check the annotation and relation in the structure.
+   *
+   * @param structure the specified structure
+   * @param offset    the offset of this structure
+   * @param text      the text that annotations should match
+   * @param parents   the path from root until this structure (not included
+   */
+  public void check(BioCStructure structure, int offset, String text, BioCStructure... parents) {
+    BioCStructure[] path = new BioCStructure[parents.length + 1];
+    System.arraycopy(parents, 0, path, 0, parents.length);
+    path[path.length - 1] = structure;
+    String location = log(path);
+    checkAnnotations(structure, offset, text, location);
+    checkRelations(structure, location);
+  }
+
+  private void checkAnnotations(BioCStructure structure, int offset, String text, String location) {
+    for (BioCAnnotation annotation : structure.getAnnotations()) {
       if (!annotation.getText().isPresent()) {
-        error("The annotation has no text: %s\n", annotation);
+        error("The %s in %s has no text", log(annotation), location);
       }
 
       BioCLocation total = annotation.getTotalLocation();
-      for (BioCLocation location: annotation.getLocations()) {
-        String expected = text.substring(
-            location.getOffset() - offset,
-            location.getOffset() + location.getLength() - offset);
-        String actual = annotation.getText().get().substring(
-            location.getOffset() - total.getOffset(),
-            location.getOffset() + location.getLength() - total.getOffset());
-        if (!expected.equals(actual)) {
-          error("Annotation text is incorrect.\n" +
-                  "  Annotation : %s\n" +
-                  "  Actual text: %s\n" +
-                  "  %s",
-              annotation, actual, annotation);
+      String expected = text.substring(
+          total.getOffset() - offset, total.getOffset() + total.getLength() - offset);
+      String actual = annotation.getText().get();
+      if (!expected.equals(actual)) {
+        error("The %s text in %s is incorrect.\n" +
+                "  Expected : %s\n" +
+                "  Actual   : %s",
+            log(annotation), location, expected, actual);
+      }
+    }
+  }
+
+  private void checkRelations(BioCStructure structure, String location) {
+    for (BioCRelation relation : structure.getRelations()) {
+      for (BioCNode node : relation.getNodes()) {
+        if (!structure.getAnnotation(node.getRefid()).isPresent()) {
+          error("Cannot find %s in %s in %s", log(node), log(relation), location);
         }
       }
     }
   }
 
-  private String checkText(BioCDocument document) {
+  public String checkText(BioCDocument document) {
     StringBuilder sb = new StringBuilder();
     for (BioCPassage passage : document.getPassages()) {
       if (sb.length() > passage.getOffset()) {
-        error("The passage is overlapped with previous text.\n%s\n", passage);
+        haveToThrow("The %s is overlapped with previous text.", log(document, passage));
       }
       fillNewLine(sb, passage.getOffset());
       sb.append(checkText(passage));
@@ -128,37 +136,55 @@ public class BioCValidate3 {
     return sb.toString();
   }
 
-  private String checkText(BioCPassage passage) {
+  public String checkText(BioCPassage passage) {
     if (passage.getText().isPresent() && !passage.getText().get().isEmpty()) {
       if (passage.getSentenceCount() == 0) {
         return passage.getText().get();
       } else {
-        error("The passage contains both text and sentences.\n", passage);
+        error("The %s contains both text and sentences.", log(passage));
       }
     }
 
     StringBuilder sb = new StringBuilder();
     for (BioCSentence sentence : passage.getSentences()) {
-      if (!sentence.getText().isPresent()) {
-        error("The sentence has no text.\n", sentence);
-      } else if (passage.getOffset() + sb.length() > sentence.getOffset()) {
-        error("The sentence is overlapped with previous text.\n%s\n", sentence);
+      if (passage.getOffset() + sb.length() > sentence.getOffset()) {
+        haveToThrow("The %s is overlapped with previous text.", log(passage, sentence));
       }
       fillNewLine(sb, sentence.getOffset() - passage.getOffset());
-      sb.append(sentence.getText().get());
+      sb.append(checkText(sentence));
     }
     return sb.toString();
+  }
+
+  public String checkText(BioCSentence sentence) {
+    if (!sentence.getText().isPresent()) {
+      error("The %s has no text.", log(sentence));
+    }
+    return sentence.getText().get();
+  }
+
+  private void error(String format, Object... objects) {
+    if (throwException) {
+      throw new IllegalArgumentException(String.format(format, objects));
+    } else {
+      ps.printf(format, objects);
+      ps.println();
+    }
   }
 
   private StringBuilder fillNewLine(StringBuilder sb, int offset) {
     return sb.append(StringUtils.repeat('\n', offset - sb.length()));
   }
 
-  private void error(String format, Object ... objects) {
-    if (isInterrupted) {
-      throw new IllegalArgumentException(String.format(format, objects));
-    } else {
-      ps.printf(format, objects);
-    }
+  private void haveToThrow(String format, Object... objects) {
+    throw new IllegalArgumentException(String.format(format, objects));
+  }
+
+  public void setPrintStream(PrintStream ps) {
+    this.ps = ps;
+  }
+
+  public void setThrowException(boolean throwException) {
+    this.throwException = throwException;
   }
 }

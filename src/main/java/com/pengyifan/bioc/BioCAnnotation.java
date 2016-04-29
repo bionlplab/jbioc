@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * @author Yifan Peng
  * @since 1.0.0
  */
-public class BioCAnnotation implements BioCInfons {
+public class BioCAnnotation implements HasInfons, HasText, HasID, BioCObject {
 
   private String id;
   private Map<String, String> infons;
@@ -104,21 +104,12 @@ public class BioCAnnotation implements BioCInfons {
         && Objects.equals(locations, rhs.locations);
   }
 
-  /**
-   * Returns the id used to identify this annotation in a {@link BioCRelation}.
-   *
-   * @return the id used to identify this annotation in a {@link BioCRelation}.
-   */
+  @Override
   public String getID() {
     checkNotNull(id, "id has to be set");
     return id;
   }
 
-  /**
-   * Returns the information in this annotation.
-   *
-   * @return the information in this annotation.
-   */
   @Override
   public Map<String, String> getInfons() {
     return infons;
@@ -134,13 +125,17 @@ public class BioCAnnotation implements BioCInfons {
   }
 
   /**
-   * Returns locations of the annotated text. Multiple locations indicate a
-   * multispan annotation.
+   * Returns locations of the annotated text. Multiple locations indicate a multi-span annotation.
    *
    * @return locations of the annotated text
    */
   public Set<BioCLocation> getLocations() {
     return locations;
+  }
+
+  @Override
+  public Optional<String> getText() {
+    return Optional.ofNullable(text);
   }
 
   /**
@@ -160,15 +155,6 @@ public class BioCAnnotation implements BioCInfons {
         totalSpan.upperEndpoint() - totalSpan.lowerEndpoint());
   }
 
-  /**
-   * Returns the original text of the annotation
-   *
-   * @return the original text of the annotation
-   */
-  public Optional<String> getText() {
-    return Optional.ofNullable(text);
-  }
-
   @Override
   public int hashCode() {
     return Objects.hash(id, text, infons, locations);
@@ -183,11 +169,7 @@ public class BioCAnnotation implements BioCInfons {
     return locations.iterator();
   }
 
-  /**
-   * Sets the id used to identify this annotation in a {@link BioCRelation}.
-   *
-   * @param id the id used to identify this annotation in a {@link BioCRelation}
-   */
+  @Override
   public void setID(String id) {
     this.id = id;
   }
@@ -202,11 +184,7 @@ public class BioCAnnotation implements BioCInfons {
     this.locations.addAll(locations);
   }
 
-  /**
-   * Sets the original text of the annotation.
-   *
-   * @param text the original text
-   */
+  @Override
   public void setText(String text) {
     this.text = text;
   }

@@ -3,7 +3,7 @@ package com.pengyifan.bioc;
 import java.util.Map;
 import java.util.Optional;
 
-public interface BioCInfons {
+public interface HasInfons {
   /**
    * Returns the information.
    *

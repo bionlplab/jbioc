@@ -10,8 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * A relation iterator over a collection, a document, a passage or a single
- * sentence.
+ * A relation iterator over a collection, a document, a passage or a single sentence.
  * 
  * @since 1.0.0
  * @see com.pengyifan.bioc.util.BioCDocumentIterator
