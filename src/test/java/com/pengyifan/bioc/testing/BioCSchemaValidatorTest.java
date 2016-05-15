@@ -19,7 +19,7 @@ public class BioCSchemaValidatorTest {
     File biocFile = new File(url.getFile());
     File xsdFile = new File(LOCAL_XSD);
 
-    BioCSchemaValidator validator = new BioCSchemaValidator();
-    assertTrue(validator.isValid(biocFile, xsdFile));
+    BioCSchemaValidator validator = new BioCSchemaValidator(xsdFile);
+    validator.validate(biocFile);
   }
 }

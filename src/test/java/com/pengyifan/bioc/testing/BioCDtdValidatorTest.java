@@ -19,7 +19,7 @@ public class BioCDtdValidatorTest {
     File biocFile = new File(url.getFile());
     File dtdFile = new File(LOCAL_DTD);
 
-    BioCDtdValidator validator = new BioCDtdValidator();
-    assertTrue(validator.isValid(biocFile, dtdFile));
+    BioCDtdValidator validator = new BioCDtdValidator(dtdFile);
+    validator.validate(biocFile);
   }
 }
