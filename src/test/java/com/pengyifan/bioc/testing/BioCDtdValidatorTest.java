@@ -1,5 +1,6 @@
 package com.pengyifan.bioc.testing;
 
+import com.pengyifan.bioc.validation.BioCDtdValidator;
 import org.junit.Test;
 
 import java.io.File;
