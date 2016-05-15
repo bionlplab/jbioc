@@ -9,23 +9,32 @@ import com.pengyifan.bioc.BioCPassage;
 import com.pengyifan.bioc.BioCRelation;
 import com.pengyifan.bioc.BioCSentence;
 import com.pengyifan.bioc.BioCStructure;
+import com.pengyifan.bioc.io.BioCDocumentReader;
+import com.pengyifan.bioc.validation.BioCErrorHandler;
+import com.pengyifan.bioc.validation.BioCValidator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintStream;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.TransformerException;
 import org.apache.commons.lang3.StringUtils;
+import org.xml.sax.SAXException;
 
 import static com.pengyifan.bioc.util.BioCLog.log;
 
-public class BioCValidate3 {
+public class BioCValidate3 implements BioCValidator {
 
-  private PrintStream ps;
-  private boolean throwException;
+  private BioCErrorHandlerImpl errorHandler;
 
   public BioCValidate3(boolean throwException) {
     this(throwException, System.err);
   }
 
   public BioCValidate3(boolean throwException, PrintStream ps) {
-    this.ps = ps;
-    this.throwException = throwException;
+    errorHandler = new BioCErrorHandlerImpl();
+    errorHandler.ps = ps;
+    errorHandler.throwException = throwException;
   }
 
   /**
@@ -98,7 +107,7 @@ public class BioCValidate3 {
   private void checkAnnotations(BioCStructure structure, int offset, String text, String location) {
     for (BioCAnnotation annotation : structure.getAnnotations()) {
       if (!annotation.getText().isPresent()) {
-        error("The %s in %s has no text", log(annotation), location);
+        errorHandler.error("The %s in %s has no text", log(annotation), location);
       }
 
       BioCLocation total = annotation.getTotalLocation();
@@ -106,7 +115,7 @@ public class BioCValidate3 {
           total.getOffset() - offset, total.getOffset() + total.getLength() - offset);
       String actual = annotation.getText().get();
       if (!expected.equals(actual)) {
-        error("The %s text in %s is incorrect.\n" +
+        errorHandler.error("The %s text in %s is incorrect.\n" +
                 "  Expected : %s\n" +
                 "  Actual   : %s",
             log(annotation), location, expected, actual);
@@ -118,7 +127,7 @@ public class BioCValidate3 {
     for (BioCRelation relation : structure.getRelations()) {
       for (BioCNode node : relation.getNodes()) {
         if (!structure.getAnnotation(node.getRefid()).isPresent()) {
-          error("Cannot find %s in %s in %s", log(node), log(relation), location);
+          errorHandler.error("Cannot find %s in %s in %s", log(node), log(relation), location);
         }
       }
     }
@@ -141,7 +150,7 @@ public class BioCValidate3 {
       if (passage.getSentenceCount() == 0) {
         return passage.getText().get();
       } else {
-        error("The %s contains both text and sentences.", log(passage));
+        errorHandler.error("The %s contains both text and sentences.", log(passage));
       }
     }
 
@@ -158,18 +167,9 @@ public class BioCValidate3 {
 
   public String checkText(BioCSentence sentence) {
     if (!sentence.getText().isPresent()) {
-      error("The %s has no text.", log(sentence));
+      errorHandler.error("The %s has no text.", log(sentence));
     }
     return sentence.getText().get();
-  }
-
-  private void error(String format, Object... objects) {
-    if (throwException) {
-      throw new IllegalArgumentException(String.format(format, objects));
-    } else {
-      ps.printf(format, objects);
-      ps.println();
-    }
   }
 
   private StringBuilder fillNewLine(StringBuilder sb, int offset) {
@@ -181,10 +181,76 @@ public class BioCValidate3 {
   }
 
   public void setPrintStream(PrintStream ps) {
-    this.ps = ps;
+    errorHandler.ps = ps;
   }
 
   public void setThrowException(boolean throwException) {
-    this.throwException = throwException;
+    errorHandler.throwException = throwException;
+  }
+
+  @Override
+  public void validate(File file) {
+    try {
+      BioCDocumentReader reader = new BioCDocumentReader(file);
+      BioCDocument document = null;
+      while ((document = reader.readDocument()) != null) {
+        checkText(document);
+      }
+      reader.close();
+    } catch (IOException e) {
+      errorHandler.error(e);
+    } catch (XMLStreamException e) {
+      errorHandler.error(e);
+    }
+  }
+
+  @Override
+  public BioCErrorHandler getErrorHandler() {
+    return errorHandler;
+  }
+
+  @Override
+  public void setErrorHandler(BioCErrorHandler errorHandler) {
+    throw new UnsupportedOperationException();
+  }
+
+  private static class BioCErrorHandlerImpl implements BioCErrorHandler {
+
+    PrintStream ps;
+    boolean throwException;
+
+    @Override
+    public void error(IOException e) {
+      error(e.getLocalizedMessage());
+    }
+
+    @Override
+    public void error(SAXException e) {
+      error(e.getLocalizedMessage());
+    }
+
+    @Override
+    public void error(TransformerException e) {
+      error(e.getLocalizedMessage());
+    }
+
+    @Override
+    public void error(XMLStreamException e) {
+      error(e.getLocalizedMessage());
+    }
+
+    @Override
+    public void error(IllegalArgumentException e) {
+      error(e.getLocalizedMessage());
+    }
+
+    private void error(String format, Object... objects) {
+      if (throwException) {
+        throw new IllegalArgumentException(String.format(format, objects));
+      } else {
+        ps.printf(format, objects);
+        ps.println();
+      }
+    }
   }
 }
