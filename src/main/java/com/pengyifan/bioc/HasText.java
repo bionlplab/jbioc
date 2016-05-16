@@ -10,6 +10,7 @@ public interface HasText {
    * @return the original text
    */
   Optional<String> getText();
+
   /**
    * Sets the original text.
    *
