@@ -49,6 +49,10 @@ public abstract class BioCStructureWithText extends BioCStructure implements Has
     return offset;
   }
 
+  public int getEnd() {
+    return offset + text.length();
+  }
+
   @Override
   public Optional<String> getText() {
     return Optional.ofNullable(text);

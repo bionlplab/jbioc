@@ -68,6 +68,10 @@ public class BioCLocation implements HasOffset, BioCObject {
     return offset;
   }
 
+  public int getEnd() {
+    return offset + length;
+  }
+
   @Override
   public int hashCode() {
     return Objects.hash(offset, length);
