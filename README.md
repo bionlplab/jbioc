@@ -40,7 +40,7 @@ or
 
 ### Developers
 
-* Yifan Peng (yfpeng@udel.edu)
+* Yifan Peng (yip4002@med.cornell.edu)
 
 ### Acknowledgment
 
