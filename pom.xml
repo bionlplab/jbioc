@@ -15,16 +15,16 @@
     </license>
   </licenses>
   <scm>
-    <url>git@github.com:yfpeng/pengyifan-bioc.git</url>
-    <connection>scm:git:git@github.com:yfpeng/pengyifan-bioc.git</connection>
-    <developerConnection>scm:git:git@github.com:yfpeng/pengyifan-bioc.git</developerConnection>
+    <url>git@github.com:bionlplab/jbioc.git</url>
+    <connection>scm:git:git@github.com:bionlplab/jbioc.git</connection>
+    <developerConnection>scm:git:git@github.com:bionlplab/jbioc.git</developerConnection>
   </scm>
   <developers>
     <developer>
       <name>Yifan Peng</name>
-      <email>yfpeng@udel.edu</email>
-      <organization>University of Delaware</organization>
-      <organizationUrl>http://www.udel.edu</organizationUrl>
+      <email>yip4002@med.cornell.edu</email>
+      <organization>BioNLP Lab @ Weill Cornell Medicine</organization>
+      <organizationUrl>https://github.com/bionlplab</organizationUrl>
     </developer>
   </developers>
   <properties>
